@@ -322,7 +322,6 @@ public class AddToernooi extends javax.swing.JFrame {
         int month = monthBox.getSelectedIndex()+1;
         int year = Integer.parseInt((String) yearBox.getSelectedItem());
         Date datum = Date.valueOf(year + "-" + month + "-" + day);
-        System.out.println(datum);
         return datum;
     }
     
