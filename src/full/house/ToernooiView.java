@@ -166,15 +166,15 @@ public class ToernooiView extends javax.swing.JPanel {
 
     private void editToernooiBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editToernooiBtnMouseClicked
         int[] row = toernooiTable.getSelectedRows();
-        if (row.length > 1) {
-            System.out.println("More than one toernooi selected!");
-        } else if (row.length == 0) {
-            System.out.println("No toernooi selected!");
+        if (row.length == 0) {
+            JOptionPane.showMessageDialog(this, "Geen toernooi(en) geselecteerd.", "Bewerk toernooi", JOptionPane.PLAIN_MESSAGE);
         } else {
-            Toernooi toernooi = getToernooiFromTable(row[0]);
-            EditToernooi editToernooi = new EditToernooi(this, toernooi);
-            editToernooi.setLocation(200, 150);
-            editToernooi.setVisible(true);
+            for (int i = 0; i < row.length; i++) {
+                Toernooi toernooi = getToernooiFromTable(row[i]);
+                EditToernooi editToernooi = new EditToernooi(this, toernooi);
+                editToernooi.setLocation(200 + i*30, 150 + i*30 - (i/5)*150);
+                editToernooi.setVisible(true);
+            }
         }
     }//GEN-LAST:event_editToernooiBtnMouseClicked
 
