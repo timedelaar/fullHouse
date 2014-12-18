@@ -193,7 +193,7 @@ public class ToernooiView extends javax.swing.JPanel {
         String query = "SELECT * FROM Evenement "
                 + "JOIN Locatie ON Evenement.locatieID = Locatie.locatieID "
                 + "JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
-                + "JOIN ToernooiSoorten ON Toernooi.soortToernooi = ToernooiSoorten.soortID;";
+                + "JOIN ToernooiSoort ON Toernooi.soortToernooi = ToernooiSoort.soortID;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -216,7 +216,7 @@ public class ToernooiView extends javax.swing.JPanel {
             ID = FullHouse.addZeroes(ID, 4);
             String locatie = result.getString("Locatie.naam");
             String datum = result.getString("Evenement.datum");
-            String soort = result.getString("ToernooiSoorten.beschrijving");
+            String soort = result.getString("ToernooiSoort.beschrijving");
             int prijs = result.getInt("Evenement.prijs");
             int maxSpelers = result.getInt("Toernooi.maximumSpelers");
             int minSpelers = result.getInt("Toernooi.minimumSpelers");
