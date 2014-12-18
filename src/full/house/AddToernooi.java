@@ -5,6 +5,9 @@
 package full.house;
 
 import java.sql.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -20,8 +23,10 @@ public class AddToernooi extends javax.swing.JFrame {
      * Creates new form AddUserFrame
      */
     public AddToernooi(ToernooiView parent) {
-        initComponents();
         this.parent = parent;
+        initComponents();
+        getLocaties();
+        getSoorten();
     }
 
     /**
@@ -37,13 +42,19 @@ public class AddToernooi extends javax.swing.JFrame {
         naamLbl = new javax.swing.JLabel();
         voorlettersLbl = new javax.swing.JLabel();
         postcodeLbl = new javax.swing.JLabel();
-        locatieField = new javax.swing.JTextField();
         prijsField = new javax.swing.JTextField();
         addBtn = new javax.swing.JButton();
         cancelBtn = new javax.swing.JButton();
         dayBox = new javax.swing.JComboBox();
         monthBox = new javax.swing.JComboBox();
         yearBox = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        locatieCB = new javax.swing.JComboBox();
+        soortCB = new javax.swing.JComboBox();
+        minSpelersField = new javax.swing.JTextField();
+        maxSpelersField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nieuw toernooi");
@@ -76,6 +87,12 @@ public class AddToernooi extends javax.swing.JFrame {
 
         yearBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020" }));
 
+        jLabel1.setText("soort toernooi:");
+
+        jLabel2.setText("min. spelers:");
+
+        jLabel3.setText("max. spelers:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,19 +108,26 @@ public class AddToernooi extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(postcodeLbl)
                             .addComponent(voorlettersLbl)
-                            .addComponent(naamLbl))
+                            .addComponent(naamLbl)
+                            .addComponent(postcodeLbl)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
                         .addGap(73, 73, 73)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(prijsField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(locatieField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(dayBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(monthBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(yearBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(yearBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(locatieCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(maxSpelersField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(minSpelersField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(prijsField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(soortCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -114,31 +138,44 @@ public class AddToernooi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(naamLbl)
-                    .addComponent(locatieField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(locatieCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(voorlettersLbl)
                     .addComponent(dayBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(monthBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(yearBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(prijsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(postcodeLbl))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(soortCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(minSpelersField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(maxSpelersField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
                     .addComponent(cancelBtn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
-        addToernooi();
-        this.setVisible(false);
-        this.dispose();
+        if (addToernooi()) {
+            this.setVisible(false);
+            this.dispose();
+        }
     }//GEN-LAST:event_addBtnMouseClicked
 
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
@@ -146,7 +183,7 @@ public class AddToernooi extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
 
-    private void addToernooi () {
+    private boolean addToernooi () {
         String query = "INSERT INTO Evenement(locatieID, datum, prijs) "
                 + "VALUES(?, ?, ?)";
         String query2 = "SELECT evenementID FROM Evenement "
@@ -159,9 +196,14 @@ public class AddToernooi extends javax.swing.JFrame {
             PreparedStatement stat2 = conn.prepareStatement(query2);
             PreparedStatement stat3 = conn.prepareStatement(query3);
             
-            int locatieID = Integer.parseInt(locatieField.getText());
+            ModelItem item = (ModelItem) locatieCB.getSelectedItem();
+            int locatieID = item.id;
             Date datum = getDatum();
             int prijs = Integer.parseInt(prijsField.getText());
+            item = (ModelItem) soortCB.getSelectedItem();
+            int soort = item.id;
+            int minSpelers = Integer.parseInt(minSpelersField.getText());
+            int maxSpelers = Integer.parseInt(maxSpelersField.getText());
             
             stat.setInt(1, locatieID);
             stat.setDate(2, datum);
@@ -171,30 +213,108 @@ public class AddToernooi extends javax.swing.JFrame {
             stat2.setDate(2, datum);
             stat2.setInt(3, prijs);
             
-            stat.executeUpdate();
-            
-            ResultSet result = stat2.executeQuery();
-            int evenementID = getEvenementID(result);
-            
-            if (evenementID > 0) {
-                stat3.setInt(1, evenementID);
-                stat3.setInt(2, 100);
-                stat3.setInt(3, 10);
-                stat3.setInt(4, 1);
-                
-                stat3.executeUpdate();
+            if (checkDate(locatieID, datum)) {
+                stat.executeUpdate();
+
+                ResultSet result = stat2.executeQuery();
+                int evenementID = getEvenementID(result);
+
+                if (evenementID > 0) {
+                    stat3.setInt(1, evenementID);
+                    stat3.setInt(2, maxSpelers);
+                    stat3.setInt(3, minSpelers);
+                    stat3.setInt(4, soort);
+
+                    stat3.executeUpdate();
+                }
+
+                result.close();
+                stat.close();
+                stat2.close();
+                stat3.close();
             }
+            else {
+                JOptionPane.showMessageDialog(this, "Er is op deze datum al een toernooi op deze locatie.", "Locatie onbeschikbaar", JOptionPane.ERROR_MESSAGE);
+                stat.close();
+                stat2.close();
+                stat3.close();
+                return false;
+            }
+        }
+        catch (Exception e) {
+            FullHouse.showDBError(e);
+            return false;
+        }
+        parent.getToernooien();
+        return true;
+    }
+    
+    private void getLocaties () {
+        String query = "SELECT locatieID, naam FROM Locatie;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            ResultSet result = stat.executeQuery();
+            fillBox(locatieCB, result);
             
             result.close();
-            
             stat.close();
-            stat2.close();
-            stat3.close();
         }
         catch (Exception e) {
             FullHouse.showDBError(e);
         }
-        parent.getToernooien();
+    }
+    
+    private void getSoorten () {
+        String query = "SELECT soortID, beschrijving from ToernooiSoort;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            ResultSet result = stat.executeQuery();
+            fillBox(soortCB, result);
+            
+            result.close();
+            stat.close();
+        }
+        catch (Exception e) {
+            FullHouse.showDBError(e);
+        }
+    }
+    
+    private void fillBox (JComboBox box, ResultSet result) throws SQLException  {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        
+        while (result.next()) {
+            int id = result.getInt(1);
+            String beschrijving = result.getString(2);
+            ModelItem item = new ModelItem(id, beschrijving);
+            model.addElement(item);
+        }
+        
+        box.setModel(model);
+    }
+    
+    /*
+     * Controleert of de locatie beschikbaar is op de gegeven datum.
+     * @param locatieID De gegeven locatie.
+     * @param datum De gegeven datum.
+     * @return Returns true als de locatie beschikbaar is.
+     */
+    private boolean checkDate (int locatieID, Date datum) throws SQLException {
+        String query = "SELECT * FROM Evenement WHERE locatieID = ? AND datum = ?;";
+        Connection conn = SimpleDataSource.getConnection();
+        PreparedStatement stat = conn.prepareStatement(query);
+        
+        stat.setInt(1, locatieID);
+        stat.setDate(2, datum);
+        
+        ResultSet result = stat.executeQuery();
+        if (result.next()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
     
     private Date getDatum () {
@@ -220,11 +340,17 @@ public class AddToernooi extends javax.swing.JFrame {
     private javax.swing.JLabel addUserLbl;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JComboBox dayBox;
-    private javax.swing.JTextField locatieField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JComboBox locatieCB;
+    private javax.swing.JTextField maxSpelersField;
+    private javax.swing.JTextField minSpelersField;
     private javax.swing.JComboBox monthBox;
     private javax.swing.JLabel naamLbl;
     private javax.swing.JLabel postcodeLbl;
     private javax.swing.JTextField prijsField;
+    private javax.swing.JComboBox soortCB;
     private javax.swing.JLabel voorlettersLbl;
     private javax.swing.JComboBox yearBox;
     // End of variables declaration//GEN-END:variables
