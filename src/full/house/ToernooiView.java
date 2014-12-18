@@ -190,7 +190,10 @@ public class ToernooiView extends javax.swing.JPanel {
     }//GEN-LAST:event_deleteToernooiBtnMouseClicked
 
     public final void getToernooien () {
-        String query = "SELECT * FROM Toernooi;";
+        String query = "SELECT * FROM Evenement "
+                + "JOIN Locatie ON Evenement.locatieID = Locatie.locatieID "
+                + "JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
+                + "JOIN ToernooiSoorten ON Toernooi.soortToernooi = ToernooiSoorten.soortID;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -205,36 +208,42 @@ public class ToernooiView extends javax.swing.JPanel {
     }
     
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"ID", "Locatie", "Datum", "Inschrijvingen", "Max. inschrijvingen", "Spelers per tafel", "Inleg", "Totaal inleg"};
+        String[] columnNames = {"ID", "Locatie", "Datum", "Soort", "Prijs", "Max. spelers", "Min. spelers"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
         while (result.next()) {
-            String ID = result.getString("toernooiID");
+            String ID = result.getString("Evenement.evenementID");
             ID = FullHouse.addZeroes(ID, 4);
-            String locatieID = result.getString("locatieID");
-            locatieID = FullHouse.addZeroes(locatieID, 4);
-            String datum = result.getString("datum");
-            int inschrijvingen = 0;//result.getInt("inschrijvingen");
-            int maxSpelers = result.getInt("maximumSpelers");
-            int spelersPerTafel = result.getInt("spelersPerTafel");
-            int inleg = result.getInt("inlegGeld");
-            int totaalInleg = result.getInt("totaalInleg");
-            Object[] rowData = {ID, locatieID, datum, inschrijvingen, maxSpelers, spelersPerTafel, inleg, totaalInleg};
+            String locatie = result.getString("Locatie.naam");
+            String datum = result.getString("Evenement.datum");
+            String soort = result.getString("ToernooiSoorten.beschrijving");
+            int prijs = result.getInt("Evenement.prijs");
+            int maxSpelers = result.getInt("Toernooi.maximumSpelers");
+            int minSpelers = result.getInt("Toernooi.minimumSpelers");
+            Object[] rowData = {ID, locatie, datum, soort, prijs, maxSpelers, minSpelers};
             model.addRow(rowData);
         }
         toernooiTable.setModel(model);
-        setColumnWidth(toernooiTable);
+        //setColumnWidth(toernooiTable);
         result.close();
     }
     
     private void deleteToernooi (int id) {
-        String query = "DELETE FROM Toernooi WHERE toernooiID = ?;";
+        String query = "DELETE FROM Toernooi WHERE evenementID = ?;";
+        String query2 = "DELETE FROM Evenement WHERE evenementID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
+            PreparedStatement stat2 = conn.prepareStatement(query2);
+            
             stat.setInt(1, id);
+            stat2.setInt(1, id);
+            
             stat.executeUpdate();
+            stat2.executeUpdate();
+            
             stat.close();
+            stat2.close();
         }
         catch (Exception e) {
             FullHouse.showDBError(e);
