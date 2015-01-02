@@ -54,7 +54,7 @@ public class AddLocatie extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         naamField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        spelersPerField = new javax.swing.JTextField();
+        spelersPerCB = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nieuwe locatie");
@@ -86,6 +86,8 @@ public class AddLocatie extends javax.swing.JFrame {
         jLabel1.setText("bescrhijving locatie:");
 
         jLabel2.setText("spelers per tafel:");
+
+        spelersPerCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -119,8 +121,8 @@ public class AddLocatie extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(huisNrField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(naamField)
-                            .addComponent(spelersPerField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(aantalField, javax.swing.GroupLayout.Alignment.LEADING))))
+                            .addComponent(spelersPerCB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(aantalField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -152,7 +154,7 @@ public class AddLocatie extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(spelersPerField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spelersPerCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
@@ -170,7 +172,7 @@ public class AddLocatie extends javax.swing.JFrame {
         woonplaats = woonplaatsField.getText();
         postcode = postcodeField.getText();
         aantalTafels = Integer.parseInt(aantalField.getText());
-        spelersPerTafel = Integer.parseInt(spelersPerField.getText());
+        spelersPerTafel = Integer.parseInt(spelersPerCB.getSelectedItem().toString());
         addLocatie();
         this.setVisible(false);
         this.dispose();
@@ -216,7 +218,7 @@ public class AddLocatie extends javax.swing.JFrame {
     private javax.swing.JTextField naamField;
     private javax.swing.JTextField postcodeField;
     private javax.swing.JLabel postcodeLbl;
-    private javax.swing.JTextField spelersPerField;
+    private javax.swing.JComboBox spelersPerCB;
     private javax.swing.JLabel straatHuisNrLbl;
     private javax.swing.JTextField straatnaamField;
     private javax.swing.JLabel telefoonNrLbl;

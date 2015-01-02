@@ -4,9 +4,9 @@
  */
 package full.house;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -42,19 +42,21 @@ public class EditToernooi extends javax.swing.JFrame {
         idLbl = new javax.swing.JLabel();
         naamLbl = new javax.swing.JLabel();
         voorlettersLbl = new javax.swing.JLabel();
-        straatHuisNrLbl = new javax.swing.JLabel();
-        woonplaatsLbl = new javax.swing.JLabel();
         postcodeLbl = new javax.swing.JLabel();
         idField = new javax.swing.JTextField();
-        locatieField = new javax.swing.JTextField();
-        maxSpelersField = new javax.swing.JTextField();
         inlegField = new javax.swing.JTextField();
         saveBtn = new javax.swing.JButton();
         cancelBtn = new javax.swing.JButton();
         dayBox = new javax.swing.JComboBox();
         monthBox = new javax.swing.JComboBox();
         yearBox = new javax.swing.JComboBox();
-        spelersPerTafelBox = new javax.swing.JComboBox();
+        locatieCB = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        maxSpelersField = new javax.swing.JTextField();
+        minSpelersField = new javax.swing.JTextField();
+        soortCB = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Bewerk toernooi");
@@ -66,10 +68,6 @@ public class EditToernooi extends javax.swing.JFrame {
         naamLbl.setText("locatie:");
 
         voorlettersLbl.setText("datum:");
-
-        straatHuisNrLbl.setText("max. aantal spelers:");
-
-        woonplaatsLbl.setText("spelers per tafel:");
 
         postcodeLbl.setText("inleg:");
 
@@ -95,7 +93,11 @@ public class EditToernooi extends javax.swing.JFrame {
 
         yearBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020" }));
 
-        spelersPerTafelBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8", "9", "10" }));
+        jLabel1.setText("max. spelers:");
+
+        jLabel2.setText("min. spelers:");
+
+        jLabel3.setText("soort:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,13 +114,14 @@ public class EditToernooi extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(straatHuisNrLbl)
-                            .addComponent(woonplaatsLbl)
-                            .addComponent(postcodeLbl)
                             .addComponent(voorlettersLbl)
                             .addComponent(naamLbl)
-                            .addComponent(idLbl))
-                        .addGap(10, 10, 10)
+                            .addComponent(idLbl)
+                            .addComponent(postcodeLbl)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(inlegField, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -127,11 +130,12 @@ public class EditToernooi extends javax.swing.JFrame {
                                 .addComponent(monthBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(yearBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(spelersPerTafelBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(locatieCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(soortCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(idField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(locatieField, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(maxSpelersField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)))))
+                                .addComponent(minSpelersField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                                .addComponent(maxSpelersField, javax.swing.GroupLayout.Alignment.LEADING)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -146,7 +150,7 @@ public class EditToernooi extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(naamLbl)
-                    .addComponent(locatieField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(locatieCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(voorlettersLbl)
@@ -155,38 +159,36 @@ public class EditToernooi extends javax.swing.JFrame {
                     .addComponent(yearBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(straatHuisNrLbl)
+                    .addComponent(inlegField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(postcodeLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(maxSpelersField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(woonplaatsLbl)
-                    .addComponent(spelersPerTafelBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2)
+                    .addComponent(minSpelersField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inlegField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(postcodeLbl))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel3)
+                    .addComponent(soortCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveBtn)
                     .addComponent(cancelBtn))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
-        toernooi.locatieID = Integer.parseInt(locatieField.getText());
-        int day = Integer.parseInt((String) dayBox.getSelectedItem());
-        int month = monthBox.getSelectedIndex()+1;
-        int year = Integer.parseInt((String) yearBox.getSelectedItem());
-        toernooi.datum = Date.valueOf(year + "-" + month + "-" + day);
-        toernooi.maxSpelers = Integer.parseInt(maxSpelersField.getText());
-        toernooi.inleg = Integer.parseInt(inlegField.getText());
-        toernooi.spelersPerTafel = Integer.parseInt((String) spelersPerTafelBox.getSelectedItem());
-        editToernooi();
-        this.setVisible(false);
-        this.dispose();
+        updateValues();
+        if (editToernooi()) {
+            this.setVisible(false);
+            this.dispose();
+        }
     }//GEN-LAST:event_saveBtnMouseClicked
 
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
@@ -195,8 +197,9 @@ public class EditToernooi extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelBtnMouseClicked
 
     private void fillFields() {
+        fillLocatieBox();
         idField.setText("" + toernooi.ID);
-        locatieField.setText("" + toernooi.locatieID);
+        
         String datum = toernooi.datum.toString();
         String day = datum.substring(8);
         int month = Integer.parseInt(datum.substring(5, 7));
@@ -204,33 +207,145 @@ public class EditToernooi extends javax.swing.JFrame {
         dayBox.setSelectedItem(day);
         monthBox.setSelectedIndex(month-1);
         yearBox.setSelectedItem(year);
-        maxSpelersField.setText("" + toernooi.maxSpelers);
-        String spelersPerTafel = "" + toernooi.spelersPerTafel;
-        spelersPerTafelBox.setSelectedItem(spelersPerTafel);
+        
         inlegField.setText("" + toernooi.inleg);
+        maxSpelersField.setText("" + toernooi.maxSpelers);
+        minSpelersField.setText("" + toernooi.minSpelers);
+        fillSoortBox();
     }
     
-    private void editToernooi () {
-        String query = "UPDATE Toernooi SET locatieID=?, datum=?, maximumSpelers=?,"
-                + "inlegGeld=?, spelersPerTafel=?, totaalInleg=? WHERE toernooiID=?;";
+    private void fillLocatieBox () {
+        String query = "SELECT locatieID, naam FROM Locatie;";
+        ModelItem current = null;
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
-            stat.setInt(1, toernooi.locatieID);
-            stat.setDate(2, toernooi.datum);
-            stat.setInt(3, toernooi.maxSpelers);
-            stat.setInt(4, toernooi.inleg);
-            stat.setInt(5, toernooi.spelersPerTafel);
-            stat.setInt(6, toernooi.totaalInleg);
-            stat.setInt(7, toernooi.ID);
+            ResultSet result = stat.executeQuery();
             
-            stat.executeUpdate();
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
+            while (result.next()) {
+                int id = result.getInt(1);
+                String beschrijving = result.getString(2);
+                ModelItem item = new ModelItem(id, beschrijving);
+                model.addElement(item);
+                if (id == toernooi.locatieID) {
+                    current = item;
+                }
+            }
+            locatieCB.setModel(model);
+            locatieCB.setSelectedItem(current);
+            
+            result.close();
             stat.close();
         }
         catch (Exception e) {
             FullHouse.showDBError(e);
         }
+    }
+    
+    private void fillSoortBox () {
+        String query = "SELECT soortID, beschrijving FROM ToernooiSoort;";
+        ModelItem current = null;
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            ResultSet result = stat.executeQuery();
+            
+            DefaultComboBoxModel model = new DefaultComboBoxModel();
+            while (result.next()) {
+                int id = result.getInt(1);
+                String beschrijving = result.getString(2);
+                ModelItem item = new ModelItem(id, beschrijving);
+                model.addElement(item);
+                if (id == toernooi.soort) {
+                    current = item;
+                }
+            }
+            soortCB.setModel(model);
+            soortCB.setSelectedItem(current);
+            
+            result.close();
+            stat.close();
+        }
+        catch (Exception e) {
+            FullHouse.showDBError(e);
+        }
+    }
+    
+    private void updateValues () {
+        ModelItem item = (ModelItem) locatieCB.getSelectedItem();
+        toernooi.locatieID = item.id;
+        int day = Integer.parseInt((String) dayBox.getSelectedItem());
+        int month = monthBox.getSelectedIndex()+1;
+        int year = Integer.parseInt((String) yearBox.getSelectedItem());
+        toernooi.datum = Date.valueOf(year + "-" + month + "-" + day);
+        toernooi.inleg = Integer.parseInt(inlegField.getText());
+        toernooi.maxSpelers = Integer.parseInt(maxSpelersField.getText());
+        toernooi.minSpelers = Integer.parseInt(minSpelersField.getText());
+        item = (ModelItem) soortCB.getSelectedItem();
+        toernooi.soort = item.id;
+    }
+    
+    private boolean editToernooi () {
+        String query = "UPDATE Toernooi SET maximumSpelers = ?, minimumSpelers = ?, soortToernooi = ? "
+                + "WHERE evenementID=?;";
+        String query2 = "UPDATE Evenement SET locatieID = ?, datum = ?, prijs = ? "
+                + "WHERE evenementID = ?;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            if (checkDate(toernooi.ID, toernooi.locatieID, toernooi.datum)) {
+                PreparedStatement stat = conn.prepareStatement(query);
+                PreparedStatement stat2 = conn.prepareStatement(query2);
+                stat.setInt(1, toernooi.maxSpelers);
+                stat.setInt(2, toernooi.minSpelers);
+                stat.setInt(3, toernooi.soort);
+                stat.setInt(4, toernooi.ID);
+
+                stat2.setInt(1, toernooi.locatieID);
+                stat2.setDate(2, toernooi.datum);
+                stat2.setInt(3, toernooi.inleg);
+                stat2.setInt(4, toernooi.ID);
+
+                stat.executeUpdate();
+                stat2.executeUpdate();
+
+                stat.close();
+                stat2.close();
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Er is op deze datum al een toernooi op deze locatie.", "Locatie onbeschikbaar", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        catch (Exception e) {
+            FullHouse.showDBError(e);
+        }
         parent.getToernooien();
+        return true;
+    }
+    
+    /*
+     * Controleert of de locatie beschikbaar is op de gegeven datum.
+     * @param locatieID De gegeven locatie.
+     * @param datum De gegeven datum.
+     * @return Returns true als de locatie beschikbaar is.
+     */
+    private boolean checkDate (int evenementID, int locatieID, Date datum) throws SQLException {
+        String query = "SELECT * FROM Evenement WHERE locatieID = ? AND datum = ? AND NOT evenementID = ?;";
+        Connection conn = SimpleDataSource.getConnection();
+        PreparedStatement stat = conn.prepareStatement(query);
+        
+        stat.setInt(1, locatieID);
+        stat.setDate(2, datum);
+        stat.setInt(3, evenementID);
+        
+        ResultSet result = stat.executeQuery();
+        if (result.next()) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -240,16 +355,18 @@ public class EditToernooi extends javax.swing.JFrame {
     private javax.swing.JTextField idField;
     private javax.swing.JLabel idLbl;
     private javax.swing.JTextField inlegField;
-    private javax.swing.JTextField locatieField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JComboBox locatieCB;
     private javax.swing.JTextField maxSpelersField;
+    private javax.swing.JTextField minSpelersField;
     private javax.swing.JComboBox monthBox;
     private javax.swing.JLabel naamLbl;
     private javax.swing.JLabel postcodeLbl;
     private javax.swing.JButton saveBtn;
-    private javax.swing.JComboBox spelersPerTafelBox;
-    private javax.swing.JLabel straatHuisNrLbl;
+    private javax.swing.JComboBox soortCB;
     private javax.swing.JLabel voorlettersLbl;
-    private javax.swing.JLabel woonplaatsLbl;
     private javax.swing.JComboBox yearBox;
     // End of variables declaration//GEN-END:variables
 }

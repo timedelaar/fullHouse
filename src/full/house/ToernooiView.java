@@ -214,9 +214,13 @@ public class ToernooiView extends javax.swing.JPanel {
         while (result.next()) {
             String ID = result.getString("Evenement.evenementID");
             ID = FullHouse.addZeroes(ID, 4);
-            String locatie = result.getString("Locatie.naam");
+            int locatieID = result.getInt("Evenement.locatieID");
+            String locatieNaam = result.getString("Locatie.naam");
+            ModelItem locatie = new ModelItem(locatieID, locatieNaam);
             String datum = result.getString("Evenement.datum");
-            String soort = result.getString("ToernooiSoort.beschrijving");
+            int soortID = result.getInt("Toernooi.soortToernooi");
+            String soortBeschrijving = result.getString("ToernooiSoort.beschrijving");
+            ModelItem soort = new ModelItem(soortID, soortBeschrijving);
             int prijs = result.getInt("Evenement.prijs");
             int maxSpelers = result.getInt("Toernooi.maximumSpelers");
             int minSpelers = result.getInt("Toernooi.minimumSpelers");
@@ -254,13 +258,15 @@ public class ToernooiView extends javax.swing.JPanel {
     
     private Toernooi getToernooiFromTable (int row) {
         int id = Integer.parseInt(toernooiTable.getValueAt(row, 0).toString());
-        int locatieID = Integer.parseInt(toernooiTable.getValueAt(row, 1).toString());
+        ModelItem locatie = (ModelItem) toernooiTable.getValueAt(row,1);
+        int locatieID = locatie.id;
         Date datum = Date.valueOf(toernooiTable.getValueAt(row, 2).toString());
-        int maxSpelers = Integer.parseInt(toernooiTable.getValueAt(row, 4).toString());
-        int inleg = Integer.parseInt(toernooiTable.getValueAt(row, 6).toString());
-        int spelersPerTafel = Integer.parseInt(toernooiTable.getValueAt(row, 5).toString());
-        int totaalInleg = Integer.parseInt(toernooiTable.getValueAt(row, 7).toString());
-        Toernooi toernooi = new Toernooi(id, locatieID, datum, maxSpelers, inleg, spelersPerTafel, totaalInleg);
+        ModelItem soort = (ModelItem) toernooiTable.getValueAt(row, 3);
+        int soortID = soort.id;
+        int inleg = Integer.parseInt(toernooiTable.getValueAt(row, 4).toString());
+        int maxSpelers = Integer.parseInt(toernooiTable.getValueAt(row, 5).toString());
+        int minSpelers = Integer.parseInt(toernooiTable.getValueAt(row, 6).toString());
+        Toernooi toernooi = new Toernooi(id, locatieID, datum, inleg, maxSpelers, minSpelers, soortID);
         return toernooi;
     }
     

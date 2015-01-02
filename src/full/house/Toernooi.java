@@ -14,27 +14,18 @@ public class Toernooi {
     int ID;
     int locatieID;
     Date datum;
-    int maxSpelers;
     int inleg;
-    int spelersPerTafel;
-    int totaalInleg;
+    int maxSpelers;
+    int minSpelers;
+    int soort;
     
-    public Toernooi (int locatieID, Date datum, int maxSpelers, int inleg, int spelersPerTafel) {
-        this.locatieID = locatieID;
-        this.datum = datum;
-        this.maxSpelers = maxSpelers;
-        this.inleg = inleg;
-        this.spelersPerTafel = spelersPerTafel;
-        this.totaalInleg = 0;
-    }
-    
-    public Toernooi (int ID, int locatieID, Date datum, int maxSpelers, int inleg, int spelersPerTafel, int totaalInleg) {
+    public Toernooi (int ID, int locatieID, Date datum, int inleg, int maxSpelers, int minSpelers, int soort) {
         this.ID = ID;
         this.locatieID = locatieID;
         this.datum = datum;
-        this.maxSpelers = maxSpelers;
         this.inleg = inleg;
-        this.spelersPerTafel = spelersPerTafel;
-        this.totaalInleg = totaalInleg;
+        this.maxSpelers = maxSpelers;
+        this.minSpelers = minSpelers;
+        this.soort = soort;
     }
 }

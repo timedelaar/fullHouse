@@ -148,12 +148,14 @@ public class LocatieView extends javax.swing.JPanel {
     }//GEN-LAST:event_addLocatieBtnMouseClicked
 
     private void editLocatieBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editLocatieBtnMouseClicked
-        int[] row = locatieTable.getSelectedRows();
-        if (row.length == 0) {
+        int[] rows = locatieTable.getSelectedRows();
+        if (rows.length == 0) {
             JOptionPane.showMessageDialog(this, "Geen locatie(s) geselecteerd.", "Bewerk locatie", JOptionPane.PLAIN_MESSAGE);
+        } else if (rows.length > 10) {
+            JOptionPane.showMessageDialog(this, "Meer dan 10 locaties geselecteerd. Selecteerd een maximum van 10 locaties.", "Bewerk locatie", JOptionPane.PLAIN_MESSAGE);
         } else {
-            for (int i = 0; i < 10; i++) {
-                Locatie locatie = getLocatieFromTable(row[0]);
+            for (int i = 0; i < rows.length; i++) {
+                Locatie locatie = getLocatieFromTable(rows[i]);
                 EditLocatie editLocatie = new EditLocatie(this, locatie);
                 editLocatie.setLocation(200 + i*30, 150 + i*30 - (i/5)*150);
                 editLocatie.setVisible(true);
