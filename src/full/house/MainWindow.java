@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package full.house;
-//shitttt
+
 import java.awt.CardLayout;
 
 /**
