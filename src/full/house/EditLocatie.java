@@ -6,6 +6,8 @@ package full.house;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -15,14 +17,14 @@ import java.sql.PreparedStatement;
 public class EditLocatie extends javax.swing.JFrame {
 
     LocatieView parent;
-    Locatie locatie;
+    int locatieID;
     /**
      * Creates new form AddUserFrame
      */
-    public EditLocatie(LocatieView parent, Locatie locatie) {
+    public EditLocatie(LocatieView parent, int locatieID) {
         initComponents();
         this.parent = parent;
-        this.locatie = locatie;
+        this.locatieID = locatieID;
         fillFields();
     }
 
@@ -172,18 +174,9 @@ public class EditLocatie extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
-        locatie.naam = naamField.getText();
-        locatie.straatnaam = straatnaamField.getText();
-        locatie.huisNr = huisNrField.getText();
-        locatie.plaats = plaatsField.getText();
-        locatie.postcode = postcodeField.getText();
-        locatie.aantalTafels = Integer.parseInt(aantalField.getText());
-        locatie.spelersPerTafel = Integer.parseInt(spelersPerCB.getSelectedItem().toString());
-        
-        editLocatie(locatie);
+        editLocatie();
         this.setVisible(false);
         this.dispose();
-        
     }//GEN-LAST:event_saveBtnMouseClicked
 
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
@@ -195,30 +188,47 @@ public class EditLocatie extends javax.swing.JFrame {
      * Vult de text velden met corresponderende waardes.
      */
     private void fillFields() {
-        idField.setText("" + locatie.ID);
-        naamField.setText(locatie.naam);
-        straatnaamField.setText(locatie.straatnaam);
-        huisNrField.setText(locatie.huisNr);
-        plaatsField.setText(locatie.plaats);
-        postcodeField.setText(locatie.postcode);
-        aantalField.setText("" + locatie.aantalTafels);
-        spelersPerCB.setSelectedIndex(locatie.spelersPerTafel - 4);
+        String query = "SELECT * FROM Locatie WHERE locatieID = ?";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setInt(1, locatieID);
+            
+            ResultSet result = stat.executeQuery();
+            result.next();
+            
+            idField.setText("" + locatieID);
+            naamField.setText(result.getString("naam"));
+            straatnaamField.setText(result.getString("straatnaam"));
+            huisNrField.setText(result.getString("huisNR"));
+            plaatsField.setText(result.getString("woonplaats"));
+            postcodeField.setText(result.getString("postcode"));
+            aantalField.setText("" + result.getInt("aantalTafels"));
+            spelersPerCB.setSelectedIndex(result.getInt("spelersPerTafel") - 4);
+            
+            result.close();
+            stat.close();
+        }
+        catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
     }
     
-    private void editLocatie (Locatie locatie) {
+    private void editLocatie () {
         String query = "UPDATE Locatie SET naam=?, straatnaam=?, huisNr=?, woonplaats=?, postcode=?,"
                 + "aantalTafels=?, spelersPerTafel=? WHERE locatieID=?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
-            stat.setString(1, locatie.naam);
-            stat.setString(2, locatie.straatnaam);
-            stat.setString(3, locatie.huisNr);
-            stat.setString(4, locatie.plaats);
-            stat.setString(5, locatie.postcode);
-            stat.setInt(6, locatie.aantalTafels);
-            stat.setInt(7, locatie.spelersPerTafel);
-            stat.setInt(8, locatie.ID);
+            
+            stat.setString(1, naamField.getText());
+            stat.setString(2, straatnaamField.getText());
+            stat.setString(3, huisNrField.getText());
+            stat.setString(4, plaatsField.getText());
+            stat.setString(5, postcodeField.getText());
+            stat.setInt(6, Integer.parseInt(aantalField.getText()));
+            stat.setInt(7, Integer.parseInt(spelersPerCB.getSelectedItem().toString()));
+            stat.setInt(8, locatieID);
             
             stat.executeUpdate();
             stat.close();

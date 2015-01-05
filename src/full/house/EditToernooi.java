@@ -4,6 +4,7 @@
  */
 package full.house;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.*;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -16,16 +17,16 @@ import javax.swing.JOptionPane;
 public class EditToernooi extends javax.swing.JFrame {
 
     ToernooiView parent;
-    Toernooi toernooi;
+    int toernooiID;
     
     
     /**
      * Creates new form AddUserFrame
      */
-    public EditToernooi(ToernooiView parent, Toernooi toernooi) {
+    public EditToernooi(ToernooiView parent, int toernooiID) {
         initComponents();
         this.parent = parent;
-        this.toernooi = toernooi;
+        this.toernooiID = toernooiID;
         fillFields();
     }
 
@@ -184,7 +185,6 @@ public class EditToernooi extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
-        updateValues();
         if (editToernooi()) {
             this.setVisible(false);
             this.dispose();
@@ -197,24 +197,40 @@ public class EditToernooi extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelBtnMouseClicked
 
     private void fillFields() {
-        fillLocatieBox();
-        idField.setText("" + toernooi.ID);
-        
-        String datum = toernooi.datum.toString();
-        String day = datum.substring(8);
-        int month = Integer.parseInt(datum.substring(5, 7));
-        String year = datum.substring(0, 4);
-        dayBox.setSelectedItem(day);
-        monthBox.setSelectedIndex(month-1);
-        yearBox.setSelectedItem(year);
-        
-        inlegField.setText("" + toernooi.inleg);
-        maxSpelersField.setText("" + toernooi.maxSpelers);
-        minSpelersField.setText("" + toernooi.minSpelers);
-        fillSoortBox();
+        String query = "SELECT * FROM Evenement "
+                + "JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
+                + "WHERE Evenement.evenementID = ?";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setInt(1, toernooiID);
+            
+            ResultSet result = stat.executeQuery();
+            result.next();
+            
+            idField.setText(result.getString("evenementID"));
+
+            String datum = result.getString("datum");
+            String day = datum.substring(8);
+            int month = Integer.parseInt(datum.substring(5, 7));
+            String year = datum.substring(0, 4);
+            dayBox.setSelectedItem(day);
+            monthBox.setSelectedIndex(month-1);
+            yearBox.setSelectedItem(year);
+
+            inlegField.setText(result.getString("prijs"));
+            maxSpelersField.setText(result.getString("maximumSpelers"));
+            minSpelersField.setText(result.getString("minimumSpelers"));
+            
+            fillSoortBox(result.getInt("soortToernooi"));
+            fillLocatieBox(result.getInt("locatieID"));
+        }
+        catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
     }
     
-    private void fillLocatieBox () {
+    private void fillLocatieBox (int locatieID) {
         String query = "SELECT locatieID, naam FROM Locatie;";
         ModelItem current = null;
         try {
@@ -228,7 +244,7 @@ public class EditToernooi extends javax.swing.JFrame {
                 String beschrijving = result.getString(2);
                 ModelItem item = new ModelItem(id, beschrijving);
                 model.addElement(item);
-                if (id == toernooi.locatieID) {
+                if (id == locatieID) {
                     current = item;
                 }
             }
@@ -243,7 +259,7 @@ public class EditToernooi extends javax.swing.JFrame {
         }
     }
     
-    private void fillSoortBox () {
+    private void fillSoortBox (int soort) {
         String query = "SELECT soortID, beschrijving FROM ToernooiSoort;";
         ModelItem current = null;
         try {
@@ -257,7 +273,7 @@ public class EditToernooi extends javax.swing.JFrame {
                 String beschrijving = result.getString(2);
                 ModelItem item = new ModelItem(id, beschrijving);
                 model.addElement(item);
-                if (id == toernooi.soort) {
+                if (id == soort) {
                     current = item;
                 }
             }
@@ -272,20 +288,6 @@ public class EditToernooi extends javax.swing.JFrame {
         }
     }
     
-    private void updateValues () {
-        ModelItem item = (ModelItem) locatieCB.getSelectedItem();
-        toernooi.locatieID = item.id;
-        int day = Integer.parseInt((String) dayBox.getSelectedItem());
-        int month = monthBox.getSelectedIndex()+1;
-        int year = Integer.parseInt((String) yearBox.getSelectedItem());
-        toernooi.datum = Date.valueOf(year + "-" + month + "-" + day);
-        toernooi.inleg = Integer.parseInt(inlegField.getText());
-        toernooi.maxSpelers = Integer.parseInt(maxSpelersField.getText());
-        toernooi.minSpelers = Integer.parseInt(minSpelersField.getText());
-        item = (ModelItem) soortCB.getSelectedItem();
-        toernooi.soort = item.id;
-    }
-    
     private boolean editToernooi () {
         String query = "UPDATE Toernooi SET maximumSpelers = ?, minimumSpelers = ?, soortToernooi = ? "
                 + "WHERE evenementID=?;";
@@ -293,59 +295,47 @@ public class EditToernooi extends javax.swing.JFrame {
                 + "WHERE evenementID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
-            if (checkDate(toernooi.ID, toernooi.locatieID, toernooi.datum)) {
-                PreparedStatement stat = conn.prepareStatement(query);
-                PreparedStatement stat2 = conn.prepareStatement(query2);
-                stat.setInt(1, toernooi.maxSpelers);
-                stat.setInt(2, toernooi.minSpelers);
-                stat.setInt(3, toernooi.soort);
-                stat.setInt(4, toernooi.ID);
+            
+            ModelItem locatieItem = (ModelItem) locatieCB.getSelectedItem();
+            int locatieID = locatieItem.id;
+            int day = Integer.parseInt((String) dayBox.getSelectedItem());
+            int month = monthBox.getSelectedIndex()+1;
+            int year = Integer.parseInt((String) yearBox.getSelectedItem());
+            Date datum = Date.valueOf(year + "-" + month + "-" + day);
+            
+            
+            PreparedStatement stat = conn.prepareStatement(query);
+            PreparedStatement stat2 = conn.prepareStatement(query2);
 
-                stat2.setInt(1, toernooi.locatieID);
-                stat2.setDate(2, toernooi.datum);
-                stat2.setInt(3, toernooi.inleg);
-                stat2.setInt(4, toernooi.ID);
+            ModelItem soortItem = (ModelItem) soortCB.getSelectedItem();
 
-                stat.executeUpdate();
-                stat2.executeUpdate();
+            stat.setInt(1, Integer.parseInt(maxSpelersField.getText()));
+            stat.setInt(2, Integer.parseInt(minSpelersField.getText()));
+            stat.setInt(3, soortItem.id);
+            stat.setInt(4, toernooiID);
 
-                stat.close();
-                stat2.close();
-            }
-            else {
-                JOptionPane.showMessageDialog(this, "Er is op deze datum al een toernooi op deze locatie.", "Locatie onbeschikbaar", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
+            stat2.setInt(1, locatieID);
+            stat2.setDate(2, datum);
+            stat2.setDouble(3, Double.parseDouble(inlegField.getText()));
+            stat2.setInt(4, toernooiID);
+
+            stat.executeUpdate();
+            stat2.executeUpdate();
+
+            stat.close();
+            stat2.close();
         }
-        catch (Exception e) {
+        catch (MySQLIntegrityConstraintViolationException e) {
+            JOptionPane.showMessageDialog(this, "Er is op deze datum al een toernooi"
+                    + " op deze locatie.", "Locatie niet beschikbaar", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        catch (SQLException e) {
             FullHouse.showDBError(e);
+            return false;
         }
         parent.getToernooien();
         return true;
-    }
-    
-    /*
-     * Controleert of de locatie beschikbaar is op de gegeven datum.
-     * @param locatieID De gegeven locatie.
-     * @param datum De gegeven datum.
-     * @return Returns true als de locatie beschikbaar is.
-     */
-    private boolean checkDate (int evenementID, int locatieID, Date datum) throws SQLException {
-        String query = "SELECT * FROM Evenement WHERE locatieID = ? AND datum = ? AND NOT evenementID = ?;";
-        Connection conn = SimpleDataSource.getConnection();
-        PreparedStatement stat = conn.prepareStatement(query);
-        
-        stat.setInt(1, locatieID);
-        stat.setDate(2, datum);
-        stat.setInt(3, evenementID);
-        
-        ResultSet result = stat.executeQuery();
-        if (result.next()) {
-            return false;
-        }
-        else {
-            return true;
-        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

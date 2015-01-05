@@ -170,8 +170,8 @@ public class ToernooiView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Geen toernooi(en) geselecteerd.", "Bewerk toernooi", JOptionPane.PLAIN_MESSAGE);
         } else {
             for (int i = 0; i < row.length; i++) {
-                Toernooi toernooi = getToernooiFromTable(row[i]);
-                EditToernooi editToernooi = new EditToernooi(this, toernooi);
+                int toernooiID = Integer.parseInt(toernooiTable.getValueAt(row[i], 0).toString());
+                EditToernooi editToernooi = new EditToernooi(this, toernooiID);
                 editToernooi.setLocation(200 + i*30, 150 + i*30 - (i/5)*150);
                 editToernooi.setVisible(true);
             }
@@ -254,20 +254,6 @@ public class ToernooiView extends javax.swing.JPanel {
         }
         
         getToernooien();
-    }
-    
-    private Toernooi getToernooiFromTable (int row) {
-        int id = Integer.parseInt(toernooiTable.getValueAt(row, 0).toString());
-        ModelItem locatie = (ModelItem) toernooiTable.getValueAt(row,1);
-        int locatieID = locatie.id;
-        Date datum = Date.valueOf(toernooiTable.getValueAt(row, 2).toString());
-        ModelItem soort = (ModelItem) toernooiTable.getValueAt(row, 3);
-        int soortID = soort.id;
-        int inleg = Integer.parseInt(toernooiTable.getValueAt(row, 4).toString());
-        int maxSpelers = Integer.parseInt(toernooiTable.getValueAt(row, 5).toString());
-        int minSpelers = Integer.parseInt(toernooiTable.getValueAt(row, 6).toString());
-        Toernooi toernooi = new Toernooi(id, locatieID, datum, inleg, maxSpelers, minSpelers, soortID);
-        return toernooi;
     }
     
     private void setColumnWidth (JTable table) {

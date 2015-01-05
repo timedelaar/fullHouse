@@ -155,8 +155,8 @@ public class LocatieView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Meer dan 10 locaties geselecteerd. Selecteerd een maximum van 10 locaties.", "Bewerk locatie", JOptionPane.PLAIN_MESSAGE);
         } else {
             for (int i = 0; i < rows.length; i++) {
-                Locatie locatie = getLocatieFromTable(rows[i]);
-                EditLocatie editLocatie = new EditLocatie(this, locatie);
+                int locatieID = Integer.parseInt(locatieTable.getValueAt(rows[i], 0).toString());
+                EditLocatie editLocatie = new EditLocatie(this, locatieID);
                 editLocatie.setLocation(200 + i*30, 150 + i*30 - (i/5)*150);
                 editLocatie.setVisible(true);
             }
@@ -225,19 +225,6 @@ public class LocatieView extends javax.swing.JPanel {
         locatieTable.setModel(model);
         //setColumnWidth(locatieTable);
         result.close();
-    }
-    
-    private Locatie getLocatieFromTable (int row) {
-        int id = Integer.parseInt(locatieTable.getValueAt(row, 0).toString());
-        String naam = locatieTable.getValueAt(row, 1).toString();
-        int aantalTafels = Integer.parseInt(locatieTable.getValueAt(row, 2).toString());
-        int spelersPerTafel = Integer.parseInt(locatieTable.getValueAt(row, 3).toString());
-        String straatnaam = locatieTable.getValueAt(row, 4).toString();
-        String huisNr = locatieTable.getValueAt(row, 5).toString();
-        String plaats = locatieTable.getValueAt(row, 6).toString();
-        String postcode = locatieTable.getValueAt(row, 7).toString();
-        Locatie locatie = new Locatie(id, naam, straatnaam, huisNr, plaats, postcode, aantalTafels, spelersPerTafel);
-        return locatie;
     }
     
     private void setColumnWidth (JTable table) {

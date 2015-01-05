@@ -226,7 +226,7 @@ public class EditSpeler extends javax.swing.JFrame {
             telefoonNrField.setText(result.getString("telefoonNR"));
             emailField.setText(result.getString("email"));
             ratingField.setText("" + result.getInt("rating"));
-            gewonnenGeldField.setText("" + result.getInt("gewonnenGeld"));
+            gewonnenGeldField.setText("" + result.getDouble("gewonnenGeld"));
             isDocentCB.setSelected(result.getBoolean("isDocent"));
             
             result.close();
