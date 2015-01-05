@@ -163,8 +163,8 @@ public class SpelerView extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Geen speler geselecteerd.", "Bewerk speler", JOptionPane.PLAIN_MESSAGE);
         } else {
             for (int i = 0; i < row.length; i++) {
-                Speler speler = getSpelerFromTable(row[i]);
-                EditSpeler editSpeler = new EditSpeler(this, speler);
+                int id = Integer.parseInt(spelerTable.getValueAt(row[i], 0).toString());
+                EditSpeler editSpeler = new EditSpeler(this, id);
                 editSpeler.setLocation(200 + i*30, 150 + i*30 - (i/5)*150);
                 editSpeler.setVisible(true);
             }
@@ -187,9 +187,9 @@ public class SpelerView extends javax.swing.JPanel {
         if (row.length == 0) {
             JOptionPane.showMessageDialog(this, "Geen speler(s) geselecteerd.", "Nieuwe inschrijving", JOptionPane.PLAIN_MESSAGE);
         } else {
-            for (int i = 0; i < 10; i++) {
-                Speler speler = getSpelerFromTable(row[i]);
-                AddInschrijving inschrijving = new AddInschrijving(speler);
+            for (int i = 0; i < row.length; i++) {
+                int id = Integer.parseInt(spelerTable.getValueAt(row[i], 0).toString());
+                AddInschrijving inschrijving = new AddInschrijving(id);
                 inschrijving.setLocation(200 + i*30,100 + i*30 - (i/5)*150);
                 inschrijving.setVisible(true);
             }
@@ -266,23 +266,6 @@ public class SpelerView extends javax.swing.JPanel {
         }
         
         getSpelers();
-    }
-    
-    private Speler getSpelerFromTable (int row) {
-        int id = Integer.parseInt(spelerTable.getValueAt(row, 0).toString());
-        String naam = spelerTable.getValueAt(row, 1).toString();
-        String voorletters = spelerTable.getValueAt(row, 2).toString();
-        String straatnaam = spelerTable.getValueAt(row, 3).toString();
-        String huisNr = spelerTable.getValueAt(row, 4).toString();
-        String woonplaats = spelerTable.getValueAt(row, 5).toString();
-        String postcode = spelerTable.getValueAt(row, 6).toString();
-        String telefoonNr = spelerTable.getValueAt(row, 7).toString();
-        String email = spelerTable.getValueAt(row, 8).toString();
-        int rating = Integer.parseInt(spelerTable.getValueAt(row, 9).toString());
-        double gewonnenGeld = Double.parseDouble(spelerTable.getValueAt(row, 10).toString());
-        boolean isDocent = Boolean.parseBoolean(spelerTable.getValueAt(row, 11).toString());
-        Speler speler = new Speler(id, naam, voorletters, postcode, woonplaats, straatnaam, huisNr, telefoonNr, email, rating, gewonnenGeld, isDocent);
-        return speler;
     }
     
     private void setColumnWidth (JTable table) {

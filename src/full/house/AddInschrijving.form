@@ -53,7 +53,7 @@
                               <Component id="spelerIDField" alignment="0" pref="34" max="32767" attributes="0"/>
                               <Component id="voorlettersField" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="toernooiCB" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="evenementCB" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="betaaldCB" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -84,7 +84,7 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="toernooiCB" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="evenementCB" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -105,7 +105,7 @@
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="toernooiCB">
+    <Component class="javax.swing.JComboBox" name="evenementCB">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>

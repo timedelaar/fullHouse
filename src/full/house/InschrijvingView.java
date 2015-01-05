@@ -111,7 +111,7 @@ public class InschrijvingView extends javax.swing.JFrame {
     }//GEN-LAST:event_editBtnMouseClicked
 
     private void deleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteBtnMouseClicked
-        int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U deze inschrijving wilt verwijderen?", "Verwijder inschrijving?", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U deze inschrijving(en) wilt verwijderen?", "Verwijder inschrijving(en)?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             int[] rows = inschrijvingTable.getSelectedRows();
             for (int i = 0; i < rows.length; i++) {
@@ -124,9 +124,9 @@ public class InschrijvingView extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteBtnMouseClicked
 
     private void getInschrijvingen () {
-        String query = "SELECT spelerID, Inschrijving.toernooiID, betaald, datum "
+        String query = "SELECT Inschrijving.evenementID, isBetaald, datum "
                 + "FROM Inschrijving "
-                + "JOIN Toernooi ON Inschrijving.toernooiID = Toernooi.toernooiID "
+                + "JOIN Evenement ON Inschrijving.evenementID = Evenement.evenementID "
                 + "WHERE spelerID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
@@ -143,7 +143,7 @@ public class InschrijvingView extends javax.swing.JFrame {
     }
     
     private void deleteInschrijving (int speler, int toernooi) {
-        String query = "DELETE FROM Inschrijving WHERE spelerID = ? AND toernooiID = ?;";
+        String query = "DELETE FROM Inschrijving WHERE spelerID = ? AND evenementID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -158,16 +158,16 @@ public class InschrijvingView extends javax.swing.JFrame {
     }
     
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"Speler ID", "Toernooi ID", "Datum", "Betaald"};
+        String[] columnNames = {"Speler ID", "Evenement ID", "Datum", "Betaald"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
         while (result.next()) {
-            String ID = result.getString("spelerID");
+            String ID = "" + spelerID;
             ID = FullHouse.addZeroes(ID, 4);
-            String toernooiID = result.getString("toernooiID");
+            String toernooiID = result.getString("evenementID");
             toernooiID = FullHouse.addZeroes(toernooiID, 4);
             Date datum = result.getDate("datum");
-            boolean betaald = result.getBoolean("betaald");
+            boolean betaald = result.getBoolean("isBetaald");
             Object[] rowData = {ID, toernooiID, datum, betaald};
             model.addRow(rowData);
         }

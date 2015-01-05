@@ -6,6 +6,8 @@ package full.house;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -15,14 +17,14 @@ import java.sql.PreparedStatement;
 public class EditSpeler extends javax.swing.JFrame {
 
     SpelerView parent;
-    Speler speler;
+    int spelerID;
     /**
      * Creates new form AddUserFrame
      */
-    public EditSpeler(SpelerView parent, Speler speler) {
+    public EditSpeler(SpelerView parent, int spelerID) {
         initComponents();
         this.parent = parent;
-        this.speler = speler;
+        this.spelerID = spelerID;
         fillFields();
     }
 
@@ -194,18 +196,6 @@ public class EditSpeler extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
-        speler.naam = naamField.getText();
-        speler.voorletters = voorlettersField.getText();
-        speler.straatnaam = straatnaamField.getText();
-        speler.huisNr = huisNrField.getText();
-        speler.woonplaats = woonplaatsField.getText();
-        speler.postcode = postcodeField.getText();
-        speler.telefoonNr = telefoonNrField.getText();
-        speler.email = emailField.getText();
-        speler.rating = Integer.parseInt(ratingField.getText());
-        speler.gewonnenGeld = Double.parseDouble(gewonnenGeldField.getText());
-        speler.isDocent = isDocentCB.isSelected();
-        
         editSpeler();
         this.setVisible(false);
         this.dispose();
@@ -218,17 +208,33 @@ public class EditSpeler extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelBtnMouseClicked
 
     private void fillFields() {
-        naamField.setText(speler.naam);
-        voorlettersField.setText(speler.voorletters);
-        straatnaamField.setText(speler.straatnaam);
-        huisNrField.setText(speler.huisNr);
-        woonplaatsField.setText(speler.woonplaats);
-        postcodeField.setText(speler.postcode);
-        telefoonNrField.setText(speler.telefoonNr);
-        emailField.setText(speler.email);
-        ratingField.setText("" + speler.rating);
-        gewonnenGeldField.setText("" + speler.gewonnenGeld);
-        isDocentCB.setSelected(speler.isDocent);
+        String query = "SELECT * FROM Speler WHERE spelerID = ?;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setInt(1, spelerID);
+            
+            ResultSet result = stat.executeQuery();
+            result.next();
+            
+            naamField.setText(result.getString("naam"));
+            voorlettersField.setText(result.getString("voorletters"));
+            straatnaamField.setText(result.getString("straatnaam"));
+            huisNrField.setText(result.getString("huisNR"));
+            woonplaatsField.setText(result.getString("woonplaats"));
+            postcodeField.setText(result.getString("postcode"));
+            telefoonNrField.setText(result.getString("telefoonNR"));
+            emailField.setText(result.getString("email"));
+            ratingField.setText("" + result.getInt("rating"));
+            gewonnenGeldField.setText("" + result.getInt("gewonnenGeld"));
+            isDocentCB.setSelected(result.getBoolean("isDocent"));
+            
+            result.close();
+            stat.close();
+        }
+        catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
     }
     
     private void editSpeler () {
@@ -238,18 +244,18 @@ public class EditSpeler extends javax.swing.JFrame {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             
-            stat.setString(1, speler.naam);
-            stat.setString(2, speler.voorletters);
-            stat.setString(3, speler.postcode);
-            stat.setString(4, speler.woonplaats);
-            stat.setString(5, speler.straatnaam);
-            stat.setString(6, speler.huisNr);
-            stat.setString(7, speler.telefoonNr);
-            stat.setString(8, speler.email);
-            stat.setInt(9, speler.rating);
-            stat.setDouble(10, speler.gewonnenGeld);
-            stat.setBoolean(11, speler.isDocent);
-            stat.setInt(12, speler.ID);
+            stat.setString(1, naamField.getText());
+            stat.setString(2, voorlettersField.getText());
+            stat.setString(3, postcodeField.getText());
+            stat.setString(4, woonplaatsField.getText());
+            stat.setString(5, straatnaamField.getText());
+            stat.setString(6, huisNrField.getText());
+            stat.setString(7, telefoonNrField.getText());
+            stat.setString(8, emailField.getText());
+            stat.setInt(9, Integer.parseInt(ratingField.getText()));
+            stat.setDouble(10, Double.parseDouble(gewonnenGeldField.getText()));
+            stat.setBoolean(11, isDocentCB.isSelected());
+            stat.setInt(12, spelerID);
             
             stat.executeUpdate();
             stat.close();

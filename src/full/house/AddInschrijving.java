@@ -4,6 +4,7 @@
  */
 package full.house;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -13,14 +14,14 @@ import javax.swing.JOptionPane;
  */
 public class AddInschrijving extends javax.swing.JFrame {
 
-    Speler speler;
+    int spelerID;
     
     /**
      * Creates new form Inschrijving2
      */
-    public AddInschrijving(Speler speler) {
+    public AddInschrijving(int spelerID) {
         initComponents();
-        this.speler = speler;
+        this.spelerID = spelerID;
         fillFields();
     }
 
@@ -34,7 +35,7 @@ public class AddInschrijving extends javax.swing.JFrame {
     private void initComponents() {
 
         voorlettersField = new javax.swing.JTextField();
-        toernooiCB = new javax.swing.JComboBox();
+        evenementCB = new javax.swing.JComboBox();
         spelerIDField = new javax.swing.JTextField();
         naamField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -109,7 +110,7 @@ public class AddInschrijving extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(spelerIDField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                                 .addComponent(voorlettersField, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(toernooiCB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(evenementCB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(betaaldCB, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addContainerGap(208, Short.MAX_VALUE))
         );
@@ -135,7 +136,7 @@ public class AddInschrijving extends javax.swing.JFrame {
                     .addComponent(naamField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(toernooiCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(evenementCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(betaaldCB)
@@ -174,9 +175,27 @@ public class AddInschrijving extends javax.swing.JFrame {
      * Vult de textvelden met corresponderende waarden.
      */
     private void fillFields () {
-        spelerIDField.setText("" + speler.ID);
-        voorlettersField.setText(speler.voorletters);
-        naamField.setText(speler.naam);
+        String query = "SELECT voorletters, naam FROM Speler WHERE spelerID = ?;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setInt(1, spelerID);
+            
+            ResultSet result = stat.executeQuery();
+            result.next();
+            String voorletters = result.getString("voorletters");
+            String naam = result.getString("naam");
+            
+            spelerIDField.setText("" + spelerID);
+            voorlettersField.setText(voorletters);
+            naamField.setText(naam);
+            
+            result.close();
+            stat.close();
+        }
+        catch (Exception e) {
+            FullHouse.showDBError(e);
+        }
         getToernooien();
     }
     
@@ -184,14 +203,14 @@ public class AddInschrijving extends javax.swing.JFrame {
      * Haalt een lijst op met bestaande toernooien en vult een ComboBox hiermee.
      */
     private void getToernooien () {
-        String query = "SELECT toernooiID FROM Toernooi";
+        String query = "SELECT evenementID FROM Evenement;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             ResultSet result = stat.executeQuery();
             while (result.next()) {
-                int toernooiID = result.getInt("toernooiID");
-                toernooiCB.addItem("" + toernooiID);
+                int evenementID = result.getInt("evenementID");
+                evenementCB.addItem("" + evenementID);
             }
             result.close();
             stat.close();
@@ -207,55 +226,27 @@ public class AddInschrijving extends javax.swing.JFrame {
      * @return Returns false als de inschrijving niet gelukt is.
      */
     private boolean addInschrijving () {
-        if (checkInschrijving()) {
-            String query = "INSERT INTO Inschrijving(spelerID, toernooiID, betaald)"
-                    + "VALUES(?,?,?)";
-            int toernooiID = Integer.parseInt(toernooiCB.getSelectedItem().toString());
-            boolean betaald = betaaldCB.isSelected();
-            try {
-                Connection conn = SimpleDataSource.getConnection();
-                PreparedStatement stat = conn.prepareStatement(query);
-                stat.setInt(1, speler.ID);
-                stat.setInt(2, toernooiID);
-                stat.setBoolean(3, betaald);
-                stat.executeUpdate();
-                stat.close();
-                return true;
-            }
-            catch (Exception e) {
-                FullHouse.showDBError(e);
-                return false;
-            }
-        }
-        else {
-            JOptionPane.showMessageDialog(rootPane, "Speler is al ingeschreven voor dit toernooi.", "Dubbele inschrijving", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-    
-    /**
-     * Controleert of de speler al is ingeschreven voor het geselecteerde toernooi.
-     * @return Returns false als de speler al is ingeschreven.
-     */
-    private boolean checkInschrijving () {
-        String query = "SELECT * FROM Inschrijving WHERE spelerID=? AND toernooiID=?;";
+        String query = "INSERT INTO Inschrijving(spelerID, evenementID, isBetaald)"
+                + "VALUES(?,?,?)";
+        int evenementID = Integer.parseInt(evenementCB.getSelectedItem().toString());
+        boolean isBetaald = betaaldCB.isSelected();
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
-            int spelerID = speler.ID;
-            int toernooiID = Integer.parseInt(toernooiCB.getSelectedItem().toString());
             stat.setInt(1, spelerID);
-            stat.setInt(2, toernooiID);
-            ResultSet result = stat.executeQuery();
-            if (result.next()) {
-                return false;
-            }
-            else {
-                return true;
-            }
+            stat.setInt(2, evenementID);
+            stat.setBoolean(3, isBetaald);
+            stat.executeUpdate();
+            stat.close();
+            return true;
         }
-        catch (SQLException | NumberFormatException e) {
+        catch (MySQLIntegrityConstraintViolationException e) {
+            JOptionPane.showMessageDialog(rootPane, "Speler is al ingeschreven voor dit toernooi.", "Dubbele inschrijving", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        catch (SQLException e) {
             FullHouse.showDBError(e);
+            System.out.println("d");
             return false;
         }
     }
@@ -263,6 +254,7 @@ public class AddInschrijving extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox betaaldCB;
     private javax.swing.JButton cancelBtn;
+    private javax.swing.JComboBox evenementCB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -271,7 +263,6 @@ public class AddInschrijving extends javax.swing.JFrame {
     private javax.swing.JTextField naamField;
     private javax.swing.JButton saveBtn;
     private javax.swing.JTextField spelerIDField;
-    private javax.swing.JComboBox toernooiCB;
     private javax.swing.JTextField voorlettersField;
     // End of variables declaration//GEN-END:variables
 }
