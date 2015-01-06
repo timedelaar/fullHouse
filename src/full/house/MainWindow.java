@@ -117,11 +117,13 @@ public class MainWindow extends javax.swing.JFrame {
     private void viewToernooienBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewToernooienBtnMouseClicked
         CardLayout cl = (CardLayout) cards.getLayout();
         cl.show(cards, "toernooiView");
+        toernooiView.getToernooien();
     }//GEN-LAST:event_viewToernooienBtnMouseClicked
 
     private void viewSpelersBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewSpelersBtnMouseClicked
         CardLayout cl = (CardLayout) cards.getLayout();
         cl.show(cards, "spelerView");
+        spelerView.getSpelers();
     }//GEN-LAST:event_viewSpelersBtnMouseClicked
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -138,6 +140,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void viewLocatiesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewLocatiesBtnMouseClicked
         CardLayout cl = (CardLayout) cards.getLayout();
         cl.show(cards, "locatieView");
+        locatieView.getLocaties();
     }//GEN-LAST:event_viewLocatiesBtnMouseClicked
     
     
