@@ -190,10 +190,12 @@ public class ToernooiView extends javax.swing.JPanel {
     }//GEN-LAST:event_deleteToernooiBtnMouseClicked
 
     public final void getToernooien () {
-        String query = "SELECT * FROM Evenement "
+        String query = "SELECT *, COUNT(Inschrijving.evenementID) AS inschrijvingen FROM Evenement "
                 + "JOIN Locatie ON Evenement.locatieID = Locatie.locatieID "
                 + "JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
-                + "JOIN ToernooiSoort ON Toernooi.soortToernooi = ToernooiSoort.soortID;";
+                + "JOIN ToernooiSoort ON Toernooi.soortToernooi = ToernooiSoort.soortID "
+                + "LEFT OUTER JOIN Inschrijving ON Evenement.evenementID = Inschrijving.evenementID "
+                + "GROUP BY Evenement.evenementID;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -208,7 +210,7 @@ public class ToernooiView extends javax.swing.JPanel {
     }
     
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"ID", "Locatie", "Datum", "Soort", "Prijs", "Max. spelers", "Min. spelers"};
+        String[] columnNames = {"ID", "Locatie", "Datum", "Soort", "Prijs", "Max. spelers", "Min. spelers", "Aantal Inschrijvingen"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
         while (result.next()) {
@@ -224,7 +226,8 @@ public class ToernooiView extends javax.swing.JPanel {
             int prijs = result.getInt("Evenement.prijs");
             int maxSpelers = result.getInt("Toernooi.maximumSpelers");
             int minSpelers = result.getInt("Toernooi.minimumSpelers");
-            Object[] rowData = {ID, locatie, datum, soort, prijs, maxSpelers, minSpelers};
+            int inschrijvingen = result.getInt("inschrijvingen");
+            Object[] rowData = {ID, locatie, datum, soort, prijs, maxSpelers, minSpelers, inschrijvingen};
             model.addRow(rowData);
         }
         toernooiTable.setModel(model);
