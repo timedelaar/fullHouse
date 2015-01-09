@@ -124,10 +124,10 @@ public class InschrijvingView extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteBtnMouseClicked
 
     private void getInschrijvingen () {
-        String query = "SELECT Inschrijving.evenementID, isBetaald, datum "
+        String query = "SELECT Inschrijving.evenementID, naam, isBetaald, datum "
                 + "FROM Inschrijving "
                 + "JOIN Evenement ON Inschrijving.evenementID = Evenement.evenementID "
-                + "WHERE spelerID = ?;";
+                + "WHERE Inschrijving.spelerID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -158,17 +158,16 @@ public class InschrijvingView extends javax.swing.JFrame {
     }
     
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"Speler ID", "Evenement ID", "Datum", "Betaald"};
+        String[] columnNames = {"Evenement ID", "Naam", "Datum", "Betaald"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
         while (result.next()) {
-            String ID = "" + spelerID;
-            ID = FullHouse.addZeroes(ID, 4);
-            String toernooiID = result.getString("evenementID");
-            toernooiID = FullHouse.addZeroes(toernooiID, 4);
+            String evenementID = result.getString("evenementID");
+            evenementID = FullHouse.addZeroes(evenementID, 4);
+            String naam = result.getString("naam");
             Date datum = result.getDate("datum");
             boolean betaald = result.getBoolean("isBetaald");
-            Object[] rowData = {ID, toernooiID, datum, betaald};
+            Object[] rowData = {evenementID, naam, datum, betaald};
             model.addRow(rowData);
         }
         inschrijvingTable.setModel(model);

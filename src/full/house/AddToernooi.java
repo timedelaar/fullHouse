@@ -55,6 +55,8 @@ public class AddToernooi extends javax.swing.JFrame {
         soortCB = new javax.swing.JComboBox();
         minSpelersField = new javax.swing.JTextField();
         maxSpelersField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        naamField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nieuw toernooi");
@@ -93,6 +95,8 @@ public class AddToernooi extends javax.swing.JFrame {
 
         jLabel3.setText("max. spelers:");
 
+        jLabel4.setText("naam:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,21 +117,25 @@ public class AddToernooi extends javax.swing.JFrame {
                             .addComponent(postcodeLbl)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
                         .addGap(73, 73, 73)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(dayBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(monthBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(yearBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(locatieCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(maxSpelersField, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(minSpelersField, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(prijsField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(soortCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(soortCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(naamField)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(dayBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(monthBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(yearBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -136,6 +144,10 @@ public class AddToernooi extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(addUserLbl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(naamField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(naamLbl)
                     .addComponent(locatieCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -161,7 +173,7 @@ public class AddToernooi extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(maxSpelersField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
                     .addComponent(cancelBtn))
@@ -184,8 +196,8 @@ public class AddToernooi extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelBtnMouseClicked
 
     private boolean addToernooi () {
-        String query = "INSERT INTO Evenement(locatieID, datum, prijs) "
-                + "VALUES(?, ?, ?)";
+        String query = "INSERT INTO Evenement(locatieID, datum, prijs, naam) "
+                + "VALUES(?, ?, ?, ?)";
         String query2 = "SELECT evenementID FROM Evenement "
                 + "WHERE locatieID = ? AND datum = ? AND prijs = ?";
         String query3 = "INSERT INTO Toernooi(evenementID, maximumSpelers, minimumSpelers, soortToernooi) "
@@ -200,6 +212,7 @@ public class AddToernooi extends javax.swing.JFrame {
             int locatieID = item.id;
             Date datum = getDatum();
             int prijs = Integer.parseInt(prijsField.getText());
+            String naam = naamField.getText();
             item = (ModelItem) soortCB.getSelectedItem();
             int soort = item.id;
             int minSpelers = Integer.parseInt(minSpelersField.getText());
@@ -208,6 +221,7 @@ public class AddToernooi extends javax.swing.JFrame {
             stat.setInt(1, locatieID);
             stat.setDate(2, datum);
             stat.setInt(3, prijs);
+            stat.setString(4, naam);
             
             stat2.setInt(1, locatieID);
             stat2.setDate(2, datum);
@@ -342,10 +356,12 @@ public class AddToernooi extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JComboBox locatieCB;
     private javax.swing.JTextField maxSpelersField;
     private javax.swing.JTextField minSpelersField;
     private javax.swing.JComboBox monthBox;
+    private javax.swing.JTextField naamField;
     private javax.swing.JLabel naamLbl;
     private javax.swing.JLabel postcodeLbl;
     private javax.swing.JTextField prijsField;

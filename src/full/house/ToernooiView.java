@@ -210,12 +210,13 @@ public class ToernooiView extends javax.swing.JPanel {
     }
     
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"ID", "Locatie", "Datum", "Soort", "Prijs", "Max. spelers", "Min. spelers", "Aantal Inschrijvingen"};
+        String[] columnNames = {"ID", "Naam", "Locatie", "Datum", "Soort", "Prijs", "Max. spelers", "Min. spelers", "Aantal Inschrijvingen"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
         while (result.next()) {
             String ID = result.getString("Evenement.evenementID");
             ID = FullHouse.addZeroes(ID, 4);
+            String naam = result.getString("Evenement.naam");
             int locatieID = result.getInt("Evenement.locatieID");
             String locatieNaam = result.getString("Locatie.naam");
             ModelItem locatie = new ModelItem(locatieID, locatieNaam);
@@ -227,7 +228,7 @@ public class ToernooiView extends javax.swing.JPanel {
             int maxSpelers = result.getInt("Toernooi.maximumSpelers");
             int minSpelers = result.getInt("Toernooi.minimumSpelers");
             int inschrijvingen = result.getInt("inschrijvingen");
-            Object[] rowData = {ID, locatie, datum, soort, prijs, maxSpelers, minSpelers, inschrijvingen};
+            Object[] rowData = {ID, naam, locatie, datum, soort, prijs, maxSpelers, minSpelers, inschrijvingen};
             model.addRow(rowData);
         }
         toernooiTable.setModel(model);
