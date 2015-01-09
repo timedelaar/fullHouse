@@ -124,9 +124,10 @@ public class InschrijvingView extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteBtnMouseClicked
 
     private void getInschrijvingen () {
-        String query = "SELECT Inschrijving.evenementID, naam, isBetaald, datum "
+        String query = "SELECT Inschrijving.evenementID, naam, isBetaald, soortToernooi, datum "
                 + "FROM Inschrijving "
                 + "JOIN Evenement ON Inschrijving.evenementID = Evenement.evenementID "
+                + "LEFT JOIN Toernooi ON Inschrijving.evenementID = Toernooi.evenementID "
                 + "WHERE Inschrijving.spelerID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
@@ -158,7 +159,7 @@ public class InschrijvingView extends javax.swing.JFrame {
     }
     
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"Evenement ID", "Naam", "Datum", "Betaald"};
+        String[] columnNames = {"Evenement ID", "Evenement naam", "Datum", "Soort", "Betaald"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
         while (result.next()) {
@@ -167,7 +168,15 @@ public class InschrijvingView extends javax.swing.JFrame {
             String naam = result.getString("naam");
             Date datum = result.getDate("datum");
             boolean betaald = result.getBoolean("isBetaald");
-            Object[] rowData = {evenementID, naam, datum, betaald};
+            String soort;
+            if (result.getString("soortToernooi") == null) {
+                soort = "Masterclass";
+            }
+            else {
+                soort = "Toernooi";
+            }
+            
+            Object[] rowData = {evenementID, naam, datum, soort, betaald};
             model.addRow(rowData);
         }
         inschrijvingTable.setModel(model);
