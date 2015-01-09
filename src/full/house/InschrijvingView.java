@@ -36,7 +36,7 @@ public class InschrijvingView extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         inschrijvingTable = new javax.swing.JTable();
-        editBtn = new javax.swing.JButton();
+        betaaldBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -57,10 +57,10 @@ public class InschrijvingView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(inschrijvingTable);
 
-        editBtn.setText("<html><div align=center>Bewerk<br>inschrijving</div></html>");
-        editBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        betaaldBtn.setText("Betaald");
+        betaaldBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                editBtnMouseClicked(evt);
+                betaaldBtnMouseClicked(evt);
             }
         });
 
@@ -81,11 +81,11 @@ public class InschrijvingView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(deleteBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(betaaldBtn, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {deleteBtn, editBtn});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {betaaldBtn, deleteBtn});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,21 +94,26 @@ public class InschrijvingView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(betaaldBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 169, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {deleteBtn, editBtn});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {betaaldBtn, deleteBtn});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void editBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editBtnMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editBtnMouseClicked
+    private void betaaldBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_betaaldBtnMouseClicked
+        int[] rows = inschrijvingTable.getSelectedRows();
+        for (int i = 0; i < rows.length; i++) {
+            int evenementID = Integer.parseInt(inschrijvingTable.getValueAt(rows[i], 0).toString());
+            setBetaald(spelerID, evenementID);
+        }
+        getInschrijvingen();
+    }//GEN-LAST:event_betaaldBtnMouseClicked
 
     private void deleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteBtnMouseClicked
         int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U deze inschrijving(en) wilt verwijderen?", "Verwijder inschrijving(en)?", JOptionPane.YES_NO_OPTION);
@@ -140,6 +145,28 @@ public class InschrijvingView extends javax.swing.JFrame {
         }
         catch (Exception e) {
             FullHouse.showDBError(e);
+        }
+    }
+    
+    private boolean setBetaald (int spelerID, int evenementID) {
+        String query = "UPDATE Inschrijving "
+                + "SET isBetaald = true "
+                + "WHERE spelerID = ? AND evenementID = ?;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            
+            stat.setInt(1, spelerID);
+            stat.setInt(2, evenementID);
+            
+            stat.executeUpdate();
+            
+            stat.close();
+            return true;
+        }
+        catch (SQLException e) {
+            FullHouse.showDBError(e);
+            return false;
         }
     }
     
@@ -184,8 +211,8 @@ public class InschrijvingView extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton betaaldBtn;
     private javax.swing.JButton deleteBtn;
-    private javax.swing.JButton editBtn;
     private javax.swing.JTable inschrijvingTable;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
