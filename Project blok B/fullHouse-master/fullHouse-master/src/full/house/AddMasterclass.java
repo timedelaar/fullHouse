@@ -14,7 +14,6 @@ public class AddMasterclass extends javax.swing.JFrame {
     MasterclassView parent;
     private String docent;
     private int minimumRating;
-    private int prijs;
     
     public AddMasterclass() {
         initComponents();
@@ -34,8 +33,6 @@ public class AddMasterclass extends javax.swing.JFrame {
         docentField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         minRatingField = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        prijsField = new javax.swing.JTextField();
         addButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
 
@@ -46,8 +43,6 @@ public class AddMasterclass extends javax.swing.JFrame {
         jLabel2.setText("Naam docent:");
 
         jLabel3.setText("Minimum rating:");
-
-        jLabel4.setText("Prijs:");
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -72,18 +67,16 @@ public class AddMasterclass extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                         .addGap(31, 31, 31)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(docentField)
-                        .addComponent(minRatingField)
-                        .addComponent(prijsField, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(docentField, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                        .addComponent(minRatingField))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24))))
@@ -105,11 +98,7 @@ public class AddMasterclass extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(minRatingField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(prijsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
                     .addComponent(cancelButton))
@@ -122,7 +111,6 @@ public class AddMasterclass extends javax.swing.JFrame {
     private void addButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonMouseClicked
         docent = docentField.getText();
         minimumRating = Integer.parseInt(minRatingField.getText());
-        prijs = Integer.parseInt(prijsField.getText());
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_addButtonMouseClicked
@@ -158,8 +146,6 @@ public class AddMasterclass extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField minRatingField;
-    private javax.swing.JTextField prijsField;
     // End of variables declaration//GEN-END:variables
 }
