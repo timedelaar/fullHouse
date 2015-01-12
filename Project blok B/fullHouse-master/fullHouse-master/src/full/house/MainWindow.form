@@ -84,6 +84,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Master Classes"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ViewMCBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="viewLocatiesBtn">
       <Properties>
@@ -115,6 +118,13 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
               <CardConstraints cardName="locatieView"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="full.house.MasterclassView" name="masterclassView">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+              <CardConstraints cardName="card5"/>
             </Constraint>
           </Constraints>
         </Component>

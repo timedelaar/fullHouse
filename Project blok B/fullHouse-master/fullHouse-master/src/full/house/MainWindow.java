@@ -36,6 +36,7 @@ public class MainWindow extends javax.swing.JFrame {
         spelerView = new full.house.SpelerView();
         toernooiView = new full.house.ToernooiView();
         locatieView = new full.house.LocatieView();
+        masterclassView = new full.house.MasterclassView();
         jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,6 +64,11 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         ViewMCBtn.setText("Master Classes");
+        ViewMCBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewMCBtnActionPerformed(evt);
+            }
+        });
 
         viewLocatiesBtn.setText("Locaties");
         viewLocatiesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -75,6 +81,7 @@ public class MainWindow extends javax.swing.JFrame {
         cards.add(spelerView, "spelerView");
         cards.add(toernooiView, "toernooiView");
         cards.add(locatieView, "locatieView");
+        cards.add(masterclassView, "card5");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,6 +149,12 @@ public class MainWindow extends javax.swing.JFrame {
         cl.show(cards, "locatieView");
         locatieView.getLocaties();
     }//GEN-LAST:event_viewLocatiesBtnMouseClicked
+
+    private void ViewMCBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewMCBtnActionPerformed
+        CardLayout cl = (CardLayout) cards.getLayout();
+        cl.show(cards, "masterclassView");
+        masterclassView.getMasterclasses();
+    }//GEN-LAST:event_ViewMCBtnActionPerformed
     
     
      
@@ -150,6 +163,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel cards;
     private javax.swing.JSeparator jSeparator2;
     private full.house.LocatieView locatieView;
+    private full.house.MasterclassView masterclassView;
     private full.house.SpelerView spelerView;
     private full.house.ToernooiView toernooiView;
     private javax.swing.JButton viewLocatiesBtn;
