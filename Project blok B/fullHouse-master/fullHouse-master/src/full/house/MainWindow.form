@@ -124,7 +124,7 @@
         <Component class="full.house.MasterclassView" name="masterclassView">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="card5"/>
+              <CardConstraints cardName="masterclassView"/>
             </Constraint>
           </Constraints>
         </Component>

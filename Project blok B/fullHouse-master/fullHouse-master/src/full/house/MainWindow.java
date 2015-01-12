@@ -81,7 +81,7 @@ public class MainWindow extends javax.swing.JFrame {
         cards.add(spelerView, "spelerView");
         cards.add(toernooiView, "toernooiView");
         cards.add(locatieView, "locatieView");
-        cards.add(masterclassView, "card5");
+        cards.add(masterclassView, "masterclassView");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
