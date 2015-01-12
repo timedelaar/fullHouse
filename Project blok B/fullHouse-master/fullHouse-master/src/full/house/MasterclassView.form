@@ -23,23 +23,15 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" min="-2" pref="552" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="623" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="editClassButton" min="-2" pref="129" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="newClassButton" min="-2" pref="129" max="-2" attributes="0"/>
-                          <Component id="deleteClassButton" alignment="0" min="-2" pref="129" max="-2" attributes="0"/>
-                          <Component id="viewClassButton" min="-2" pref="129" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="newClassButton" linkSize="1" alignment="1" min="-2" pref="129" max="-2" attributes="0"/>
+                  <Component id="editClassButton" linkSize="1" alignment="1" min="-2" pref="129" max="-2" attributes="0"/>
+                  <Component id="deleteClassButton" linkSize="1" alignment="1" min="-2" pref="129" max="-2" attributes="0"/>
+                  <Component id="viewClassButton" linkSize="1" alignment="1" min="-2" pref="129" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="18" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -47,19 +39,18 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" pref="461" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="newClassButton" min="-2" pref="54" max="-2" attributes="0"/>
+                      <Component id="newClassButton" linkSize="2" min="-2" pref="54" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="editClassButton" min="-2" pref="54" max="-2" attributes="0"/>
+                      <Component id="editClassButton" linkSize="2" min="-2" pref="54" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="deleteClassButton" min="-2" pref="54" max="-2" attributes="0"/>
+                      <Component id="deleteClassButton" linkSize="2" min="-2" pref="54" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="viewClassButton" min="-2" pref="54" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="viewClassButton" linkSize="2" min="-2" pref="54" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -123,6 +114,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Nieuwe class"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newClassButtonMouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="editClassButton">
       <Properties>
