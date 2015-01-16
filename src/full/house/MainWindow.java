@@ -5,6 +5,7 @@
 package full.house;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 
 /**
  *
@@ -17,6 +18,7 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
+        viewSpelersBtn.setForeground(Color.red);
     }
 
     /**
@@ -30,7 +32,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         viewSpelersBtn = new javax.swing.JButton();
         viewToernooienBtn = new javax.swing.JButton();
-        ViewMCBtn = new javax.swing.JButton();
+        viewMCBtn = new javax.swing.JButton();
         viewLocatiesBtn = new javax.swing.JButton();
         cards = new javax.swing.JPanel();
         spelerView = new full.house.SpelerView();
@@ -41,7 +43,6 @@ public class MainWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Full House registratie-programma");
         setPreferredSize(new java.awt.Dimension(800, 600));
-        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -62,7 +63,12 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        ViewMCBtn.setText("Master Classes");
+        viewMCBtn.setText("Master Classes");
+        viewMCBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                viewMCBtnMouseClicked(evt);
+            }
+        });
 
         viewLocatiesBtn.setText("Locaties");
         viewLocatiesBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -86,7 +92,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(viewToernooienBtn)
                 .addGap(18, 18, 18)
-                .addComponent(ViewMCBtn)
+                .addComponent(viewMCBtn)
                 .addGap(18, 18, 18)
                 .addComponent(viewLocatiesBtn)
                 .addGap(0, 187, Short.MAX_VALUE))
@@ -94,7 +100,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addComponent(cards, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {ViewMCBtn, viewLocatiesBtn, viewSpelersBtn, viewToernooienBtn});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {viewLocatiesBtn, viewMCBtn, viewSpelersBtn, viewToernooienBtn});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,7 +109,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(viewSpelersBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(viewToernooienBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ViewMCBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(viewMCBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(viewLocatiesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -117,12 +123,20 @@ public class MainWindow extends javax.swing.JFrame {
     private void viewToernooienBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewToernooienBtnMouseClicked
         CardLayout cl = (CardLayout) cards.getLayout();
         cl.show(cards, "toernooiView");
+        viewLocatiesBtn.setForeground(Color.black);
+        viewMCBtn.setForeground(Color.black);
+        viewSpelersBtn.setForeground(Color.black);
+        viewToernooienBtn.setForeground(Color.red);
         toernooiView.getToernooien();
     }//GEN-LAST:event_viewToernooienBtnMouseClicked
 
     private void viewSpelersBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewSpelersBtnMouseClicked
         CardLayout cl = (CardLayout) cards.getLayout();
         cl.show(cards, "spelerView");
+        viewLocatiesBtn.setForeground(Color.black);
+        viewMCBtn.setForeground(Color.black);
+        viewSpelersBtn.setForeground(Color.red);
+        viewToernooienBtn.setForeground(Color.black);
         spelerView.getSpelers();
     }//GEN-LAST:event_viewSpelersBtnMouseClicked
 
@@ -140,19 +154,30 @@ public class MainWindow extends javax.swing.JFrame {
     private void viewLocatiesBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewLocatiesBtnMouseClicked
         CardLayout cl = (CardLayout) cards.getLayout();
         cl.show(cards, "locatieView");
+        viewLocatiesBtn.setForeground(Color.red);
+        viewMCBtn.setForeground(Color.black);
+        viewSpelersBtn.setForeground(Color.black);
+        viewToernooienBtn.setForeground(Color.black);
         locatieView.getLocaties();
     }//GEN-LAST:event_viewLocatiesBtnMouseClicked
+
+    private void viewMCBtnMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewMCBtnMouseClicked
+        viewLocatiesBtn.setForeground(Color.black);
+        viewMCBtn.setForeground(Color.red);
+        viewSpelersBtn.setForeground(Color.black);
+        viewToernooienBtn.setForeground(Color.black);
+    }//GEN-LAST:event_viewMCBtnMouseClicked
     
     
      
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton ViewMCBtn;
     private javax.swing.JPanel cards;
     private javax.swing.JSeparator jSeparator2;
     private full.house.LocatieView locatieView;
     private full.house.SpelerView spelerView;
     private full.house.ToernooiView toernooiView;
     private javax.swing.JButton viewLocatiesBtn;
+    private javax.swing.JButton viewMCBtn;
     private javax.swing.JButton viewSpelersBtn;
     private javax.swing.JButton viewToernooienBtn;
     // End of variables declaration//GEN-END:variables

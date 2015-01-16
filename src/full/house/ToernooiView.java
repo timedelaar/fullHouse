@@ -5,6 +5,7 @@
 package full.house;
 
 import java.sql.*;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -41,6 +42,7 @@ public class ToernooiView extends javax.swing.JPanel {
         editToernooiBtn = new javax.swing.JButton();
         deleteToernooiBtn = new javax.swing.JButton();
         viewInschrijvingenBtn = new javax.swing.JButton();
+        tafelBtn = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -119,6 +121,13 @@ public class ToernooiView extends javax.swing.JPanel {
 
         viewInschrijvingenBtn.setText("<html><div align=center>Bekijk<br>inschrijvingen</div></html>");
 
+        tafelBtn.setText("<html><div align=center>Maak<br>tafelindeling</div></html>");
+        tafelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tafelBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,15 +136,16 @@ public class ToernooiView extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 641, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addToernooiBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(viewInschrijvingenBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deleteToernooiBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editToernooiBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(addToernooiBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                    .addComponent(viewInschrijvingenBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                    .addComponent(deleteToernooiBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                    .addComponent(editToernooiBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                    .addComponent(tafelBtn))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addToernooiBtn, deleteToernooiBtn, editToernooiBtn, viewInschrijvingenBtn});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {addToernooiBtn, deleteToernooiBtn, editToernooiBtn, tafelBtn, viewInschrijvingenBtn});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,11 +160,13 @@ public class ToernooiView extends javax.swing.JPanel {
                         .addComponent(deleteToernooiBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(viewInschrijvingenBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tafelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addToernooiBtn, deleteToernooiBtn, editToernooiBtn, viewInschrijvingenBtn});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addToernooiBtn, deleteToernooiBtn, editToernooiBtn, tafelBtn, viewInschrijvingenBtn});
 
     }// </editor-fold>//GEN-END:initComponents
 
@@ -179,7 +191,7 @@ public class ToernooiView extends javax.swing.JPanel {
     }//GEN-LAST:event_editToernooiBtnMouseClicked
 
     private void deleteToernooiBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteToernooiBtnMouseClicked
-        int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U dit toernooi wilt verwijderen?", "Verwijder toernooi?", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(null, "Weet u zeker dat u dit toernooi wilt verwijderen?", "Verwijder toernooi?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             int[] rows = toernooiTable.getSelectedRows();
             for (int i = 0; i < rows.length; i++) {
@@ -188,6 +200,23 @@ public class ToernooiView extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_deleteToernooiBtnMouseClicked
+
+    private void tafelBtnMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tafelBtnMouseClicked
+        int[] rows = toernooiTable.getSelectedRows();
+        if (rows.length == 0) {
+            JOptionPane.showMessageDialog(this, "Geen toernooi(en) geselecteerd.", "Genereer tafelindeling", JOptionPane.PLAIN_MESSAGE);
+        }
+        else {
+            int confirm = JOptionPane.showConfirmDialog(null, "<html>Weet u zeker dat u de tafelindeling voor dit toernooi wilt aanmaken?<br>"
+                    + "Nadat de tafelindeling is aangemaakt is het niet meer mogelijk nieuwe spelers in te schrijven.</html>", "Genereer tafelindeling?", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                for (int i = 0; i < rows.length; i++) {
+                    int id = Integer.parseInt(toernooiTable.getValueAt(rows[i], 0).toString());
+                    genereerTafelIndeling(id);
+                }
+            }
+        }
+    }//GEN-LAST:event_tafelBtnMouseClicked
 
     public final void getToernooien () {
         String query = "SELECT *, COUNT(Inschrijving.evenementID) AS inschrijvingen FROM Evenement "
@@ -260,6 +289,64 @@ public class ToernooiView extends javax.swing.JPanel {
         getToernooien();
     }
     
+    private boolean genereerTafelIndeling (int toernooiID) {
+        String query = "SELECT spelerID FROM Inschrijving WHERE evenementID = ?;";
+        String query2 = "SELECT spelersPerTafel FROM Evenement "
+                + "JOIN Locatie ON Evenement.locatieID = Locatie.locatieID "
+                + "WHERE evenementID = ?;";
+        String query3 = "INSERT INTO ToernooiInschrijving(evenementID, spelerID, tafelNr, isUitgeschakeld) "
+                + "VALUES(?, ?, ?, false);";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            PreparedStatement stat2 = conn.prepareStatement(query2);
+            
+            stat.setInt(1, toernooiID);
+            stat2.setInt(1, toernooiID);
+            
+            ResultSet result = stat.executeQuery();
+            ResultSet result2 = stat2.executeQuery();
+            
+            ArrayList<Integer> spelers = new ArrayList<>();
+            while (result.next()) {
+                int spelerID = result.getInt("spelerID");
+                spelers.add(spelerID);
+            }
+            
+            result2.next();
+            int stoelen = result2.getInt("spelersPerTafel");
+            int tafels = spelers.size() / stoelen + 1;
+            int[][] indeling = new int[tafels][stoelen];
+            
+            result.close();
+            result2.close();
+            stat.close();
+            stat2.close();
+            
+            for (int i = 0; i < spelers.size(); i++) {
+                int speler = spelers.get(i);
+                int tafel = (int) (Math.random() * tafels);
+                int stoel = (int) (Math.random() * stoelen);
+                if (indeling[tafel][stoel] == 0) {
+                    indeling[tafel][stoel] = speler;
+                    PreparedStatement stat3 = conn.prepareStatement(query3);
+                    stat3.setInt(1, toernooiID);
+                    stat3.setInt(2, speler);
+                    stat3.setInt(3, tafel);
+                    stat3.executeUpdate();
+                    stat3.close();
+                }
+                else {
+                    i --;
+                }
+            }
+        }
+        catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
+        return true;
+    }
+    
     private void setColumnWidth (JTable table) {
         TableColumnModel tcm = table.getColumnModel();
         
@@ -291,6 +378,7 @@ public class ToernooiView extends javax.swing.JPanel {
     private javax.swing.JButton deleteToernooiBtn;
     private javax.swing.JButton editToernooiBtn;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton tafelBtn;
     private javax.swing.JTable toernooiTable;
     private javax.swing.JButton viewInschrijvingenBtn;
     // End of variables declaration//GEN-END:variables

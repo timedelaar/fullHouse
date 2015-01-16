@@ -204,7 +204,7 @@ public class SpelerView extends javax.swing.JPanel {
             System.out.println("No user selected!");
         } else {
             int spelerID = Integer.parseInt(spelerTable.getValueAt(row[0], 0).toString());
-            InschrijvingView inschrijvingen = new InschrijvingView(spelerID);
+            InschrijvingViewSpeler inschrijvingen = new InschrijvingViewSpeler(spelerID);
             inschrijvingen.setLocation(200,100);
             inschrijvingen.setVisible(true);
         }

@@ -12,14 +12,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Tim
  */
-public class InschrijvingView extends javax.swing.JFrame {
+public class InschrijvingViewSpeler extends javax.swing.JFrame {
 
     int spelerID;
     
     /**
      * Creates new form InschrijvingView
      */
-    public InschrijvingView(int spelerID) {
+    public InschrijvingViewSpeler(int spelerID) {
         initComponents();
         this.spelerID = spelerID;
         getInschrijvingen();
@@ -41,7 +41,6 @@ public class InschrijvingView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Inschrijvingen");
-        setPreferredSize(new java.awt.Dimension(600, 400));
         setResizable(false);
 
         inschrijvingTable.setModel(new javax.swing.table.DefaultTableModel(

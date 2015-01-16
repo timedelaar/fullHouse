@@ -25,11 +25,12 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="641" max="32767" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="addToernooiBtn" linkSize="5" min="-2" pref="129" max="-2" attributes="0"/>
-                  <Component id="viewInschrijvingenBtn" linkSize="5" alignment="1" min="-2" pref="129" max="-2" attributes="0"/>
-                  <Component id="deleteToernooiBtn" linkSize="5" alignment="0" min="-2" pref="129" max="-2" attributes="0"/>
-                  <Component id="editToernooiBtn" linkSize="5" alignment="0" min="-2" pref="129" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="addToernooiBtn" linkSize="5" pref="129" max="32767" attributes="0"/>
+                  <Component id="viewInschrijvingenBtn" linkSize="5" pref="129" max="32767" attributes="0"/>
+                  <Component id="deleteToernooiBtn" linkSize="5" pref="129" max="32767" attributes="0"/>
+                  <Component id="editToernooiBtn" linkSize="5" pref="129" max="32767" attributes="0"/>
+                  <Component id="tafelBtn" linkSize="5" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -48,6 +49,8 @@
                       <Component id="deleteToernooiBtn" linkSize="3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="viewInschrijvingenBtn" linkSize="3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="tafelBtn" linkSize="3" min="-2" pref="56" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -158,6 +161,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;div align=center&gt;Bekijk&lt;br&gt;inschrijvingen&lt;/div&gt;&lt;/html&gt;"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="tafelBtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;div align=center&gt;Maak&lt;br&gt;tafelindeling&lt;/div&gt;&lt;/html&gt;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tafelBtnMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
