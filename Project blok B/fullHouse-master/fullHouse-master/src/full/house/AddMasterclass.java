@@ -121,7 +121,7 @@ public class AddMasterclass extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelButtonMouseClicked
 
     public void addMasterclass(){
-        String query  = "INSERT INTO MasterClass(docent, minimumrating)"
+        String query  = "INSERT INTO MasterClass(docent, minimumRating)"
                       + "VALUES(?,?);";
         
         try{
