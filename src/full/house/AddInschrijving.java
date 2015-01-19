@@ -6,6 +6,7 @@ package full.house;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.*;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,14 +15,14 @@ import javax.swing.JOptionPane;
  */
 public class AddInschrijving extends javax.swing.JFrame {
 
-    int spelerID;
+    int[] spelers;
     
     /**
      * Creates new form Inschrijving2
      */
-    public AddInschrijving(int spelerID) {
+    public AddInschrijving(int[] spelers) {
         initComponents();
-        this.spelerID = spelerID;
+        this.spelers = spelers;
         fillFields();
     }
 
@@ -34,32 +35,19 @@ public class AddInschrijving extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        voorlettersField = new javax.swing.JTextField();
         evenementCB = new javax.swing.JComboBox();
-        spelerIDField = new javax.swing.JTextField();
-        naamField = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         saveBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         cancelBtn = new javax.swing.JButton();
         betaaldCB = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        spelersList = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        voorlettersField.setEditable(false);
-
-        spelerIDField.setEditable(false);
-
-        naamField.setEditable(false);
-
-        jLabel3.setText("naam:");
-
-        jLabel2.setText("speler ID:");
-
-        jLabel4.setText("voorletters:");
+        jLabel2.setText("spelers:");
 
         saveBtn.setText("Save");
         saveBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -70,7 +58,7 @@ public class AddInschrijving extends javax.swing.JFrame {
 
         jLabel1.setText("Nieuwe inschrijving");
 
-        jLabel5.setText("toernooi ID:");
+        jLabel5.setText("evenement:");
 
         cancelBtn.setText("Cancel");
         cancelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -81,6 +69,10 @@ public class AddInschrijving extends javax.swing.JFrame {
 
         betaaldCB.setText("betaald");
 
+        spelersList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        spelersList.setEnabled(false);
+        jScrollPane1.setViewportView(spelersList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -89,30 +81,22 @@ public class AddInschrijving extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cancelBtn))
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addComponent(jLabel2)
-                                .addGap(28, 28, 28))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addGap(18, 18, 18)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(naamField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(spelerIDField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                                .addComponent(voorlettersField, javax.swing.GroupLayout.Alignment.LEADING))
-                            .addComponent(evenementCB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(betaaldCB, javax.swing.GroupLayout.Alignment.LEADING))))
-                .addContainerGap(208, Short.MAX_VALUE))
+                                .addComponent(jLabel2))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(betaaldCB)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(evenementCB, 0, 155, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cancelBtn))
+                    .addComponent(jLabel1))
+                .addContainerGap(173, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelBtn, saveBtn});
@@ -123,24 +107,17 @@ public class AddInschrijving extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(spelerIDField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(voorlettersField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(naamField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(evenementCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(73, 73, 73)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(evenementCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(betaaldCB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveBtn)
                     .addComponent(cancelBtn))
@@ -156,7 +133,7 @@ public class AddInschrijving extends javax.swing.JFrame {
      */
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         if (addInschrijving()) {
-            JOptionPane.showMessageDialog(rootPane, "Speler is ingeschreven");
+            JOptionPane.showMessageDialog(rootPane, "Spelers zijn ingeschreven");
             this.setVisible(false);
             this.dispose();
         }
@@ -176,26 +153,29 @@ public class AddInschrijving extends javax.swing.JFrame {
      */
     private void fillFields () {
         String query = "SELECT voorletters, naam FROM Speler WHERE spelerID = ?;";
-        try {
-            Connection conn = SimpleDataSource.getConnection();
-            PreparedStatement stat = conn.prepareStatement(query);
-            stat.setInt(1, spelerID);
-            
-            ResultSet result = stat.executeQuery();
-            result.next();
-            String voorletters = result.getString("voorletters");
-            String naam = result.getString("naam");
-            
-            spelerIDField.setText("" + spelerID);
-            voorlettersField.setText(voorletters);
-            naamField.setText(naam);
-            
-            result.close();
-            stat.close();
+        DefaultListModel model = new DefaultListModel();
+        for (int i = 0; i < spelers.length; i++) {
+            try {
+                Connection conn = SimpleDataSource.getConnection();
+                PreparedStatement stat = conn.prepareStatement(query);
+                int spelerID = spelers[i];
+                stat.setInt(1, spelerID);
+
+                ResultSet result = stat.executeQuery();
+                result.next();
+                String voorletters = result.getString("voorletters");
+                String naam = result.getString("naam");
+                ModelItem item = new ModelItem(spelers[i], naam + ", " + voorletters);
+                model.addElement(item);
+                
+                result.close();
+                stat.close();
+            }
+            catch (Exception e) {
+                FullHouse.showDBError(e);
+            }
         }
-        catch (Exception e) {
-            FullHouse.showDBError(e);
-        }
+        spelersList.setModel(model);
         getToernooien();
     }
     
@@ -203,14 +183,16 @@ public class AddInschrijving extends javax.swing.JFrame {
      * Haalt een lijst op met bestaande toernooien en vult een ComboBox hiermee.
      */
     private void getToernooien () {
-        String query = "SELECT evenementID FROM Evenement;";
+        String query = "SELECT evenementID, naam FROM Evenement;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             ResultSet result = stat.executeQuery();
             while (result.next()) {
                 int evenementID = result.getInt("evenementID");
-                evenementCB.addItem("" + evenementID);
+                String naam = result.getString("naam");
+                ModelItem item = new ModelItem(evenementID, naam);
+                evenementCB.addItem(item);
             }
             result.close();
             stat.close();
@@ -222,33 +204,35 @@ public class AddInschrijving extends javax.swing.JFrame {
     
     /**
      * Voegt een inschrijving toe.
-     * Laat een dialog zien als de speler al is ingeschreven voor dit toernooi.
+     * Laat een dialog zien als een speler al is ingeschreven voor dit toernooi.
      * @return Returns false als de inschrijving niet gelukt is.
      */
     private boolean addInschrijving () {
+        boolean succes = true;
         String query = "INSERT INTO Inschrijving(spelerID, evenementID, isBetaald)"
                 + "VALUES(?,?,?)";
-        int evenementID = Integer.parseInt(evenementCB.getSelectedItem().toString());
+        ModelItem item = (ModelItem) evenementCB.getSelectedItem();
+        int evenementID = item.id;
         boolean isBetaald = betaaldCB.isSelected();
-        try {
-            Connection conn = SimpleDataSource.getConnection();
-            PreparedStatement stat = conn.prepareStatement(query);
-            stat.setInt(1, spelerID);
-            stat.setInt(2, evenementID);
-            stat.setBoolean(3, isBetaald);
-            stat.executeUpdate();
-            stat.close();
-            return true;
+        for (int i = 0; i < spelers.length; i++) {
+            try {
+                Connection conn = SimpleDataSource.getConnection();
+                PreparedStatement stat = conn.prepareStatement(query);
+                stat.setInt(1, spelers[i]);
+                stat.setInt(2, evenementID);
+                stat.setBoolean(3, isBetaald);
+                stat.executeUpdate();
+                stat.close();
+            }
+            catch (MySQLIntegrityConstraintViolationException e) {
+                
+            }
+            catch (SQLException e) {
+                FullHouse.showDBError(e);
+                succes = false;
+            }
         }
-        catch (MySQLIntegrityConstraintViolationException e) {
-            JOptionPane.showMessageDialog(rootPane, "Speler is al ingeschreven voor dit toernooi.", "Dubbele inschrijving", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        catch (SQLException e) {
-            FullHouse.showDBError(e);
-            System.out.println("d");
-            return false;
-        }
+        return succes;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -257,12 +241,9 @@ public class AddInschrijving extends javax.swing.JFrame {
     private javax.swing.JComboBox evenementCB;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField naamField;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton saveBtn;
-    private javax.swing.JTextField spelerIDField;
-    private javax.swing.JTextField voorlettersField;
+    private javax.swing.JList spelersList;
     // End of variables declaration//GEN-END:variables
 }

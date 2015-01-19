@@ -14,16 +14,6 @@ import java.sql.PreparedStatement;
  * @author jannedevos
  */
 public class SpelerGen {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) 
-    {
-        genNamen();
-        
-       
-    }
     
     private static String genTelefoon()
     {

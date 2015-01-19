@@ -187,12 +187,13 @@ public class SpelerView extends javax.swing.JPanel {
         if (row.length == 0) {
             JOptionPane.showMessageDialog(this, "Geen speler(s) geselecteerd.", "Nieuwe inschrijving", JOptionPane.PLAIN_MESSAGE);
         } else {
-            for (int i = 0; i < row.length; i++) {
-                int id = Integer.parseInt(spelerTable.getValueAt(row[i], 0).toString());
-                AddInschrijving inschrijving = new AddInschrijving(id);
-                inschrijving.setLocation(200 + i*30,100 + i*30 - (i/5)*150);
-                inschrijving.setVisible(true);
+            int[] spelers = new int[row.length];
+            for (int i = 0; i < spelers.length; i++) {
+                spelers[i] = Integer.parseInt(spelerTable.getValueAt(row[i], 0).toString());
             }
+            AddInschrijving inschrijving = new AddInschrijving(spelers);
+            inschrijving.setLocation(300, 300);
+            inschrijving.setVisible(true);
         }
     }//GEN-LAST:event_addInschrijvingBtnMouseClicked
 

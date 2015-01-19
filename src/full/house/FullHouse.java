@@ -34,6 +34,28 @@ public class FullHouse {
         System.out.println(e);
     }
     
+    public static boolean checkPostcode (String postcode) {
+        if (postcode.length() != 6) {
+            return false;
+        }
+        else {
+            for (int i = 0; i < postcode.length(); i++) {
+                char c = postcode.charAt(i);
+                if (i <= 3) {
+                    if (c < '0' || c > '9') {
+                        return false;
+                    }
+                }
+                else {
+                    if (c < 'A' || c > 'Z') {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+    
     public static String addZeroes (String s, int length) {
         while (s.length() < length) {
             s = "0" + s;

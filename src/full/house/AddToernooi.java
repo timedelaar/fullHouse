@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 public class AddToernooi extends javax.swing.JFrame {
 
     ToernooiView parent;
+    int locatieCapaciteit;
     
     
     /**
@@ -202,19 +203,30 @@ public class AddToernooi extends javax.swing.JFrame {
                 + "WHERE locatieID = ? AND datum = ? AND prijs = ?";
         String query3 = "INSERT INTO Toernooi(evenementID, maximumSpelers, minimumSpelers, soortToernooi) "
                 + "VALUES(?, ?, ?, ?);";
+        String query4 = "SELECT aantalTafels, spelersPerTafel FROM Locatie WHERE locatieID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             PreparedStatement stat2 = conn.prepareStatement(query2);
             PreparedStatement stat3 = conn.prepareStatement(query3);
+            PreparedStatement stat4 = conn.prepareStatement(query4);
+            
             
             ModelItem item = (ModelItem) locatieCB.getSelectedItem();
             int locatieID = item.id;
             Date datum = getDatum();
             int prijs = Integer.parseInt(prijsField.getText());
-            String naam = naamField.getText();
             item = (ModelItem) soortCB.getSelectedItem();
             int soort = item.id;
+            
+            stat4.setInt(1, locatieID);
+            ResultSet result = stat4.executeQuery();
+            result.next();
+            locatieCapaciteit = result.getInt("aantalTafels") * result.getInt("spelersPerTafel");
+            result.close();
+            stat4.close();
+            
+            String naam = naamField.getText();
             int minSpelers = Integer.parseInt(minSpelersField.getText());
             int maxSpelers = Integer.parseInt(maxSpelersField.getText());
             
@@ -230,7 +242,7 @@ public class AddToernooi extends javax.swing.JFrame {
             if (checkDate(locatieID, datum)) {
                 stat.executeUpdate();
 
-                ResultSet result = stat2.executeQuery();
+                result = stat2.executeQuery();
                 int evenementID = getEvenementID(result);
 
                 if (evenementID > 0) {
@@ -264,7 +276,7 @@ public class AddToernooi extends javax.swing.JFrame {
     }
     
     private void getLocaties () {
-        String query = "SELECT locatieID, naam FROM Locatie;";
+        String query = "SELECT locatieID, naam, aantalTafels, spelersPerTafel FROM Locatie;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);

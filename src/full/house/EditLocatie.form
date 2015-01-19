@@ -23,40 +23,43 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="straatHuisNrLbl" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="woonplaatsLbl" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="postcodeLbl" min="-2" max="-2" attributes="0"/>
-                          <Component id="telefoonNrLbl" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="naamLbl" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="straatnaamField" min="-2" pref="132" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="huisNrField" min="-2" pref="32" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="warningLbl" alignment="1" min="-2" pref="289" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="straatHuisNrLbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="woonplaatsLbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="postcodeLbl" min="-2" max="-2" attributes="0"/>
+                              <Component id="telefoonNrLbl" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="naamLbl" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="postcodeField" max="32767" attributes="0"/>
-                          <Component id="plaatsField" alignment="0" max="32767" attributes="0"/>
-                          <Component id="naamField" max="32767" attributes="0"/>
-                          <Component id="idField" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
-                          <Component id="aantalField" alignment="0" min="-2" pref="47" max="-2" attributes="0"/>
-                          <Component id="spelersPerCB" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="straatnaamField" min="-2" pref="132" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="huisNrField" min="-2" pref="32" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="postcodeField" max="32767" attributes="0"/>
+                              <Component id="plaatsField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="naamField" max="32767" attributes="0"/>
+                              <Component id="idField" alignment="0" min="-2" pref="36" max="-2" attributes="0"/>
+                              <Component id="aantalField" alignment="0" min="-2" pref="47" max="-2" attributes="0"/>
+                              <Component id="spelersPerCB" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                  </Group>
-                  <Component id="addUserLbl" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="saveBtn" min="-2" pref="72" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="cancelBtn" min="-2" pref="73" max="-2" attributes="0"/>
+                      <Component id="addUserLbl" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="saveBtn" min="-2" pref="72" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="cancelBtn" min="-2" pref="73" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -104,7 +107,9 @@
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="spelersPerCB" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="warningLbl" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="saveBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cancelBtn" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -203,6 +208,14 @@
             <StringItem index="8" value="12"/>
           </StringArray>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="warningLbl">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="f0" green="f0" red="f0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="jLabel3"/>
       </Properties>
     </Component>
   </SubComponents>

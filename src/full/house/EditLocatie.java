@@ -4,6 +4,7 @@
  */
 package full.house;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,14 @@ public class EditLocatie extends javax.swing.JFrame {
 
     LocatieView parent;
     int locatieID;
+    String naam;
+    String straatnaam;
+    String huisNr;
+    String woonplaats;
+    String postcode;
+    int aantalTafels;
+    int spelersPerTafel;
+    
     /**
      * Creates new form AddUserFrame
      */
@@ -55,6 +64,7 @@ public class EditLocatie extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         naamField = new javax.swing.JTextField();
         spelersPerCB = new javax.swing.JComboBox();
+        warningLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Bewerk locatie");
@@ -93,40 +103,45 @@ public class EditLocatie extends javax.swing.JFrame {
 
         spelersPerCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
 
+        warningLbl.setForeground(new java.awt.Color(240, 240, 240));
+        warningLbl.setText("jLabel3");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(straatHuisNrLbl)
-                            .addComponent(woonplaatsLbl)
-                            .addComponent(postcodeLbl)
-                            .addComponent(telefoonNrLbl)
-                            .addComponent(naamLbl)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(straatnaamField, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(huisNrField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(postcodeField)
-                            .addComponent(plaatsField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(naamField)
-                            .addComponent(idField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(aantalField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(spelersPerCB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(addUserLbl)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(warningLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(straatHuisNrLbl)
+                                .addComponent(woonplaatsLbl)
+                                .addComponent(postcodeLbl)
+                                .addComponent(telefoonNrLbl)
+                                .addComponent(naamLbl)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(straatnaamField, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(huisNrField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(postcodeField)
+                                .addComponent(plaatsField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(naamField)
+                                .addComponent(idField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(aantalField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(spelersPerCB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(addUserLbl)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(saveBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -163,7 +178,9 @@ public class EditLocatie extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(spelersPerCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(warningLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveBtn)
                     .addComponent(cancelBtn))
@@ -174,9 +191,21 @@ public class EditLocatie extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
-        editLocatie();
-        this.setVisible(false);
-        this.dispose();
+        if (getValues()) {
+            if (FullHouse.checkPostcode(postcode)) {
+                editLocatie();
+                this.setVisible(false);
+                this.dispose();
+            }
+            else {
+                warningLbl.setText("Ongeldige postcode! formaat postcode 1234AB");
+                warningLbl.setForeground(Color.red);
+            }
+        }
+        else {
+            warningLbl.setText("Controleer invoer!");
+            warningLbl.setForeground(Color.red);
+        }
     }//GEN-LAST:event_saveBtnMouseClicked
 
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
@@ -221,13 +250,13 @@ public class EditLocatie extends javax.swing.JFrame {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             
-            stat.setString(1, naamField.getText());
-            stat.setString(2, straatnaamField.getText());
-            stat.setString(3, huisNrField.getText());
-            stat.setString(4, plaatsField.getText());
-            stat.setString(5, postcodeField.getText());
-            stat.setInt(6, Integer.parseInt(aantalField.getText()));
-            stat.setInt(7, Integer.parseInt(spelersPerCB.getSelectedItem().toString()));
+            stat.setString(1, naam);
+            stat.setString(2, straatnaam);
+            stat.setString(3, huisNr);
+            stat.setString(4, woonplaats);
+            stat.setString(5, postcode);
+            stat.setInt(6, aantalTafels);
+            stat.setInt(7, spelersPerTafel);
             stat.setInt(8, locatieID);
             
             stat.executeUpdate();
@@ -237,6 +266,36 @@ public class EditLocatie extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
         parent.getLocaties();
+    }
+    
+    private boolean getValues () {
+        naam = naamField.getText();
+        straatnaam = straatnaamField.getText();
+        huisNr = huisNrField.getText();
+        woonplaats = plaatsField.getText();
+        postcode = postcodeField.getText();
+        spelersPerTafel = Integer.parseInt(spelersPerCB.getSelectedItem().toString());
+        try {
+            aantalTafels = Integer.parseInt(aantalField.getText());
+        }
+        catch (Exception e) {
+            return false;
+        }
+        if (naam.length() < 2) {
+            return false;
+        }
+        else if (straatnaam.length() < 2) {
+            return false;
+        }
+        else if (huisNr.length() < 1) {
+            return false;
+        }
+        else if (woonplaats.length() < 2) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -257,6 +316,7 @@ public class EditLocatie extends javax.swing.JFrame {
     private javax.swing.JLabel straatHuisNrLbl;
     private javax.swing.JTextField straatnaamField;
     private javax.swing.JLabel telefoonNrLbl;
+    private javax.swing.JLabel warningLbl;
     private javax.swing.JLabel woonplaatsLbl;
     // End of variables declaration//GEN-END:variables
 }
