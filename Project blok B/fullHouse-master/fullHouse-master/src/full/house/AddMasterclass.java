@@ -1,22 +1,24 @@
 package full.house;
 
-import java.sql.SQLException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Quinten
  */
-
 public class AddMasterclass extends javax.swing.JFrame {
 
     MasterclassView parent;
     private String docent;
     private int minimumRating;
-    
-    public AddMasterclass() {
+
+    public AddMasterclass(MasterclassView parent) {
+        this.parent = parent;
         initComponents();
+        fillLocatieCB();
     }
 
     /**
@@ -35,6 +37,16 @@ public class AddMasterclass extends javax.swing.JFrame {
         minRatingField = new javax.swing.JTextField();
         addButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        naamField = new javax.swing.JTextField();
+        locatieComboBox = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        dayComboBox = new javax.swing.JComboBox();
+        monthComboBox = new javax.swing.JComboBox();
+        yearComboBox = new javax.swing.JComboBox();
+        prijsField = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,32 +70,58 @@ public class AddMasterclass extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Naam:");
+
+        jLabel5.setText("Locatie:");
+
+        jLabel6.setText("Datum:");
+
+        dayComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        monthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december" }));
+
+        yearComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020" }));
+
+        jLabel7.setText("Prijs:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                        .addGap(31, 31, 31)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(docentField, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-                        .addComponent(minRatingField))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(locatieComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(minRatingField)
+                            .addComponent(naamField)
+                            .addComponent(docentField)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(dayComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(monthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(yearComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(prijsField))
+                        .addGap(8, 8, 8))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,12 +130,30 @@ public class AddMasterclass extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(naamField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(locatieComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(dayComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(monthComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yearComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(docentField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(minRatingField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(prijsField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
@@ -111,6 +167,7 @@ public class AddMasterclass extends javax.swing.JFrame {
     private void addButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonMouseClicked
         docent = docentField.getText();
         minimumRating = Integer.parseInt(minRatingField.getText());
+        addMasterclass();
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_addButtonMouseClicked
@@ -120,32 +177,146 @@ public class AddMasterclass extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancelButtonMouseClicked
 
-    public void addMasterclass(){
-        String query  = "INSERT INTO MasterClass(docent, minimumrating)"
-                      + "VALUES(?,?);";
-        
-        try{
+    public void addMasterclass() {
+        String query = "INSERT INTO Evenement(LocatieID, datum, prijs, naam)"
+                + "VALUES(?,?,?,?)";
+        String query2 = "SELECT EvenementID FROM Evenement"
+                + " WHERE locatieID = ? AND datum = ? AND prijs = ?";
+        String query3 = "INSERT INTO MasterClass(evenementID, docent, minimumRating)"
+                + "VALUES(?,?,?);";
+
+        try {
             Connection conn = SimpleDataSource.getConnection();
-            PreparedStatement stat  = conn.prepareStatement(query);
+            PreparedStatement stat = conn.prepareStatement(query);
+            PreparedStatement stat2 = conn.prepareStatement(query2);
+            PreparedStatement stat3 = conn.prepareStatement(query3);
+
+            ModelItem item = (ModelItem) locatieComboBox.getSelectedItem();
+
+            int locatieID = item.id;
+            Date datum = getDatum();
+            int prijs = Integer.parseInt(prijsField.getText());
+            String naam = naamField.getText();
+
+            stat.setInt(1, locatieID);
+            stat.setDate(2, datum);
+            stat.setInt(3, prijs);
+            stat.setString(4, naam);
+
+            stat2.setInt(1, locatieID);
+            stat2.setDate(2, datum);
+            stat2.setInt(3, prijs);
+
+                if (checkDate(locatieID, datum) == false) {
+                    stat.executeUpdate();
+
+                    ResultSet result = stat2.executeQuery();
+                    int evenementID = getEvenementID(result);
+                    
+                    if(evenementID > 0){
+                        stat3.setInt(1, evenementID);
+                        stat3.setString(2, docent);
+                        stat3.setInt(3, minimumRating);
+                        stat3.executeUpdate();
+                    }
+                    
+                    result.close();
+                    stat.close();
+                    stat2.close();
+                    stat3.close();
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Er is op deze datum al een toernooi op deze locatie.", "Locatie onbeschikbaar", JOptionPane.ERROR_MESSAGE);
+                    stat.close();
+                    stat2.close();
+                    stat3.close();
+                }
+                
             
-            stat.setString(1, docent);
-            stat.setInt(2, minimumRating);
-            stat.executeUpdate();
-            stat.close();
             
-            parent.getMasterclasses();
         }
-        catch(SQLException e){
+        catch (SQLException e) {
             FullHouse.showDBError(e);
+        }
+        parent.getMasterclasses();
+    }
+
+    private void fillLocatieCB() {
+        String query = "SELECT LocatieID, naam FROM Locatie";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            ResultSet result = stat.executeQuery();
+            fillBox(locatieComboBox, result);
+
+            result.close();
+            stat.close();
+
+        } catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
+    }
+
+    private void fillBox(JComboBox box, ResultSet result) throws SQLException {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+
+        while (result.next()) {
+            int id = result.getInt(1);
+            String locatieNaam = result.getString(2);
+            ModelItem item = new ModelItem(id, locatieNaam);
+            model.addElement(item);
+        }
+        box.setModel(model);
+    }
+
+    private Date getDatum() {
+        int day = dayComboBox.getSelectedIndex() + 1;
+        int month = monthComboBox.getSelectedIndex() + 1;
+        int year = Integer.parseInt((String) yearComboBox.getSelectedItem());
+        Date datum = Date.valueOf(year + "-" + month + "-" + day);
+        return datum;
+    }
+
+    private boolean checkDate(int locatieID, Date datum) throws SQLException {
+        String query = "SELECT * FROM Evenement WHERE locatieID = ? AND datum = ?";
+        Connection conn = SimpleDataSource.getConnection();
+        PreparedStatement stat = conn.prepareStatement(query);
+        
+        stat.setInt(1, locatieID);
+        stat.setDate(2, datum);
+        
+        ResultSet result = stat.executeQuery();
+        if (result.next()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private int getEvenementID(ResultSet result) throws SQLException {
+        if (result.first()) {
+            return result.getInt("evenementID");
+        } else {
+            return -1;
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JComboBox dayComboBox;
     private javax.swing.JTextField docentField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JComboBox locatieComboBox;
     private javax.swing.JTextField minRatingField;
+    private javax.swing.JComboBox monthComboBox;
+    private javax.swing.JTextField naamField;
+    private javax.swing.JTextField prijsField;
+    private javax.swing.JComboBox yearComboBox;
     // End of variables declaration//GEN-END:variables
 }
