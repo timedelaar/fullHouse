@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.JOptionPane;
@@ -40,7 +42,7 @@ public class MasterclassView extends javax.swing.JPanel {
         deleteClassButton = new javax.swing.JButton();
         viewClassButton = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(712, 472));
+        setPreferredSize(new java.awt.Dimension(800, 600));
 
         masterclassTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,7 +71,7 @@ public class MasterclassView extends javax.swing.JPanel {
             }
         });
         masterclassTable.setMinimumSize(new java.awt.Dimension(180, 64));
-        masterclassTable.setPreferredSize(new java.awt.Dimension(900, 64));
+        masterclassTable.setPreferredSize(new java.awt.Dimension(590, 64));
         jScrollPane1.setViewportView(masterclassTable);
 
         newClassButton.setText("Nieuwe class");
@@ -82,6 +84,11 @@ public class MasterclassView extends javax.swing.JPanel {
         editClassButton.setText("Bewerk class");
 
         deleteClassButton.setText("Verwijder class");
+        deleteClassButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteClassButtonMouseClicked(evt);
+            }
+        });
 
         viewClassButton.setText("Bekijk class");
 
@@ -91,14 +98,14 @@ public class MasterclassView extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(newClassButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(editClassButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteClassButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(viewClassButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {deleteClassButton, editClassButton, newClassButton, viewClassButton});
@@ -107,7 +114,6 @@ public class MasterclassView extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(newClassButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -115,8 +121,10 @@ public class MasterclassView extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(deleteClassButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(viewClassButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(viewClassButton, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 306, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {deleteClassButton, editClassButton, newClassButton, viewClassButton});
@@ -124,10 +132,21 @@ public class MasterclassView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newClassButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newClassButtonMouseClicked
-        AddMasterclass addMasterclass = new AddMasterclass();
+        AddMasterclass addMasterclass = new AddMasterclass(this);
         addMasterclass.setLocationRelativeTo(this);
         addMasterclass.setVisible(true);
     }//GEN-LAST:event_newClassButtonMouseClicked
+
+    private void deleteClassButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteClassButtonMouseClicked
+        int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U dit toernooi wilt verwijderen?", "Verwijder toernooi?", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            int[] rows = masterclassTable.getSelectedRows();
+            for (int i = 0; i < rows.length; i++) {
+                int id = Integer.parseInt(masterclassTable.getValueAt(rows[i], 0).toString());
+                deleteMasterclass(id);
+            }
+        }
+    }//GEN-LAST:event_deleteClassButtonMouseClicked
     
     public final void getMasterclasses(){
         String query = "SELECT * FROM MasterClass" 
@@ -160,6 +179,28 @@ public class MasterclassView extends javax.swing.JPanel {
         }
         masterclassTable.setModel(model);
         result.close();
+    }
+    
+    private void deleteMasterclass(int id){
+        String query = "DELETE FROM MasterClass WHERE EvenementID = ?;";
+        String query2 = "DELETE FROM Evenement WHERE EvenementID = ?;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            PreparedStatement stat2 = conn.prepareStatement(query2);
+            
+            stat.setInt(1, id);
+            stat.executeUpdate();
+            stat.close();
+            
+            stat2.setInt(1, id);
+            stat2.executeUpdate();
+            stat2.close();
+            
+        } catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
+        getMasterclasses(); 
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteClassButton;
