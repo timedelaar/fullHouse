@@ -96,6 +96,24 @@ public class EditSpeler extends javax.swing.JFrame {
 
         winstenLbl.setText("Gewonnen geld:");
 
+        telefoonNrField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                telefoonNrFieldKeyTyped(evt);
+            }
+        });
+
+        ratingField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ratingFieldKeyTyped(evt);
+            }
+        });
+
+        gewonnenGeldField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                gewonnenGeldFieldKeyTyped(evt);
+            }
+        });
+
         isDocentCB.setText("Docent");
 
         saveBtn.setText("Save");
@@ -227,16 +245,30 @@ public class EditSpeler extends javax.swing.JFrame {
                 warningLbl.setForeground(Color.red);
             }
         }
-        else {
-            warningLbl.setText("Controleer invoer!");
-            warningLbl.setForeground(Color.red);
-        }
     }//GEN-LAST:event_saveBtnMouseClicked
 
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
+
+    private void ratingFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ratingFieldKeyTyped
+        if ((evt.getKeyChar() < '0' || evt.getKeyChar() > '9') && evt.getKeyChar() != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_ratingFieldKeyTyped
+
+    private void gewonnenGeldFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gewonnenGeldFieldKeyTyped
+        if ((evt.getKeyChar() < '0' || evt.getKeyChar() > '9') && evt.getKeyChar() != '.') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_gewonnenGeldFieldKeyTyped
+
+    private void telefoonNrFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_telefoonNrFieldKeyTyped
+        if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_telefoonNrFieldKeyTyped
 
     private void fillFields() {
         String query = "SELECT * FROM Speler WHERE spelerID = ?;";
@@ -313,27 +345,43 @@ public class EditSpeler extends javax.swing.JFrame {
             gewonnenGeld = Double.parseDouble(gewonnenGeldField.getText());
         }
         catch (Exception e) {
+            warningLbl.setText("Controleer rating en gewonnen geld");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         if (naam.length() < 2) {
+            warningLbl.setText("Naam moet minimaal twee karakters bevatten");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (voorletters.length() < 1) {
+            warningLbl.setText("Vul minimaal één voorletter in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (straatnaam.length() < 2) {
+            warningLbl.setText("Vul een straatnaam in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (huisNr.length() < 1) {
+            warningLbl.setText("Vul een huisnummer in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (woonplaats.length() < 2) {
+            warningLbl.setText("Vul een woonplaats in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (telefoonNr.length() != 10) {
+            warningLbl.setText("Telefoon nummer moet tien tekens lang zijn");
+            warningLbl.setForeground(Color.red);
             return false;
         }
-        else if (email.length() < 5) {
+        else if (email.length() < 5 || !email.contains("@") || !email.contains(".")) {
+            warningLbl.setText("Ongeldig email adres");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else {

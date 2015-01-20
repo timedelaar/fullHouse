@@ -208,10 +208,6 @@ public class AddSpeler extends javax.swing.JFrame {
                 warningLbl.setForeground(Color.red);
             }
         }
-        else {
-            warningLbl.setText("Controleer invoer!");
-            warningLbl.setForeground(Color.red);
-        }
     }//GEN-LAST:event_addBtnMouseClicked
 
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
@@ -269,24 +265,38 @@ public class AddSpeler extends javax.swing.JFrame {
         telefoonNr = telefoonNrField.getText();
         email = emailField.getText();
         if (naam.length() < 2) {
+            warningLbl.setText("Naam moet minimaal twee karakters bevatten");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (voorletters.length() < 1) {
+            warningLbl.setText("Vul minimaal één voorletter in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (straatnaam.length() < 2) {
+            warningLbl.setText("Vul een straatnaam in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (huisNr.length() < 1) {
+            warningLbl.setText("Vul een huisnummer in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (woonplaats.length() < 2) {
+            warningLbl.setText("Vul een woonplaats in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (telefoonNr.length() != 10) {
+            warningLbl.setText("Telefoon nummer moet tien tekens lang zijn");
+            warningLbl.setForeground(Color.red);
             return false;
         }
-        else if (email.length() < 5) {
+        else if (email.length() < 5 || !email.contains("@") || !email.contains(".")) {
+            warningLbl.setText("Ongeldig email adres");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else {

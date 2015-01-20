@@ -25,14 +25,15 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="addUserLbl" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="warningLbl" alignment="1" min="-2" pref="319" max="-2" attributes="0"/>
+                  <Component id="addUserLbl" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="addBtn" min="-2" pref="72" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="cancelBtn" min="-2" pref="73" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="voorlettersLbl" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -113,12 +114,14 @@
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="maxSpelersField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="14" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="warningLbl" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="addBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cancelBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -145,6 +148,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="prijsField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="prijsFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="addBtn">
       <Properties>
@@ -266,8 +272,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="minSpelersField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="minSpelersFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="maxSpelersField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="maxSpelersFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
@@ -275,6 +287,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="naamField">
+    </Component>
+    <Component class="javax.swing.JLabel" name="warningLbl">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="f0" green="f0" red="f0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="jLabel5"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

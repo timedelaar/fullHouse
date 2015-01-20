@@ -200,12 +200,21 @@
     <Component class="javax.swing.JTextField" name="postcodeField">
     </Component>
     <Component class="javax.swing.JTextField" name="telefoonNrField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="telefoonNrFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="emailField">
     </Component>
     <Component class="javax.swing.JTextField" name="ratingField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="ratingFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="gewonnenGeldField">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="gewonnenGeldFieldKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="isDocentCB">
       <Properties>

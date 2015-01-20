@@ -4,6 +4,7 @@
  */
 package full.house;
 
+import java.awt.Color;
 import java.sql.*;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -17,8 +18,13 @@ import javax.swing.JOptionPane;
 public class AddToernooi extends javax.swing.JFrame {
 
     ToernooiView parent;
-    int locatieCapaciteit;
-    
+    String naam;
+    int minSpelers;
+    int maxSpelers;
+    int prijs;
+    int locatieID;
+    Date datum;
+    int soort;
     
     /**
      * Creates new form AddUserFrame
@@ -58,6 +64,7 @@ public class AddToernooi extends javax.swing.JFrame {
         maxSpelersField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         naamField = new javax.swing.JTextField();
+        warningLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Nieuw toernooi");
@@ -69,6 +76,12 @@ public class AddToernooi extends javax.swing.JFrame {
         voorlettersLbl.setText("datum:");
 
         postcodeLbl.setText("prijs:");
+
+        prijsField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                prijsFieldKeyTyped(evt);
+            }
+        });
 
         addBtn.setText("Add");
         addBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -96,7 +109,22 @@ public class AddToernooi extends javax.swing.JFrame {
 
         jLabel3.setText("max. spelers:");
 
+        minSpelersField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                minSpelersFieldKeyTyped(evt);
+            }
+        });
+
+        maxSpelersField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                maxSpelersFieldKeyTyped(evt);
+            }
+        });
+
         jLabel4.setText("naam:");
+
+        warningLbl.setForeground(new java.awt.Color(240, 240, 240));
+        warningLbl.setText("jLabel5");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,13 +132,14 @@ public class AddToernooi extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addUserLbl)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(warningLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addUserLbl, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(addBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cancelBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(voorlettersLbl)
@@ -174,20 +203,24 @@ public class AddToernooi extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(maxSpelersField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(warningLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addBtn)
                     .addComponent(cancelBtn))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
-        if (addToernooi()) {
-            this.setVisible(false);
-            this.dispose();
+        if (getValues()) {
+            if (addToernooi()) {
+                this.setVisible(false);
+                this.dispose();
+            }
         }
     }//GEN-LAST:event_addBtnMouseClicked
 
@@ -196,6 +229,24 @@ public class AddToernooi extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
 
+    private void prijsFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prijsFieldKeyTyped
+        if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_prijsFieldKeyTyped
+
+    private void minSpelersFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_minSpelersFieldKeyTyped
+        if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_minSpelersFieldKeyTyped
+
+    private void maxSpelersFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maxSpelersFieldKeyTyped
+        if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
+            evt.consume();
+        }
+    }//GEN-LAST:event_maxSpelersFieldKeyTyped
+
     private boolean addToernooi () {
         String query = "INSERT INTO Evenement(locatieID, datum, prijs, naam) "
                 + "VALUES(?, ?, ?, ?)";
@@ -203,32 +254,11 @@ public class AddToernooi extends javax.swing.JFrame {
                 + "WHERE locatieID = ? AND datum = ? AND prijs = ?";
         String query3 = "INSERT INTO Toernooi(evenementID, maximumSpelers, minimumSpelers, soortToernooi) "
                 + "VALUES(?, ?, ?, ?);";
-        String query4 = "SELECT aantalTafels, spelersPerTafel FROM Locatie WHERE locatieID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             PreparedStatement stat2 = conn.prepareStatement(query2);
             PreparedStatement stat3 = conn.prepareStatement(query3);
-            PreparedStatement stat4 = conn.prepareStatement(query4);
-            
-            
-            ModelItem item = (ModelItem) locatieCB.getSelectedItem();
-            int locatieID = item.id;
-            Date datum = getDatum();
-            int prijs = Integer.parseInt(prijsField.getText());
-            item = (ModelItem) soortCB.getSelectedItem();
-            int soort = item.id;
-            
-            stat4.setInt(1, locatieID);
-            ResultSet result = stat4.executeQuery();
-            result.next();
-            locatieCapaciteit = result.getInt("aantalTafels") * result.getInt("spelersPerTafel");
-            result.close();
-            stat4.close();
-            
-            String naam = naamField.getText();
-            int minSpelers = Integer.parseInt(minSpelersField.getText());
-            int maxSpelers = Integer.parseInt(maxSpelersField.getText());
             
             stat.setInt(1, locatieID);
             stat.setDate(2, datum);
@@ -242,7 +272,7 @@ public class AddToernooi extends javax.swing.JFrame {
             if (checkDate(locatieID, datum)) {
                 stat.executeUpdate();
 
-                result = stat2.executeQuery();
+                ResultSet result = stat2.executeQuery();
                 int evenementID = getEvenementID(result);
 
                 if (evenementID > 0) {
@@ -343,12 +373,50 @@ public class AddToernooi extends javax.swing.JFrame {
         }
     }
     
+    private boolean getValues () {
+        naam = naamField.getText();
+        if (naam.length() < 4) {
+            warningLbl.setText("Naam moet minimaal 4 karakters zijn");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
+        try {
+            minSpelers = Integer.parseInt(minSpelersField.getText());
+            maxSpelers = Integer.parseInt(maxSpelersField.getText());
+            prijs = Integer.parseInt(prijsField.getText());
+        }
+        catch (Exception e) {
+            return false;
+        }
+        if (minSpelers > maxSpelers) {
+            warningLbl.setText("<html>Minimum aantal spelers kan niet groter<br>zijn dan het maximum aantal spelers</html>");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
+        ModelItem item = (ModelItem) locatieCB.getSelectedItem();
+        locatieID = item.id;
+        int locatieCapaciteit = getCapaciteit(locatieID);
+        if (maxSpelers > locatieCapaciteit) {
+            warningLbl.setText("<html>Geselecteerde locatie is te klein.<br>Maximaal " + locatieCapaciteit + " spelers</html>");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
+        datum = getDatum();
+        if (datum.before(new Date(System.currentTimeMillis()))) {
+            warningLbl.setText("Geselecteerde datum is al geweest");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
+        item = (ModelItem) soortCB.getSelectedItem();
+        soort = item.id;
+        return true;
+    }
+    
     private Date getDatum () {
         int day = Integer.parseInt((String) dayBox.getSelectedItem());
         int month = monthBox.getSelectedIndex()+1;
         int year = Integer.parseInt((String) yearBox.getSelectedItem());
-        Date datum = Date.valueOf(year + "-" + month + "-" + day);
-        return datum;
+        return Date.valueOf(year + "-" + month + "-" + day);
     }
     
     private int getEvenementID (ResultSet result) throws SQLException {
@@ -356,6 +424,28 @@ public class AddToernooi extends javax.swing.JFrame {
             return result.getInt("evenementID");
         }
         else {
+            return -1;
+        }
+    }
+    
+    private int getCapaciteit (int locatie) {
+        String query = "SELECT aantalTafels, spelersPerTafel FROM Locatie WHERE locatieID = ?;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            
+            stat.setInt(1, locatie);
+            ResultSet result = stat.executeQuery();
+            
+            if (result.next()) {
+                return result.getInt("aantalTafels") * result.getInt("spelersPerTafel");
+            }
+            else {
+                return -1;
+            }
+        }
+        catch (Exception e) {
+            FullHouse.showDBError(e);
             return -1;
         }
     }
@@ -379,6 +469,7 @@ public class AddToernooi extends javax.swing.JFrame {
     private javax.swing.JTextField prijsField;
     private javax.swing.JComboBox soortCB;
     private javax.swing.JLabel voorlettersLbl;
+    private javax.swing.JLabel warningLbl;
     private javax.swing.JComboBox yearBox;
     // End of variables declaration//GEN-END:variables
 }

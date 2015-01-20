@@ -178,18 +178,15 @@ public class AddLocatie extends javax.swing.JFrame {
     private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
         if (getValues()) {
             if (FullHouse.checkPostcode(postcode)) {
-                addLocatie();
-                this.setVisible(false);
-                this.dispose();
+                if (addLocatie()) {
+                    this.setVisible(false);
+                    this.dispose();
+                }
             }
             else {
-                warningLbl.setText("Ongeldige postcode! formaat postcode 1234AB");
+                warningLbl.setText("Ongeldige postcode. formaat postcode 1234AB");
                 warningLbl.setForeground(Color.red);
             }
-        }
-        else {
-            warningLbl.setText("Controleer invoer!");
-            warningLbl.setForeground(Color.red);
         }
     }//GEN-LAST:event_addBtnMouseClicked
 
@@ -198,7 +195,7 @@ public class AddLocatie extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
 
-    private void addLocatie () {
+    private boolean addLocatie () {
         String query = "INSERT INTO Locatie(naam, straatnaam, huisNr, woonplaats, postcode, aantalTafels, spelersPerTafel)"
                 + "VALUES(?, ?, ?, ?, ?, ?, ?)";
         try {
@@ -219,7 +216,9 @@ public class AddLocatie extends javax.swing.JFrame {
         }
         catch (Exception e) {
             FullHouse.showDBError(e);
+            return false;
         }
+        return true;
     }
     
     private boolean getValues () {
@@ -236,15 +235,23 @@ public class AddLocatie extends javax.swing.JFrame {
             return false;
         }
         if (naam.length() < 2) {
+            warningLbl.setText("Naam moet minimaal 4 tekens lang zijn");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (straatnaam.length() < 2) {
+            warningLbl.setText("Vul een straatnaam in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (huisNr.length() < 1) {
+            warningLbl.setText("Vul een huisnummer in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else if (woonplaats.length() < 2) {
+            warningLbl.setText("Vul een woonplaats in");
+            warningLbl.setForeground(Color.red);
             return false;
         }
         else {
