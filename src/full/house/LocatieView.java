@@ -4,6 +4,7 @@
  */
 package full.house;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -101,6 +102,11 @@ public class LocatieView extends javax.swing.JPanel {
         });
 
         viewToernooienBtn.setText("<html><div align=center>Bekijk<br>toernooien</div></html>");
+        viewToernooienBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                viewToernooienBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -164,7 +170,7 @@ public class LocatieView extends javax.swing.JPanel {
     }//GEN-LAST:event_editLocatieBtnMouseClicked
 
     private void deleteLocatieBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteLocatieBtnMouseClicked
-        int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U deze locatie wilt verwijderen?", "Verwijder locatie?", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Weet U zeker dat U deze locatie wilt verwijderen?", "Verwijder locatie?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             int[] rows = locatieTable.getSelectedRows();
             for (int i = 0; i < rows.length; i++) {
@@ -173,6 +179,20 @@ public class LocatieView extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_deleteLocatieBtnMouseClicked
+
+    private void viewToernooienBtnMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewToernooienBtnMouseClicked
+        int[] rows = locatieTable.getSelectedRows();
+        if (rows.length == 0) {
+            JOptionPane.showMessageDialog(this, "Geen locatie(s) geselecteerd.", "Bekijk locatie", JOptionPane.PLAIN_MESSAGE);
+        } else if (rows.length > 1) {
+            JOptionPane.showMessageDialog(this, "Meer dan één locatie geselecteerd.", "Bekijk locatie", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            int id = Integer.parseInt(locatieTable.getValueAt(rows[0], 0).toString());
+            ToernooienLocatieView view = new ToernooienLocatieView(id);
+            view.setLocation(300, 200);
+            view.setVisible(true);
+        }
+    }//GEN-LAST:event_viewToernooienBtnMouseClicked
 
     public final void getLocaties () {
         String query = "SELECT * FROM Locatie;";
@@ -198,10 +218,13 @@ public class LocatieView extends javax.swing.JPanel {
             stat.executeUpdate();
             stat.close();
         }
+        catch (MySQLIntegrityConstraintViolationException e) {
+            JOptionPane.showMessageDialog(this, "<html>Locatie kan niet verwijderd worden."
+                    + "<br>Er staat een toernooi geregistreerd.</html>", "Fout", JOptionPane.ERROR_MESSAGE);
+        }
         catch (Exception e) {
             FullHouse.showDBError(e);
         }
-        
         getLocaties();
     }
     
@@ -225,33 +248,6 @@ public class LocatieView extends javax.swing.JPanel {
         locatieTable.setModel(model);
         //setColumnWidth(locatieTable);
         result.close();
-    }
-    
-    private void setColumnWidth (JTable table) {
-        TableColumnModel tcm = table.getColumnModel();
-        
-        tcm.getColumn(0).setMaxWidth(35);
-        tcm.getColumn(0).setPreferredWidth(35);
-        tcm.getColumn(0).setMinWidth(35);
-        tcm.getColumn(1).setMaxWidth(250);
-        tcm.getColumn(1).setPreferredWidth(100);
-        tcm.getColumn(2).setMaxWidth(70);
-        tcm.getColumn(2).setPreferredWidth(70);
-        tcm.getColumn(3).setMaxWidth(250);
-        tcm.getColumn(3).setPreferredWidth(100);
-        tcm.getColumn(4).setMaxWidth(100);
-        tcm.getColumn(4).setPreferredWidth(80);
-        tcm.getColumn(5).setMaxWidth(150);
-        tcm.getColumn(5).setPreferredWidth(80);
-        
-        DefaultTableCellRenderer Renderer = new DefaultTableCellRenderer();
-        Renderer.setHorizontalAlignment(SwingConstants.CENTER);
-        tcm.getColumn(0).setCellRenderer(Renderer);
-        tcm.getColumn(1).setCellRenderer(Renderer);
-        tcm.getColumn(2).setCellRenderer(Renderer);
-        tcm.getColumn(3).setCellRenderer(Renderer);
-        tcm.getColumn(4).setCellRenderer(Renderer);
-        tcm.getColumn(5).setCellRenderer(Renderer);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

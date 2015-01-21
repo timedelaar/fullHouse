@@ -183,7 +183,9 @@ public class AddInschrijving extends javax.swing.JFrame {
      * Haalt een lijst op met bestaande toernooien en vult een ComboBox hiermee.
      */
     private void getToernooien () {
-        String query = "SELECT evenementID, naam FROM Evenement;";
+        String query = "SELECT Evenement.evenementID, naam FROM Evenement "
+                + "LEFT JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
+                + "WHERE isGesloten = false OR isGesloten IS NULL;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);

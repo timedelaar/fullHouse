@@ -38,6 +38,7 @@ public class MainWindow extends javax.swing.JFrame {
         spelerView = new full.house.SpelerView();
         toernooiView = new full.house.ToernooiView();
         locatieView = new full.house.LocatieView();
+        masterclassView = new full.house.MasterclassView();
         jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,6 +82,7 @@ public class MainWindow extends javax.swing.JFrame {
         cards.add(spelerView, "spelerView");
         cards.add(toernooiView, "toernooiView");
         cards.add(locatieView, "locatieView");
+        cards.add(masterclassView, "masterclassView");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,6 +164,8 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_viewLocatiesBtnMouseClicked
 
     private void viewMCBtnMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewMCBtnMouseClicked
+        CardLayout cl = (CardLayout) cards.getLayout();
+        cl.show(cards, "masterclassView");
         viewLocatiesBtn.setForeground(Color.black);
         viewMCBtn.setForeground(Color.red);
         viewSpelersBtn.setForeground(Color.black);
@@ -174,6 +178,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel cards;
     private javax.swing.JSeparator jSeparator2;
     private full.house.LocatieView locatieView;
+    private full.house.MasterclassView masterclassView;
     private full.house.SpelerView spelerView;
     private full.house.ToernooiView toernooiView;
     private javax.swing.JButton viewLocatiesBtn;

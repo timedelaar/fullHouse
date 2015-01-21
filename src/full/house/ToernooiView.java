@@ -7,11 +7,7 @@ package full.house;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -261,7 +257,6 @@ public class ToernooiView extends javax.swing.JPanel {
             model.addRow(rowData);
         }
         toernooiTable.setModel(model);
-        //setColumnWidth(toernooiTable);
         result.close();
     }
     
@@ -296,6 +291,7 @@ public class ToernooiView extends javax.swing.JPanel {
                 + "WHERE evenementID = ?;";
         String query3 = "INSERT INTO ToernooiInschrijving(evenementID, spelerID, tafelNr, isUitgeschakeld) "
                 + "VALUES(?, ?, ?, false);";
+        String query4 = "UPDATE Toernooi SET isGesloten = true WHERE evenementID = ?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -340,39 +336,17 @@ public class ToernooiView extends javax.swing.JPanel {
                     i --;
                 }
             }
+            stat = conn.prepareStatement(query4);
+            stat.setInt(1, toernooiID);
+            stat.executeUpdate();
+            stat.close();
         }
         catch (SQLException e) {
             FullHouse.showDBError(e);
+            return false;
         }
         return true;
     }
-    
-    private void setColumnWidth (JTable table) {
-        TableColumnModel tcm = table.getColumnModel();
-        
-        tcm.getColumn(0).setMaxWidth(35);
-        tcm.getColumn(0).setPreferredWidth(35);
-        tcm.getColumn(0).setMinWidth(35);
-        tcm.getColumn(1).setMaxWidth(60);
-        tcm.getColumn(1).setPreferredWidth(40);
-        tcm.getColumn(2).setPreferredWidth(70);
-        tcm.getColumn(3).setPreferredWidth(100);
-        tcm.getColumn(4).setPreferredWidth(80);
-        tcm.getColumn(5).setPreferredWidth(100);
-        tcm.getColumn(6).setPreferredWidth(60);
-        tcm.getColumn(7).setPreferredWidth(90);
-        
-        DefaultTableCellRenderer Renderer = new DefaultTableCellRenderer();
-        Renderer.setHorizontalAlignment(SwingConstants.RIGHT);
-        tcm.getColumn(0).setCellRenderer(Renderer);
-        tcm.getColumn(1).setCellRenderer(Renderer);
-        tcm.getColumn(3).setCellRenderer(Renderer);
-        tcm.getColumn(4).setCellRenderer(Renderer);
-        tcm.getColumn(5).setCellRenderer(Renderer);
-        tcm.getColumn(6).setCellRenderer(Renderer);
-        tcm.getColumn(7).setCellRenderer(Renderer);
-    }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addToernooiBtn;
     private javax.swing.JButton deleteToernooiBtn;

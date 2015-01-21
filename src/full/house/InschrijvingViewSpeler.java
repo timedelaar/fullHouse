@@ -206,7 +206,6 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
             model.addRow(rowData);
         }
         inschrijvingTable.setModel(model);
-        result.close();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
