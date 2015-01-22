@@ -252,8 +252,8 @@ public class AddToernooi extends javax.swing.JFrame {
                 + "VALUES(?, ?, ?, ?)";
         String query2 = "SELECT evenementID FROM Evenement "
                 + "WHERE locatieID = ? AND datum = ? AND prijs = ?";
-        String query3 = "INSERT INTO Toernooi(evenementID, maximumSpelers, minimumSpelers, soortToernooi) "
-                + "VALUES(?, ?, ?, ?);";
+        String query3 = "INSERT INTO Toernooi(evenementID, maximumSpelers, minimumSpelers, soortToernooi, isGesloten, isGespeeld) "
+                + "VALUES(?, ?, ?, ?, false, false);";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -409,7 +409,7 @@ public class AddToernooi extends javax.swing.JFrame {
         }
         datum = getDatum();
         if (datum.before(new Date(System.currentTimeMillis()))) {
-            warningLbl.setText("Geselecteerde datum is al geweest");
+            warningLbl.setText("<html>Datum ligt in het verleden.<br>Selecteer een andere datum</html>");
             warningLbl.setForeground(Color.red);
             return false;
         }

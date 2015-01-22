@@ -43,16 +43,15 @@
                                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="locatieComboBox" min="-2" max="-2" attributes="0"/>
                                   <Component id="naamField" alignment="0" min="-2" pref="198" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="1" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
                                       <Component id="dagComboBox" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="maandComboBox" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jaarComboBox" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="idField" alignment="0" min="-2" pref="198" max="-2" attributes="0"/>
                                   <Component id="docentCB" min="-2" max="-2" attributes="0"/>
@@ -256,15 +255,7 @@
     <Component class="javax.swing.JComboBox" name="jaarComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="7">
-            <StringItem index="0" value="2014"/>
-            <StringItem index="1" value="2015"/>
-            <StringItem index="2" value="2016"/>
-            <StringItem index="3" value="2017"/>
-            <StringItem index="4" value="2018"/>
-            <StringItem index="5" value="2019"/>
-            <StringItem index="6" value="2020"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
     </Component>

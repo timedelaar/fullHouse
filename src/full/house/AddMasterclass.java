@@ -2,6 +2,7 @@ package full.house;
 
 import java.awt.Color;
 import java.sql.*;
+import java.util.Calendar;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -25,6 +26,7 @@ public class AddMasterclass extends javax.swing.JFrame {
         initComponents();
         fillLocatieCB();
         fillDocentCB();
+        fillDatumCB();
     }
 
     /**
@@ -86,8 +88,6 @@ public class AddMasterclass extends javax.swing.JFrame {
         dagComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
 
         maandComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december" }));
-
-        jaarComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020" }));
 
         jLabel7.setText("Prijs:");
 
@@ -305,8 +305,16 @@ public class AddMasterclass extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
+    
+    private void fillDatumCB () {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = 0; i < 10; i++) {
+            int year = currentYear + i;
+            jaarComboBox.addItem(year);
+        }
+    }
 
-    private void fillBox(JComboBox box, ResultSet result, int idColumn, int[] desColumn) throws SQLException {
+    private void fillBox (JComboBox box, ResultSet result, int idColumn, int[] desColumn) throws SQLException {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         ModelItem item1 = new ModelItem(-1, "Selecteer");
         model.addElement(item1);
@@ -339,7 +347,11 @@ public class AddMasterclass extends javax.swing.JFrame {
             return false;
         }
         datum = getDatum();
-        
+        if (datum.before(new Date(System.currentTimeMillis()))) {
+            warningLbl.setText("<html>Datum ligt in het verleden.<br>Selecteer een andere datum</html>");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         if (naam.length() < 2) {
             warningLbl.setText("Naam moet minimaal twee karakters bevatten");
             warningLbl.setForeground(Color.red);
@@ -362,7 +374,7 @@ public class AddMasterclass extends javax.swing.JFrame {
     private Date getDatum() {
         int dag = Integer.parseInt((String) dagComboBox.getSelectedItem());
         int maand = maandComboBox.getSelectedIndex() + 1;
-        int jaar = Integer.parseInt((String) jaarComboBox.getSelectedItem());
+        int jaar = (int) jaarComboBox.getSelectedItem();
         return Date.valueOf(jaar + "-" + maand + "-" + dag);
     }
 

@@ -311,7 +311,10 @@ public class ToernooiView extends javax.swing.JPanel {
             
             result2.next();
             int stoelen = result2.getInt("spelersPerTafel");
-            int tafels = spelers.size() / stoelen + 1;
+            int tafels = spelers.size() / stoelen;
+            if (spelers.size() % stoelen != 0) {
+                tafels ++;
+            }
             int[][] indeling = new int[tafels][stoelen];
             
             result.close();
@@ -328,7 +331,7 @@ public class ToernooiView extends javax.swing.JPanel {
                     PreparedStatement stat3 = conn.prepareStatement(query3);
                     stat3.setInt(1, toernooiID);
                     stat3.setInt(2, speler);
-                    stat3.setInt(3, tafel);
+                    stat3.setInt(3, tafel+1);
                     stat3.executeUpdate();
                     stat3.close();
                 }

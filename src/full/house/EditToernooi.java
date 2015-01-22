@@ -405,7 +405,7 @@ public class EditToernooi extends javax.swing.JFrame {
         }
         datum = getDatum();
         if (datum.before(new Date(System.currentTimeMillis()))) {
-            warningLbl.setText("Geselecteerde datum is al geweest");
+            warningLbl.setText("<html>Datum ligt in het verleden.<br>Selecteer een andere datum</html>");
             warningLbl.setForeground(Color.red);
             return false;
         }

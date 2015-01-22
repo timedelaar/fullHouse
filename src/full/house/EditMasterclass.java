@@ -10,6 +10,7 @@ package full.house;
  */
 import java.awt.Color;
 import java.sql.*;
+import java.util.Calendar;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -98,8 +99,6 @@ public class EditMasterclass extends javax.swing.JFrame {
 
         maandComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december" }));
 
-        jaarComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020" }));
-
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,16 +139,15 @@ public class EditMasterclass extends javax.swing.JFrame {
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel5))
                                 .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(locatieComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(naamField, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(dagComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(maandComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jaarComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(24, 24, 24))
+                                        .addComponent(jaarComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(docentCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -304,6 +302,7 @@ public class EditMasterclass extends javax.swing.JFrame {
             prijsField.setText("" + prijs);
             minRatingField.setText("" + minimumRating);
 
+            fillDatumCB();
             datum = result.getDate("datum");
             String dag = datum.toString().substring(8);
             int maand = Integer.parseInt(datum.toString().substring(5, 7));
@@ -354,6 +353,14 @@ public class EditMasterclass extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
+    
+    private void fillDatumCB () {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = 0; i < 10; i++) {
+            int year = currentYear + i;
+            jaarComboBox.addItem(year);
+        }
+    }
 
     private void fillBox(JComboBox box, ResultSet result, int idColumn, int[] desColumn, int currentID) throws SQLException {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
@@ -393,7 +400,11 @@ public class EditMasterclass extends javax.swing.JFrame {
             return false;
         }
         datum = getDatum();
-        
+        if (datum.before(new Date(System.currentTimeMillis()))) {
+            warningLbl.setText("<html>Datum ligt in het verleden.<br>Selecteer een andere datum</html>");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         if (naam.length() < 2) {
             warningLbl.setText("Naam moet minimaal twee karakters bevatten");
             warningLbl.setForeground(Color.red);
