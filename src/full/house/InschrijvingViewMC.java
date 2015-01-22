@@ -46,15 +46,21 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
 
         mcInschrijvingTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        mcInschrijvingTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(mcInschrijvingTable);
 
         paidButton.setText("Betaald");
@@ -112,7 +118,8 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
     private void getInschrijvingen() {
         String query = "SELECT I.spelerID, voorletters, isBetaald, naam FROM Inschrijving I "
                 + "JOIN Speler S ON I.spelerID = S.spelerID "
-                + "WHERE EvenementID = ?";
+                + "WHERE EvenementID = ? "
+                + "ORDER BY naam;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -127,7 +134,7 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
     }
 
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"Speler id", "Voorletters", "Naam speler", "Betaald"};
+        String[] columnNames = {"Speler id", "Naam", "Voorletters", "Betaald"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
 
@@ -137,7 +144,7 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
             String voorletters = result.getString("voorletters");
             boolean betaald = result.getBoolean("isBetaald");
 
-            Object[] rowData = {spelerID, voorletters, naam, betaald};
+            Object[] rowData = {spelerID, naam, voorletters, betaald};
             model.addRow(rowData);
         }
         mcInschrijvingTable.setModel(model);

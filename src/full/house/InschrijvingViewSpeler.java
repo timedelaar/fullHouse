@@ -54,6 +54,7 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        inschrijvingTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(inschrijvingTable);
 
         betaaldBtn.setText("Betaald");
@@ -132,7 +133,8 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
                 + "FROM Inschrijving "
                 + "JOIN Evenement ON Inschrijving.evenementID = Evenement.evenementID "
                 + "LEFT JOIN Toernooi ON Inschrijving.evenementID = Toernooi.evenementID "
-                + "WHERE Inschrijving.spelerID = ?;";
+                + "WHERE Inschrijving.spelerID = ? "
+                + "ORDER BY isGespeeld, datum;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);

@@ -51,6 +51,7 @@ public class ToernooienLocatieView extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        inschrijvingTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(inschrijvingTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
