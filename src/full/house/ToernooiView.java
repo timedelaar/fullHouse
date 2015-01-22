@@ -220,6 +220,7 @@ public class ToernooiView extends javax.swing.JPanel {
                 + "JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
                 + "JOIN ToernooiSoort ON Toernooi.soortToernooi = ToernooiSoort.soortID "
                 + "LEFT OUTER JOIN Inschrijving ON Evenement.evenementID = Inschrijving.evenementID "
+                + "WHERE Toernooi.isGesloten = false "
                 + "GROUP BY Evenement.evenementID;";
         try {
             Connection conn = SimpleDataSource.getConnection();
