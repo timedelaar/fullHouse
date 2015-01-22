@@ -70,28 +70,30 @@ public class ToernooiView extends javax.swing.JPanel {
         });
         toernooiTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(toernooiTable);
-        toernooiTable.getColumnModel().getColumn(0).setResizable(false);
-        toernooiTable.getColumnModel().getColumn(0).setPreferredWidth(25);
-        toernooiTable.getColumnModel().getColumn(1).setMinWidth(40);
-        toernooiTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-        toernooiTable.getColumnModel().getColumn(1).setMaxWidth(150);
-        toernooiTable.getColumnModel().getColumn(2).setMinWidth(30);
-        toernooiTable.getColumnModel().getColumn(2).setPreferredWidth(65);
-        toernooiTable.getColumnModel().getColumn(2).setMaxWidth(70);
-        toernooiTable.getColumnModel().getColumn(3).setMinWidth(30);
-        toernooiTable.getColumnModel().getColumn(3).setPreferredWidth(100);
-        toernooiTable.getColumnModel().getColumn(3).setMaxWidth(120);
-        toernooiTable.getColumnModel().getColumn(4).setMinWidth(40);
-        toernooiTable.getColumnModel().getColumn(4).setPreferredWidth(50);
-        toernooiTable.getColumnModel().getColumn(4).setMaxWidth(60);
-        toernooiTable.getColumnModel().getColumn(5).setResizable(false);
-        toernooiTable.getColumnModel().getColumn(5).setPreferredWidth(60);
-        toernooiTable.getColumnModel().getColumn(6).setMinWidth(30);
-        toernooiTable.getColumnModel().getColumn(6).setPreferredWidth(90);
-        toernooiTable.getColumnModel().getColumn(6).setMaxWidth(100);
-        toernooiTable.getColumnModel().getColumn(7).setMinWidth(30);
-        toernooiTable.getColumnModel().getColumn(7).setPreferredWidth(100);
-        toernooiTable.getColumnModel().getColumn(7).setMaxWidth(200);
+        if (toernooiTable.getColumnModel().getColumnCount() > 0) {
+            toernooiTable.getColumnModel().getColumn(0).setResizable(false);
+            toernooiTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+            toernooiTable.getColumnModel().getColumn(1).setMinWidth(40);
+            toernooiTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+            toernooiTable.getColumnModel().getColumn(1).setMaxWidth(150);
+            toernooiTable.getColumnModel().getColumn(2).setMinWidth(30);
+            toernooiTable.getColumnModel().getColumn(2).setPreferredWidth(65);
+            toernooiTable.getColumnModel().getColumn(2).setMaxWidth(70);
+            toernooiTable.getColumnModel().getColumn(3).setMinWidth(30);
+            toernooiTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+            toernooiTable.getColumnModel().getColumn(3).setMaxWidth(120);
+            toernooiTable.getColumnModel().getColumn(4).setMinWidth(40);
+            toernooiTable.getColumnModel().getColumn(4).setPreferredWidth(50);
+            toernooiTable.getColumnModel().getColumn(4).setMaxWidth(60);
+            toernooiTable.getColumnModel().getColumn(5).setResizable(false);
+            toernooiTable.getColumnModel().getColumn(5).setPreferredWidth(60);
+            toernooiTable.getColumnModel().getColumn(6).setMinWidth(30);
+            toernooiTable.getColumnModel().getColumn(6).setPreferredWidth(90);
+            toernooiTable.getColumnModel().getColumn(6).setMaxWidth(100);
+            toernooiTable.getColumnModel().getColumn(7).setMinWidth(30);
+            toernooiTable.getColumnModel().getColumn(7).setPreferredWidth(100);
+            toernooiTable.getColumnModel().getColumn(7).setMaxWidth(200);
+        }
 
         addToernooiBtn.setText("<html><div align=center>Nieuw<br>toernooi</div></html>");
         addToernooiBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -116,6 +118,11 @@ public class ToernooiView extends javax.swing.JPanel {
         });
 
         viewInschrijvingenBtn.setText("<html><div align=center>Bekijk<br>inschrijvingen</div></html>");
+        viewInschrijvingenBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                viewInschrijvingenBtnMouseClicked(evt);
+            }
+        });
 
         tafelBtn.setText("<html><div align=center>Maak<br>tafelindeling</div></html>");
         tafelBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -213,6 +220,21 @@ public class ToernooiView extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_tafelBtnMouseClicked
+
+    private void viewInschrijvingenBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewInschrijvingenBtnMouseClicked
+        int[] row = toernooiTable.getSelectedRows();
+        if (row.length == 0) {
+            JOptionPane.showMessageDialog(this, "Geen toernooi(en) geselecteerd.", "Genereer tafelindeling", JOptionPane.PLAIN_MESSAGE);
+        }
+        else {
+            for (int i = 0; i < row.length; i++) {
+                int evenementID = Integer.parseInt(toernooiTable.getValueAt(row[i], 0).toString());
+                BekijkToernooiInschrijving toernooiInschrijving = new BekijkToernooiInschrijving(evenementID);
+                toernooiInschrijving.setLocation(200 + i*30, 150 + i*30 - (i/5)*150);
+                toernooiInschrijving.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_viewInschrijvingenBtnMouseClicked
 
     public final void getToernooien () {
         String query = "SELECT *, COUNT(Inschrijving.evenementID) AS inschrijvingen FROM Evenement "
