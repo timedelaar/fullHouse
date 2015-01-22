@@ -207,7 +207,11 @@ public class ToernooiView extends javax.swing.JPanel {
     private void tafelBtnMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tafelBtnMouseClicked
         int[] rows = toernooiTable.getSelectedRows();
         if (rows.length == 0) {
-            JOptionPane.showMessageDialog(this, "Geen toernooi(en) geselecteerd.", "Genereer tafelindeling", JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Geen toernooi geselecteerd.", "Genereer tafelindeling", JOptionPane.PLAIN_MESSAGE);
+        }
+        else if (rows.length > 1) {
+            JOptionPane.showMessageDialog(this, "<html>Meerdere toernooien geselecteerd.<br>"
+                    + "Selecteer één toernooi.</html>", "Genereer tafelindeling", JOptionPane.PLAIN_MESSAGE);
         }
         else {
             int confirm = JOptionPane.showConfirmDialog(null, "<html>Weet u zeker dat u de tafelindeling voor dit toernooi wilt aanmaken?<br>"
