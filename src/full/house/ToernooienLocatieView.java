@@ -37,7 +37,7 @@ public class ToernooienLocatieView extends javax.swing.JFrame {
         inschrijvingTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Inschrijvingen");
+        setTitle("Toernooien");
         setResizable(false);
 
         inschrijvingTable.setModel(new javax.swing.table.DefaultTableModel(

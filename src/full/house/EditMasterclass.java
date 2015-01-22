@@ -62,7 +62,7 @@ public class EditMasterclass extends javax.swing.JFrame {
         warningLbl = new javax.swing.JLabel();
         docentCB = new javax.swing.JComboBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Bewerk masterclass");
 
@@ -287,10 +287,6 @@ public class EditMasterclass extends javax.swing.JFrame {
                 + "JOIN MasterClass MC ON E.EvenementID = MC.EvenementID "
                 + "JOIN Speler S ON MC.docent = S.spelerID "
                 + "WHERE E.EvenementID = ? ;";
-
-        String query2 = "SELECT naam FROM Locatie "
-                + "WHERE LocatieID = ?;";
-
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -362,6 +358,8 @@ public class EditMasterclass extends javax.swing.JFrame {
     private void fillBox(JComboBox box, ResultSet result, int idColumn, int[] desColumn, int currentID) throws SQLException {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         ModelItem current = new ModelItem(0, "");
+        ModelItem item1 = new ModelItem(-1, "Selecteer");
+        model.addElement(item1);
         while (result.next()) {
             int id = result.getInt(idColumn);
             String beschrijving = "";
@@ -382,8 +380,18 @@ public class EditMasterclass extends javax.swing.JFrame {
         naam = naamField.getText();
         ModelItem item = (ModelItem) locatieComboBox.getSelectedItem();
         locatieID = item.id;
+        if (locatieID == -1) {
+            warningLbl.setText("Selecteer een locatie");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         item = (ModelItem) docentCB.getSelectedItem();
         docent = item.id;
+        if (docent == -1) {
+            warningLbl.setText("Selecteer een docent");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         datum = getDatum();
         
         if (naam.length() < 2) {

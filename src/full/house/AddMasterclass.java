@@ -55,7 +55,7 @@ public class AddMasterclass extends javax.swing.JFrame {
         docentCB = new javax.swing.JComboBox();
         warningLbl = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Voeg masterclass toe");
 
@@ -119,7 +119,7 @@ public class AddMasterclass extends javax.swing.JFrame {
                                 .addComponent(jaarComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(naamField, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(locatieComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(11, Short.MAX_VALUE))
+                        .addContainerGap(20, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(minRatingField, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -308,7 +308,8 @@ public class AddMasterclass extends javax.swing.JFrame {
 
     private void fillBox(JComboBox box, ResultSet result, int idColumn, int[] desColumn) throws SQLException {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-
+        ModelItem item1 = new ModelItem(-1, "Selecteer");
+        model.addElement(item1);
         while (result.next()) {
             int id = result.getInt(idColumn);
             String beschrijving = "";
@@ -325,8 +326,18 @@ public class AddMasterclass extends javax.swing.JFrame {
         naam = naamField.getText();
         ModelItem item = (ModelItem) locatieComboBox.getSelectedItem();
         locatieID = item.id;
+        if (locatieID == -1) {
+            warningLbl.setText("Selecteer een locatie");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         item = (ModelItem) docentCB.getSelectedItem();
         docent = item.id;
+        if (docent == -1) {
+            warningLbl.setText("Selecteer een docent");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         datum = getDatum();
         
         if (naam.length() < 2) {

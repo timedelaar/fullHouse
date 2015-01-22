@@ -339,7 +339,8 @@ public class AddToernooi extends javax.swing.JFrame {
     
     private void fillBox (JComboBox box, ResultSet result) throws SQLException  {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        
+        ModelItem item1 = new ModelItem(-1, "Selecteer");
+        model.addElement(item1);
         while (result.next()) {
             int id = result.getInt(1);
             String beschrijving = result.getString(2);
@@ -395,6 +396,11 @@ public class AddToernooi extends javax.swing.JFrame {
         }
         ModelItem item = (ModelItem) locatieCB.getSelectedItem();
         locatieID = item.id;
+        if (locatieID == -1) {
+            warningLbl.setText("Selecteer een locatie");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         int locatieCapaciteit = getCapaciteit(locatieID);
         if (maxSpelers > locatieCapaciteit) {
             warningLbl.setText("<html>Geselecteerde locatie is te klein.<br>Maximaal " + locatieCapaciteit + " spelers</html>");
@@ -409,6 +415,11 @@ public class AddToernooi extends javax.swing.JFrame {
         }
         item = (ModelItem) soortCB.getSelectedItem();
         soort = item.id;
+        if (soort == -1) {
+            warningLbl.setText("Selecteer een toernooi soort");
+            warningLbl.setForeground(Color.red);
+            return false;
+        }
         return true;
     }
     

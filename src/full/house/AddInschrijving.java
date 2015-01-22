@@ -45,7 +45,7 @@ public class AddInschrijving extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         spelersList = new javax.swing.JList();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel2.setText("spelers:");
 
@@ -190,6 +190,8 @@ public class AddInschrijving extends javax.swing.JFrame {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             ResultSet result = stat.executeQuery();
+            ModelItem item1 = new ModelItem(-1, "Selecteer");
+            evenementCB.addItem(item1);
             while (result.next()) {
                 int evenementID = result.getInt("evenementID");
                 String naam = result.getString("naam");
@@ -215,6 +217,10 @@ public class AddInschrijving extends javax.swing.JFrame {
                 + "VALUES(?,?,?)";
         ModelItem item = (ModelItem) evenementCB.getSelectedItem();
         int evenementID = item.id;
+        if (evenementID == -1) {
+            JOptionPane.showMessageDialog(this, "Selecteer een evenement.");
+            return false;
+        }
         boolean isBetaald = betaaldCB.isSelected();
         for (int i = 0; i < spelers.length; i++) {
             try {
