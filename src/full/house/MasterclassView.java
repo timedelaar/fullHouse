@@ -87,6 +87,11 @@ public class MasterclassView extends javax.swing.JPanel {
         });
 
         viewClassButton.setText("<html><div align=center>Bekijk<br>inschrijvingen</div></html>");
+        viewClassButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                viewClassButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -149,6 +154,10 @@ public class MasterclassView extends javax.swing.JPanel {
         if(rows.length == 0){
             JOptionPane.showMessageDialog(this, "Geen masterclass geselecteerd", "Bewerk masterclass", JOptionPane.ERROR_MESSAGE);
         }
+        if (rows.length > 5) {
+            JOptionPane.showMessageDialog(this, "<html>Meer dan 5 classes geselecteerd.<br>Selecteer maximaal 5 classes</html>",
+                    "Bewerk masterclass", JOptionPane.ERROR_MESSAGE);
+        }
         else{
             for(int i = 0; i < rows.length; i++){
                 int classID = Integer.parseInt(masterclassTable.getValueAt(rows[i], 0).toString());
@@ -159,6 +168,26 @@ public class MasterclassView extends javax.swing.JPanel {
             getMasterclasses();
         }
     }//GEN-LAST:event_editClassButtonMouseClicked
+
+    private void viewClassButtonMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewClassButtonMouseClicked
+        int[] rows = masterclassTable.getSelectedRows();
+        if(rows.length == 0){
+            JOptionPane.showMessageDialog(this, "Geen masterclass geselecteerd", "Bekijk inschrijvingen", JOptionPane.ERROR_MESSAGE);
+        }
+        if (rows.length > 5) {
+            JOptionPane.showMessageDialog(this, "<html>Meer dan 5 classes geselecteerd.<br>Selecteer maximaal 5 classes</html>",
+                    "Bekijk inschrijvingen", JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            for(int i = 0; i < rows.length; i++){
+                int classID = Integer.parseInt(masterclassTable.getValueAt(rows[i], 0).toString());
+                InschrijvingViewMC viewInschrijvingen = new InschrijvingViewMC(classID);
+                viewInschrijvingen.setLocation(200 + i*30, 150 + i*30 - (i/5)*150);
+                viewInschrijvingen.setVisible(true);                
+            }
+            getMasterclasses();
+        }
+    }//GEN-LAST:event_viewClassButtonMouseClicked
     
     public final void getMasterclasses(){
         String query = "SELECT MasterClass.evenementID, MasterClass.docent, MasterClass.minimumRating, "

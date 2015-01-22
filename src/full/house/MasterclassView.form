@@ -139,6 +139,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;div align=center&gt;Bekijk&lt;br&gt;inschrijvingen&lt;/div&gt;&lt;/html&gt;"/>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="viewClassButtonMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

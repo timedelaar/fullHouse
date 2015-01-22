@@ -110,7 +110,7 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
     }//GEN-LAST:event_paidButtonMouseClicked
 
     private void getInschrijvingen() {
-        String query = "SELECT I.spelerID, voorletters, isBetaald, naam, isDocent FROM Inschrijving I "
+        String query = "SELECT I.spelerID, voorletters, isBetaald, naam FROM Inschrijving I "
                 + "JOIN Speler S ON I.spelerID = S.spelerID "
                 + "WHERE EvenementID = ?";
         try {
@@ -127,7 +127,7 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
     }
 
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"Speler id", "Voorletters", "Naam speler", "Betaald", "docent"};
+        String[] columnNames = {"Speler id", "Voorletters", "Naam speler", "Betaald"};
         DefaultTableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
 
@@ -135,10 +135,9 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
             int spelerID = result.getInt("spelerID");
             String naam = result.getString("naam");
             String voorletters = result.getString("voorletters");
-            boolean isDocent = result.getBoolean("isDocent");
             boolean betaald = result.getBoolean("isBetaald");
 
-            Object[] rowData = {spelerID, voorletters, naam, betaald, isDocent};
+            Object[] rowData = {spelerID, voorletters, naam, betaald};
             model.addRow(rowData);
         }
         mcInschrijvingTable.setModel(model);
