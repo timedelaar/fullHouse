@@ -158,7 +158,9 @@ public class AddInschrijving extends javax.swing.JFrame {
      */
     private boolean checkMaxSpelers(int evenementID) 
     {
-        String query = "SELECT maximumSpelers FROM Toernooi WHERE evenementID = ?;";
+        String query = "SELECT maximumSpelers FROM Evenement "
+                + "LEFT JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
+                + "WHERE Evenement.evenementID = ?;";
         String query2 = "SELECT COUNT(spelerID) FROM Inschrijving WHERE evenementID = ?;";
         
         try {
@@ -171,12 +173,24 @@ public class AddInschrijving extends javax.swing.JFrame {
             ResultSet result = stat.executeQuery();
             ResultSet result2 = stat2.executeQuery();
             
-            int maximunSpelers = result.getInt(query);
+            result.next();
+            result2.next();
+            
+            if (result.getInt(1) == 0) {
+                return true;
+            }
+            
+            int maximumSpelers = result.getInt(query);
             int aantalSpelers = result2.getInt(query2);
-            if (aantalSpelers <= maximunSpelers)
+            if (aantalSpelers <= maximumSpelers)
             {
                 return true;
             }
+            
+            result.close();
+            result2.close();
+            stat.close();
+            stat2.close();
         }
         catch (Exception e)
         {
@@ -193,38 +207,44 @@ public class AddInschrijving extends javax.swing.JFrame {
      */
     private boolean checkRating(int evenementID) {
         String query = "SELECT rating FROM Speler WHERE spelerID = ?;";
-        String query2 = "SELECT minimumRating FROM Evenement WHERE evenementID = ?;";
+        String query2 = "SELECT minimumRating FROM Evenement "
+                + "LEFT JOIN MasterClass ON Evenement.evenementID = MasterClass.evenementID "
+                + "WHERE Evenement.evenementID = ?;";
 
 
         try {
             Connection conn = SimpleDataSource.getConnection();
-            PreparedStatement stat2 = conn.prepareStatement(query2);
             PreparedStatement stat = conn.prepareStatement(query);
+            PreparedStatement stat2 = conn.prepareStatement(query2);
 
             stat2.setInt(1, evenementID);
-            ResultSet result = stat2.executeQuery();
-            result.next();
-            int mimimumRating = result.getInt(query2);
+            ResultSet result2 = stat2.executeQuery();
+            result2.next();
+            if (result2.getInt(1) == 0) {
+                return true;
+            }
+            int mimimumRating = result2.getInt(1);
 
             for (int i = 0; i < spelers.length; i++) {
 
                 int spelerID = spelers[i];
                 stat.setInt(1, spelerID);
-                ResultSet result2 = stat.executeQuery();
-                result2.next();
-                int ratingSpeler = result.getInt(query);
+                ResultSet result = stat.executeQuery();
+                result.next();
+                int ratingSpeler = result.getInt(1);
                 if (ratingSpeler >= mimimumRating) {
                     return true;
                 }
-                result2.close();
+                result.close();
 
             }
 
-            result.close();
+            result2.close();
             stat.close();
+            stat2.close();
 
         } catch (Exception e) {
-            System.out.println(e);
+            FullHouse.showDBError(e);
         }
         JOptionPane.showMessageDialog(this, "Er is een speler geselecteert met te lage rating", "Rating te laag.", JOptionPane.PLAIN_MESSAGE);
         return false;
