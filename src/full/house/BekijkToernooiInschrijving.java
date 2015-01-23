@@ -34,7 +34,7 @@ public class BekijkToernooiInschrijving extends javax.swing.JFrame {
      * Haalt inschrijving op uit database.
      */
     private void getInschrijvingen() {
-        String query = "SELECT Inschrijving.evenementID, Inschrijving.spelerID, Speler.naam, Speler.voorletters "
+        String query = "SELECT Inschrijving.spelerID, Speler.naam, Speler.voorletters, Inschrijving.isBetaald "
                 + "FROM Inschrijving "
                 + "JOIN Speler "
                 + "ON Inschrijving.spelerID = Speler.spelerID "
@@ -59,19 +59,66 @@ public class BekijkToernooiInschrijving extends javax.swing.JFrame {
      * @throws SQLException 
      */
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"Evenement ID", "Speler ID", "Naam", "Voorletters"};
-        DefaultTableModel model = new DefaultTableModel();
+        String[] columnNames = {"Speler ID", "Naam", "Voorletters", "Betaald"};
+        TableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
         while (result.next()) {
-            int ID = result.getInt("evenementID");
-            //ID = FullHouse.addZeroes(ID, 3);
+            
             String naam = result.getString("naam");
             String voorletter = result.getString("voorletters");
             String spelerID = result.getString("spelerID");
-            Object[] rowData = {ID, spelerID, naam, voorletter};
+            boolean isBetaald = result.getBoolean("isBetaald");
+            Object[] rowData = {spelerID, naam, voorletter, isBetaald};
             model.addRow(rowData);
         }
         jTable2.setModel(model);
+    }
+    private void isBetaald() {
+    int[] rows = jTable2.getSelectedRows();
+        for(int i = 0; i < rows.length; i++){
+            int spelerID = Integer.parseInt(jTable2.getValueAt(rows[i], 0).toString());
+            isBetaaldQuery(spelerID);
+        }
+    }
+    //Query voor het wijzigen van de betaling van de inschrijving in 'isBetaald = true'.
+    private void isBetaaldQuery(int spelerID){
+        String query = "UPDATE Inschrijving SET isBetaald = true "
+                + "WHERE evenementID = ? AND spelerID = ?;";
+        try{
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            
+            stat.setInt(1, evenementID);
+            stat.setInt(2, spelerID);
+            stat.executeUpdate();
+            
+            stat.close();
+        }
+        catch(SQLException e){
+            FullHouse.showDBError(e);
+        }
+        getInschrijvingen();
+    }
+    
+    //Query voor het opvragen van alle inschrijvingen die nog niet betaald hebben
+    private void isNietBetaald() {
+        String query = "SELECT Inschrijving.spelerID, Speler.naam, Speler.voorletters, Inschrijving.isBetaald "
+                + "FROM Inschrijving "
+                + "JOIN Speler "
+                + "ON Inschrijving.spelerID = Speler.spelerID "
+                + "WHERE Inschrijving.evenementID = ? AND Inschrijving.isBetaald = false;";
+                //+ "ORDER BY Inschrijving.evenementID ASC;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setInt(1, evenementID);
+            ResultSet result = stat.executeQuery();
+            fillTable(result);
+            result.close();
+            stat.close();
+        } catch (Exception e) {
+            FullHouse.showDBError(e);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -86,6 +133,9 @@ public class BekijkToernooiInschrijving extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -99,43 +149,112 @@ public class BekijkToernooiInschrijving extends javax.swing.JFrame {
         jTable1.getAccessibleContext().setAccessibleName("bekijkToernooiTabel");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null,  new Boolean(true)}
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
+        if (jTable2.getColumnModel().getColumnCount() > 0) {
+            jTable2.getColumnModel().getColumn(0).setHeaderValue("Title 1");
+            jTable2.getColumnModel().getColumn(1).setHeaderValue("Title 2");
+            jTable2.getColumnModel().getColumn(2).setHeaderValue("Title 3");
+            jTable2.getColumnModel().getColumn(3).setHeaderValue("Title 4");
+        }
+
+        jButton1.setText("Betaald");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("<html><div align=center>Overzicht<br>niet betaald</div></html>");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+
+        jButton3.setText("<html><div align=center>Alle<br>inschrijvingen</div></html>");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+            isBetaald();    
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+            isNietBetaald();    
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+            getInschrijvingen();
+    }//GEN-LAST:event_jButton3MouseClicked
     
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
