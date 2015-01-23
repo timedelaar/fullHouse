@@ -107,7 +107,6 @@ public class BekijkToernooiInschrijving extends javax.swing.JFrame {
                 + "JOIN Speler "
                 + "ON Inschrijving.spelerID = Speler.spelerID "
                 + "WHERE Inschrijving.evenementID = ? AND Inschrijving.isBetaald = false;";
-                //+ "ORDER BY Inschrijving.evenementID ASC;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
