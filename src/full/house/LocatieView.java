@@ -146,13 +146,20 @@ public class LocatieView extends javax.swing.JPanel {
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {addLocatieBtn, deleteLocatieBtn, editLocatieBtn, viewToernooienBtn});
 
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+    * Opent dialog voor het toevoegen van een locatie.
+    * @param evt 
+    */
     private void addLocatieBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addLocatieBtnMouseClicked
         AddLocatie addLocatie = new AddLocatie(this);
         addLocatie.setLocation(300, 150);
         addLocatie.setVisible(true);
     }//GEN-LAST:event_addLocatieBtnMouseClicked
 
+    /**
+     * Opent dialog voor het aanpassen van de geselecteerde locatie.
+     * @param evt 
+     */
     private void editLocatieBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editLocatieBtnMouseClicked
         int[] rows = locatieTable.getSelectedRows();
         if (rows.length == 0) {
@@ -169,6 +176,10 @@ public class LocatieView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_editLocatieBtnMouseClicked
 
+    /**
+     * Verwijdert geselecteerde locatie.
+     * @param evt 
+     */
     private void deleteLocatieBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteLocatieBtnMouseClicked
         int confirm = JOptionPane.showConfirmDialog(this, "Weet U zeker dat U deze locatie wilt verwijderen?", "Verwijder locatie?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -180,6 +191,10 @@ public class LocatieView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_deleteLocatieBtnMouseClicked
 
+    /**
+     * Opent dialog voor het bekijken van de toernooien op de geselecteerde locatie.
+     * @param evt 
+     */
     private void viewToernooienBtnMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewToernooienBtnMouseClicked
         int[] rows = locatieTable.getSelectedRows();
         if (rows.length == 0) {
@@ -194,6 +209,9 @@ public class LocatieView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_viewToernooienBtnMouseClicked
 
+    /**
+     * Haalt de locaties op uit de database.
+     */
     public final void getLocaties () {
         String query = "SELECT * FROM Locatie;";
         try {
@@ -209,6 +227,10 @@ public class LocatieView extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Verwijdert locatie uit de database.
+     * @param id 
+     */
     private void deleteLocatie (int id) {
         String query = "DELETE FROM Locatie WHERE locatieID = ?;";
         try {
@@ -228,6 +250,11 @@ public class LocatieView extends javax.swing.JPanel {
         getLocaties();
     }
     
+    /**
+     * Vult de tabel met de locaties.
+     * @param result
+     * @throws SQLException 
+     */
     private void fillTable(ResultSet result) throws SQLException {
         String[] columnNames = {"ID", "Naam", "Aantal tafels",  "Spelers per tafel", "Straatnaam", "HuisNr", "Plaats", "Postcode"};
         DefaultTableModel model = new TableModel();

@@ -195,6 +195,11 @@ public class AddSpeler extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Voegt een speler toe.
+     * Laat een label zien als er een ongeldige postcode word ingevoerd.
+     * @param evt 
+     */
     private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
         if (getValues()) {
             if (FullHouse.checkPostcode(postcode)) {
@@ -210,17 +215,30 @@ public class AddSpeler extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addBtnMouseClicked
 
+    /**
+     * Sluit scherm af.
+     * @param evt 
+     */
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
 
+    /**
+     * Controleert of er een geldig telefoonnummer word opgegeven.
+     * @param evt 
+     */
     private void telefoonNrFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_telefoonNrFieldKeyTyped
         if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
             evt.consume();
         }
     }//GEN-LAST:event_telefoonNrFieldKeyTyped
 
+    /**
+     * Voegt een speler toe aan de database.
+     * Returns false als de speler niet is toegevoegd.
+     * @return 
+     */
     private boolean addSpeler () {
         String query = "INSERT INTO Speler(naam, voorletters, postcode, woonplaats, straatnaam, huisNr, telefoonNr, email, rating, gewonnenGeld, isDocent)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
@@ -255,6 +273,11 @@ public class AddSpeler extends javax.swing.JFrame {
         return true;
     }
     
+    /**
+     * Haalt gegevens op uit de invoer velden.
+     * Controleert of de invoer correct is.
+     * @return Returns true wanneer alles goed is ingevult.
+     */
     private boolean getValues () {
         naam = naamField.getText();
         voorletters = voorlettersField.getText();

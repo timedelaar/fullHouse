@@ -74,6 +74,9 @@ public class ToernooienLocatieView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Haalt toernooien op uit database.
+     */
     private void getToernooien () {
         String query = "SELECT * FROM Evenement "
                 + "LEFT JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
@@ -93,6 +96,11 @@ public class ToernooienLocatieView extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Vult de tabel met toernooien.
+     * @param result
+     * @throws SQLException 
+     */
     private void fillTable(ResultSet result) throws SQLException {
         String[] columnNames = {"Evenement ID", "Evenement naam", "Datum", "Soort"};
         DefaultTableModel model = new TableModel();

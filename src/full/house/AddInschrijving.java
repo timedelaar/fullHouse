@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 public class AddInschrijving extends javax.swing.JFrame {
 
     int[] spelers;
-    
+
     /**
      * Creates new form Inschrijving2
      */
@@ -127,9 +127,10 @@ public class AddInschrijving extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Schrijft de speler in voor het geselecteerde toernooi.
-     * Laat een dialog zien als de inschrijving succesvol is.
-     * @param evt 
+     * Schrijft de speler in voor het geselecteerde toernooi. Laat een dialog
+     * zien als de inschrijving succesvol is.
+     *
+     * @param evt
      */
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         if (addInschrijving()) {
@@ -138,20 +139,101 @@ public class AddInschrijving extends javax.swing.JFrame {
             this.dispose();
         }
     }//GEN-LAST:event_saveBtnMouseClicked
-    
+
     /**
      * Annuleert de inschrijving.
-     * @param evt 
+     *
+     * @param evt
      */
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
+
     
+    /**
+     * controleert of het maximum aantal spelers niet bereikt word.
+     * @param evenementID
+     * @return returns true als spelers toegevoegd kunnen worden.
+     */
+    private boolean checkMaxSpelers(int evenementID) 
+    {
+        String query = "SELECT maximumSpelers FROM Toernooi WHERE evenementID = ?;";
+        String query2 = "SELECT COUNT(spelerID) FROM Inschrijving WHERE evenementID = ?;";
+        
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            PreparedStatement stat2 = conn.prepareStatement(query2);
+            
+            stat.setInt(1, evenementID);
+            stat2.setInt(1, evenementID);
+            ResultSet result = stat.executeQuery();
+            ResultSet result2 = stat2.executeQuery();
+            
+            int maximunSpelers = result.getInt(query);
+            int aantalSpelers = result2.getInt(query2);
+            if (aantalSpelers <= maximunSpelers)
+            {
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        JOptionPane.showMessageDialog(this, "Maximun aantal spelers is berreikt", "Te veel spelers.", JOptionPane.PLAIN_MESSAGE);
+        return false;
+    }
+    
+    /**
+     * Controleert of de rating voldoende is om deeltenemen aan een masterclass.
+     * @param evenementID
+     * @return returns false als rating te laag is.
+     */
+    private boolean checkRating(int evenementID) {
+        String query = "SELECT rating FROM Speler WHERE spelerID = ?;";
+        String query2 = "SELECT minimumRating FROM Evenement WHERE evenementID = ?;";
+
+
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat2 = conn.prepareStatement(query2);
+            PreparedStatement stat = conn.prepareStatement(query);
+
+            stat2.setInt(1, evenementID);
+            ResultSet result = stat2.executeQuery();
+            result.next();
+            int mimimumRating = result.getInt(query2);
+
+            for (int i = 0; i < spelers.length; i++) {
+
+                int spelerID = spelers[i];
+                stat.setInt(1, spelerID);
+                ResultSet result2 = stat.executeQuery();
+                result2.next();
+                int ratingSpeler = result.getInt(query);
+                if (ratingSpeler >= mimimumRating) {
+                    return true;
+                }
+                result2.close();
+
+            }
+
+            result.close();
+            stat.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        JOptionPane.showMessageDialog(this, "Er is een speler geselecteert met te lage rating", "Rating te laag.", JOptionPane.PLAIN_MESSAGE);
+        return false;
+    }
+
     /**
      * Vult de textvelden met corresponderende waarden.
      */
-    private void fillFields () {
+    private void fillFields() {
         String query = "SELECT voorletters, naam FROM Speler WHERE spelerID = ?;";
         DefaultListModel model = new DefaultListModel();
         for (int i = 0; i < spelers.length; i++) {
@@ -167,22 +249,21 @@ public class AddInschrijving extends javax.swing.JFrame {
                 String naam = result.getString("naam");
                 ModelItem item = new ModelItem(spelers[i], naam + ", " + voorletters);
                 model.addElement(item);
-                
+
                 result.close();
                 stat.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 FullHouse.showDBError(e);
             }
         }
         spelersList.setModel(model);
         getToernooien();
     }
-    
+
     /**
      * Haalt een lijst op met bestaande toernooien en vult een ComboBox hiermee.
      */
-    private void getToernooien () {
+    private void getToernooien() {
         String query = "SELECT Evenement.evenementID, naam FROM Evenement "
                 + "LEFT JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
                 + "WHERE isGesloten = false OR isGesloten IS NULL;";
@@ -200,18 +281,18 @@ public class AddInschrijving extends javax.swing.JFrame {
             }
             result.close();
             stat.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             FullHouse.showDBError(e);
         }
     }
-    
+
     /**
-     * Voegt een inschrijving toe.
-     * Laat een dialog zien als een speler al is ingeschreven voor dit toernooi.
+     * Voegt een inschrijving toe. Laat een dialog zien als een speler al is
+     * ingeschreven voor dit toernooi.
+     *
      * @return Returns false als de inschrijving niet gelukt is.
      */
-    private boolean addInschrijving () {
+    private boolean addInschrijving() {
         boolean succes = true;
         String query = "INSERT INTO Inschrijving(spelerID, evenementID, isBetaald)"
                 + "VALUES(?,?,?)";
@@ -221,28 +302,31 @@ public class AddInschrijving extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecteer een evenement.");
             return false;
         }
-        boolean isBetaald = betaaldCB.isSelected();
-        for (int i = 0; i < spelers.length; i++) {
-            try {
-                Connection conn = SimpleDataSource.getConnection();
-                PreparedStatement stat = conn.prepareStatement(query);
-                stat.setInt(1, spelers[i]);
-                stat.setInt(2, evenementID);
-                stat.setBoolean(3, isBetaald);
-                stat.executeUpdate();
-                stat.close();
+
+        if (checkRating(evenementID) == true && checkMaxSpelers(evenementID) == true) {
+            boolean isBetaald = betaaldCB.isSelected();
+            for (int i = 0; i < spelers.length; i++) {
+                try {
+                    Connection conn = SimpleDataSource.getConnection();
+                    PreparedStatement stat = conn.prepareStatement(query);
+                    stat.setInt(1, spelers[i]);
+                    stat.setInt(2, evenementID);
+                    stat.setBoolean(3, isBetaald);
+                    stat.executeUpdate();
+                    stat.close();
+                } catch (MySQLIntegrityConstraintViolationException e) {
+
+                } catch (SQLException e) {
+                    FullHouse.showDBError(e);
+                    succes = false;
+                }
             }
-            catch (MySQLIntegrityConstraintViolationException e) {
-                
-            }
-            catch (SQLException e) {
-                FullHouse.showDBError(e);
-                succes = false;
-            }
+            return succes;
         }
-        return succes;
+        return false;
+       
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox betaaldCB;
     private javax.swing.JButton cancelBtn;

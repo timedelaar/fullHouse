@@ -25,7 +25,7 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
     public InschrijvingViewMC(int evenementID) {
         initComponents();
         this.evenementID = evenementID;
-        getInschrijvingen();
+        getAlleInschrijvingen();
     }
 
     /**
@@ -41,26 +41,25 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
         mcInschrijvingTable = new javax.swing.JTable();
         paidButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        alBetaaldButton = new javax.swing.JButton();
+        nogNietBetaaldButton = new javax.swing.JButton();
+        alleDeelnemersButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         mcInschrijvingTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        mcInschrijvingTable.getTableHeader().setReorderingAllowed(false);
+        ));
         jScrollPane1.setViewportView(mcInschrijvingTable);
 
         paidButton.setText("Betaald");
@@ -77,31 +76,78 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Bekijk de volgende deelnemers:");
+
+        alBetaaldButton.setText("Al betaald");
+        alBetaaldButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alBetaaldButtonMouseClicked(evt);
+            }
+        });
+
+        nogNietBetaaldButton.setText("Niet betaald");
+        nogNietBetaaldButton.setActionCommand("Nog niet betaald");
+        nogNietBetaaldButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nogNietBetaaldButtonMouseClicked(evt);
+            }
+        });
+
+        alleDeelnemersButton.setText("Alle deelnemers");
+        alleDeelnemersButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alleDeelnemersButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(paidButton, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                    .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(alBetaaldButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nogNietBetaaldButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(alleDeelnemersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(paidButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {alBetaaldButton, nogNietBetaaldButton});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(alBetaaldButton)
+                    .addComponent(nogNietBetaaldButton)
+                    .addComponent(alleDeelnemersButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(paidButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 174, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addGap(0, 195, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         pack();
@@ -115,11 +161,56 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
         setIsBetaald();
     }//GEN-LAST:event_paidButtonMouseClicked
 
-    private void getInschrijvingen() {
-        String query = "SELECT I.spelerID, voorletters, isBetaald, naam FROM Inschrijving I "
+    private void alBetaaldButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alBetaaldButtonMouseClicked
+        getBetaaldeInschrijvingen();
+    }//GEN-LAST:event_alBetaaldButtonMouseClicked
+
+    private void nogNietBetaaldButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nogNietBetaaldButtonMouseClicked
+        getNietBetaaldeInschrijvingen();
+    }//GEN-LAST:event_nogNietBetaaldButtonMouseClicked
+
+    private void alleDeelnemersButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alleDeelnemersButtonMouseClicked
+        getAlleInschrijvingen();
+    }//GEN-LAST:event_alleDeelnemersButtonMouseClicked
+
+    private void getAlleInschrijvingen() {
+        String query = "SELECT I.spelerID, voorletters, isBetaald, naam, isDocent FROM Inschrijving I "
                 + "JOIN Speler S ON I.spelerID = S.spelerID "
-                + "WHERE EvenementID = ? "
-                + "ORDER BY naam;";
+                + "WHERE EvenementID = ?;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setInt(1, evenementID);
+            ResultSet result = stat.executeQuery();
+            fillTable(result);
+            result.close();
+            stat.close();
+        } catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
+    }
+
+    private void getBetaaldeInschrijvingen() {
+        String query = "SELECT I.SpelerID, voorletters, isBetaald, naam, isDocent FROM Inschrijving I "
+                + "JOIN Speler S ON I.spelerID = S.spelerID "
+                + "WHERE EvenementID = ? AND isBetaald = true;";
+        try {
+            Connection conn = SimpleDataSource.getConnection();
+            PreparedStatement stat = conn.prepareStatement(query);
+            stat.setInt(1, evenementID);
+            ResultSet result = stat.executeQuery();
+            fillTable(result);
+            result.close();
+            stat.close();
+        } catch (SQLException e) {
+            FullHouse.showDBError(e);
+        }
+    }
+
+    private void getNietBetaaldeInschrijvingen() {
+        String query = "SELECT I.SpelerID, voorletters, isBetaald, naam, isDocent FROM Inschrijving I "
+                + "JOIN Speler S on I.spelerID = S.spelerID "
+                + "WHERE EvenementID = ? AND isBetaald = false;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -134,17 +225,18 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
     }
 
     private void fillTable(ResultSet result) throws SQLException {
-        String[] columnNames = {"Speler id", "Naam", "Voorletters", "Betaald"};
-        DefaultTableModel model = new TableModel();
+        String[] columnNames = {"Speler id", "Voorletters", "Naam speler", "Betaald", "docent"};
+        TableModel model = new TableModel();
         model.setDataVector(new Object[][]{}, columnNames);
 
         while (result.next()) {
             int spelerID = result.getInt("spelerID");
             String naam = result.getString("naam");
             String voorletters = result.getString("voorletters");
+            boolean isDocent = result.getBoolean("isDocent");
             boolean betaald = result.getBoolean("isBetaald");
 
-            Object[] rowData = {spelerID, naam, voorletters, betaald};
+            Object[] rowData = {spelerID, voorletters, naam, betaald, isDocent};
             model.addRow(rowData);
         }
         mcInschrijvingTable.setModel(model);
@@ -152,14 +244,13 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
 
     private void deleteInschrijving() {
         int[] rows = mcInschrijvingTable.getSelectedRows();
-        if(rows.length == 0){
+        if (rows.length == 0) {
             JOptionPane.showMessageDialog(this, "Geen inschrijving geselecteerd", "Verwijder inschrijving", JOptionPane.ERROR_MESSAGE);
-        }else if(rows.length >= 2){
+        } else if (rows.length >= 2) {
             JOptionPane.showMessageDialog(this, "Meer dan één inschrijving geselecteerd", "Verwijder inschrijving", JOptionPane.ERROR_MESSAGE);
-        }
-        else{
+        } else {
             int confirm = JOptionPane.showConfirmDialog(null, "Weet u zeker dat u deze inschrijving wilt verwijderen?", "Verwijder inschrijving", JOptionPane.YES_NO_OPTION);
-            if(confirm == JOptionPane.YES_OPTION) {
+            if (confirm == JOptionPane.YES_OPTION) {
                 int spelerID = Integer.parseInt(mcInschrijvingTable.getValueAt(rows[0], 0).toString());
                 deleteQuery(spelerID);
             }
@@ -171,48 +262,51 @@ public class InschrijvingViewMC extends javax.swing.JFrame {
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
-            
+
             stat.setInt(1, spelerID);
             stat.setInt(2, evenementID);
             stat.executeUpdate();
-            
+
             stat.close();
         } catch (SQLException e) {
             FullHouse.showDBError(e);
         }
-        getInschrijvingen();
+        getAlleInschrijvingen();
     }
-    
-    private void setIsBetaald(){
+
+    private void setIsBetaald() {
         int[] rows = mcInschrijvingTable.getSelectedRows();
-        for(int i = 0; i < rows.length; i++){
+        for (int i = 0; i < rows.length; i++) {
             int spelerID = Integer.parseInt(mcInschrijvingTable.getValueAt(rows[i], 0).toString());
             isBetaaldQuery(spelerID);
         }
     }
-    
-    private void isBetaaldQuery(int spelerID){
+
+    private void isBetaaldQuery(int spelerID) {
         String query = "UPDATE Inschrijving SET isBetaald = true "
                 + "WHERE evenementID = ? AND spelerID = ?;";
-        try{
+        try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
-            
+
             stat.setInt(1, evenementID);
             stat.setInt(2, spelerID);
             stat.executeUpdate();
-            
+
             stat.close();
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             FullHouse.showDBError(e);
         }
-        getInschrijvingen();
+        getAlleInschrijvingen();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton alBetaaldButton;
+    private javax.swing.JButton alleDeelnemersButton;
     private javax.swing.JButton deleteButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable mcInschrijvingTable;
+    private javax.swing.JButton nogNietBetaaldButton;
     private javax.swing.JButton paidButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -182,7 +182,11 @@ public class AddMasterclass extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Voegt een masterclass toe.
+     * @param evt 
+     */
     private void addButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonMouseClicked
         if (getValues()) {
             if (addMasterclass()) {
@@ -192,11 +196,19 @@ public class AddMasterclass extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addButtonMouseClicked
 
+    /**
+     * Sluit scherm af.
+     * @param evt 
+     */
     private void cancelButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelButtonMouseClicked
 
+    /**
+     * Voegt een Masterclass toe in de database.
+     * @return returns true wanneer de masterclass is toegevoegd.
+     */
     private boolean addMasterclass() {
         String query = "INSERT INTO Evenement(LocatieID, datum, prijs, naam)"
                 + "VALUES(?, ?, ?, ?)";
@@ -273,6 +285,9 @@ public class AddMasterclass extends javax.swing.JFrame {
         return succes;
     }
 
+    /**
+     * Vult de locatie combobox.
+     */
     private void fillLocatieCB() {
         String query = "SELECT LocatieID, naam FROM Locatie";
         try {
@@ -289,6 +304,9 @@ public class AddMasterclass extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Vult de docent combobox.
+     */
     private void fillDocentCB() {
         String query = "SELECT spelerID, naam, voorletters FROM Speler WHERE isDocent = ? ORDER BY naam;";
         try {
@@ -306,6 +324,9 @@ public class AddMasterclass extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Vult de datum combobox.
+     */
     private void fillDatumCB () {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = 0; i < 10; i++) {
@@ -314,6 +335,14 @@ public class AddMasterclass extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Voegt id en beschrijving toe aan combobox.
+     * @param box
+     * @param result
+     * @param idColumn
+     * @param desColumn
+     * @throws SQLException 
+     */
     private void fillBox (JComboBox box, ResultSet result, int idColumn, int[] desColumn) throws SQLException {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         ModelItem item1 = new ModelItem(-1, "Selecteer");
@@ -330,6 +359,11 @@ public class AddMasterclass extends javax.swing.JFrame {
         box.setModel(model);
     }
     
+    /**
+     * Haalt gegevens op uit de invoervelden.
+     * Controleert of de invoer correct is.
+     * @return returns true wanneer alles correct ingevoerd is.
+     */
     private boolean getValues () {
         naam = naamField.getText();
         ModelItem item = (ModelItem) locatieComboBox.getSelectedItem();
@@ -371,6 +405,10 @@ public class AddMasterclass extends javax.swing.JFrame {
         return true;
     }
 
+    /**
+     * Haalt datum op.
+     * @return returns de datum.
+     */
     private Date getDatum() {
         int dag = Integer.parseInt((String) dagComboBox.getSelectedItem());
         int maand = maandComboBox.getSelectedIndex() + 1;
@@ -378,6 +416,13 @@ public class AddMasterclass extends javax.swing.JFrame {
         return Date.valueOf(jaar + "-" + maand + "-" + dag);
     }
 
+    /**
+     * Controleert of er op een locatie een evenement is met de zelfde datum.
+     * @param locatieID
+     * @param datum
+     * @return returns true wanneer er geen evenement is met de zelfde locatie en datum, als een ander evenement.
+     * @throws SQLException 
+     */
     private boolean checkDate(int locatieID, Date datum) throws SQLException {
         String query = "SELECT * FROM Evenement WHERE locatieID = ? AND datum = ?";
         Connection conn = SimpleDataSource.getConnection();
@@ -394,6 +439,12 @@ public class AddMasterclass extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Haalt evenementID op.
+     * @param result
+     * @return returns evenementID.
+     * @throws SQLException 
+     */
     private int getEvenementID(ResultSet result) throws SQLException {
         if (result.first()) {
             return result.getInt("evenementID");

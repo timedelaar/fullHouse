@@ -173,12 +173,20 @@ public class ToernooiView extends javax.swing.JPanel {
 
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Opent dialog voor het toevoegen van een geselecteerd toernooi.
+     * @param evt 
+     */
     private void addToernooiBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addToernooiBtnMouseClicked
         AddToernooi addToernooi = new AddToernooi(this);
         addToernooi.setLocation(300, 150);
         addToernooi.setVisible(true);
     }//GEN-LAST:event_addToernooiBtnMouseClicked
 
+    /**
+     * Opent dialog voor het bewerken van een geselecteerd toernooi.
+     * @param evt 
+     */
     private void editToernooiBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editToernooiBtnMouseClicked
         int[] row = toernooiTable.getSelectedRows();
         if (row.length == 0) {
@@ -193,6 +201,10 @@ public class ToernooiView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_editToernooiBtnMouseClicked
 
+    /**
+     * Verwijdert geselecteerd toernooi.
+     * @param evt 
+     */
     private void deleteToernooiBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteToernooiBtnMouseClicked
         int confirm = JOptionPane.showConfirmDialog(null, "Weet u zeker dat u dit toernooi wilt verwijderen?", "Verwijder toernooi?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -204,6 +216,12 @@ public class ToernooiView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_deleteToernooiBtnMouseClicked
 
+    /**
+     * Maakt een tafel indeling van een geselecteerd toernooi.
+     * Controleert of er 1 toernooi is geselecteerd.
+     * Dialog voor bevestiging keuze.
+     * @param evt 
+     */
     private void tafelBtnMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tafelBtnMouseClicked
         int[] rows = toernooiTable.getSelectedRows();
         if (rows.length == 0) {
@@ -225,6 +243,10 @@ public class ToernooiView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tafelBtnMouseClicked
 
+    /**
+     * Opent dialog voor het bekijken van de inschrijvingen van een geselecteerd toernooi.
+     * @param evt 
+     */
     private void viewInschrijvingenBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewInschrijvingenBtnMouseClicked
         int[] row = toernooiTable.getSelectedRows();
         if (row.length == 0) {
@@ -240,6 +262,9 @@ public class ToernooiView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_viewInschrijvingenBtnMouseClicked
 
+    /**
+     * Haalt toernooien op uit de database.
+     */
     public final void getToernooien () {
         String query = "SELECT *, COUNT(Inschrijving.evenementID) AS inschrijvingen FROM Evenement "
                 + "JOIN Locatie ON Evenement.locatieID = Locatie.locatieID "
@@ -261,6 +286,11 @@ public class ToernooiView extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Vult de tabel met toernooien.
+     * @param result
+     * @throws SQLException 
+     */
     private void fillTable(ResultSet result) throws SQLException {
         String[] columnNames = {"ID", "Naam", "Locatie", "Datum", "Soort", "Prijs", "Max. spelers", "Min. spelers", "Aantal Inschrijvingen"};
         DefaultTableModel model = new TableModel();
@@ -287,6 +317,10 @@ public class ToernooiView extends javax.swing.JPanel {
         result.close();
     }
     
+    /**
+     * Verwijdert een toernooi uit de database.
+     * @param id 
+     */
     private void deleteToernooi (int id) {
         String query = "DELETE FROM Toernooi WHERE evenementID = ?;";
         String query2 = "DELETE FROM Evenement WHERE evenementID = ?;";
@@ -311,6 +345,11 @@ public class ToernooiView extends javax.swing.JPanel {
         getToernooien();
     }
     
+    /**
+     * Maakt een tafelindeling aan.
+     * @param toernooiID
+     * @return returns true wanneer de indeling is gemaakt.
+     */
     private boolean genereerTafelIndeling (int toernooiID) {
         String query = "SELECT spelerID FROM Inschrijving WHERE evenementID = ?;";
         String query2 = "SELECT spelersPerTafel FROM Evenement "

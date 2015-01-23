@@ -215,6 +215,10 @@ public class AddToernooi extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Voegt toernooi toe.
+     * @param evt 
+     */
     private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
         if (getValues()) {
             if (addToernooi()) {
@@ -224,29 +228,49 @@ public class AddToernooi extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addBtnMouseClicked
 
+    /**
+     * Sluit scherm af.
+     * @param evt 
+     */
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
 
+    /**
+     * Controleert of de invoer correct is.
+     * @param evt 
+     */
     private void prijsFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prijsFieldKeyTyped
         if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
             evt.consume();
         }
     }//GEN-LAST:event_prijsFieldKeyTyped
 
+    /**
+     * Controleert of de invoer correct is.
+     * @param evt 
+     */
     private void minSpelersFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_minSpelersFieldKeyTyped
         if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
             evt.consume();
         }
     }//GEN-LAST:event_minSpelersFieldKeyTyped
 
+    /**
+     * controleert of de invoer correct is.
+     * @param evt 
+     */
     private void maxSpelersFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maxSpelersFieldKeyTyped
         if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
             evt.consume();
         }
     }//GEN-LAST:event_maxSpelersFieldKeyTyped
 
+    /**
+     * Voegt toernooi toe.
+     * @return returns true wanneer het toernooi is toegevoegd.
+     */
     private boolean addToernooi () {
         String query = "INSERT INTO Evenement(locatieID, datum, prijs, naam) "
                 + "VALUES(?, ?, ?, ?)";
@@ -305,6 +329,9 @@ public class AddToernooi extends javax.swing.JFrame {
         return true;
     }
     
+    /**
+     * Haalt locaties op.
+     */
     private void getLocaties () {
         String query = "SELECT locatieID, naam, aantalTafels, spelersPerTafel FROM Locatie;";
         try {
@@ -321,6 +348,9 @@ public class AddToernooi extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Haalt verschillende toernooi soorten op.
+     */
     private void getSoorten () {
         String query = "SELECT soortID, beschrijving from ToernooiSoort;";
         try {
@@ -337,6 +367,12 @@ public class AddToernooi extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Voegt id en beschrijving toe aan combobox.
+     * @param box
+     * @param result
+     * @throws SQLException 
+     */
     private void fillBox (JComboBox box, ResultSet result) throws SQLException  {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         ModelItem item1 = new ModelItem(-1, "Selecteer");
@@ -374,6 +410,11 @@ public class AddToernooi extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Haalt gegevens op uit de invoervelden.
+     * Controleert of de invoer correct is.
+     * @return returns true wanneer alles correct ingevoerd is.
+     */
     private boolean getValues () {
         naam = naamField.getText();
         if (naam.length() < 4) {
@@ -423,6 +464,10 @@ public class AddToernooi extends javax.swing.JFrame {
         return true;
     }
     
+    /**
+     * Haalt datum op.
+     * @return returns de datum.
+     */
     private Date getDatum () {
         int day = Integer.parseInt((String) dayBox.getSelectedItem());
         int month = monthBox.getSelectedIndex()+1;
@@ -430,6 +475,12 @@ public class AddToernooi extends javax.swing.JFrame {
         return Date.valueOf(year + "-" + month + "-" + day);
     }
     
+    /**
+     * Haalt evenementID op.
+     * @param result
+     * @return returns evenementID.
+     * @throws SQLException 
+     */
     private int getEvenementID (ResultSet result) throws SQLException {
         if(result.first()) {
             return result.getInt("evenementID");
@@ -439,6 +490,11 @@ public class AddToernooi extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Haalt de capaciteit van een locatie op.
+     * @param locatie
+     * @return returns de capaciteit.
+     */
     private int getCapaciteit (int locatie) {
         String query = "SELECT aantalTafels, spelersPerTafel FROM Locatie WHERE locatieID = ?;";
         try {

@@ -28,7 +28,8 @@ public class EditToernooi extends javax.swing.JFrame {
     
     
     /**
-     * Creates new form AddUserFrame
+     * genereert een nieuwe JFrameForm 
+     * EditToernooi met ToernooiView als de parent
      */
     public EditToernooi(ToernooiView parent, int toernooiID) {
         initComponents();
@@ -210,7 +211,10 @@ public class EditToernooi extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /*
+     * als getValues() en editToernooi() allebei true zijn
+     * worden veranderingen doorgevoerd en het scherm gesloten
+     */
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         if (getValues()) {
             if (editToernooi()) {
@@ -219,12 +223,19 @@ public class EditToernooi extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_saveBtnMouseClicked
-
+    /*
+     * Sluit het scherm zonder veranderingen door te voeren
+     */
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
-
+    /*
+     * query om de toernooi en evenement table aan te passen
+     * als de gebruiker er zelf voor kiest een dubbel evenement te maken
+     * op dezelfde locatie/datum of als er nog geen toernooi is
+     * returned succes = true anders returned succes = false
+     */
     private boolean editToernooi () {
         boolean succes = false;
         String query = "UPDATE Toernooi SET maximumSpelers = ?, minimumSpelers = ?, soortToernooi = ? "
@@ -272,7 +283,10 @@ public class EditToernooi extends javax.swing.JFrame {
         }
         return succes;
     }
-    
+    /*
+     * haalt de informatie uit de tables op en vult de velden
+     * zodat deze aangepast kunnen worden
+     */
     private void fillFields() {
         String query = "SELECT * FROM Evenement "
                 + "JOIN Toernooi ON Evenement.evenementID = Toernooi.evenementID "
@@ -307,7 +321,10 @@ public class EditToernooi extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
-    
+    /*
+     * vult alle de locatieComboBox met alle locaties
+     * selecteerd vervolgens de huidige locatie uit de database
+     */
     private void fillLocatieBox (int locatieID) {
         String query = "SELECT locatieID, naam FROM Locatie;";
         ModelItem current = null;
@@ -338,7 +355,10 @@ public class EditToernooi extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
-    
+    /*
+     * vult de soortComboBox met alle evenementsoorten
+     * selecteerd vervolgens de huidig geselecteerde soort uit de database
+     */
     private void fillSoortBox (int soort) {
         String query = "SELECT soortID, beschrijving FROM ToernooiSoort;";
         ModelItem current = null;
@@ -369,7 +389,9 @@ public class EditToernooi extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
-    
+    /*
+     * checkt of de ingevoerde waarden correct zijn
+     */
     private boolean getValues () {
         naam = naamField.getText();
         if (naam.length() < 4) {
@@ -405,7 +427,7 @@ public class EditToernooi extends javax.swing.JFrame {
         }
         datum = getDatum();
         if (datum.before(new Date(System.currentTimeMillis()))) {
-            warningLbl.setText("<html>Datum ligt in het verleden.<br>Selecteer een andere datum</html>");
+            warningLbl.setText("Geselecteerde datum is al geweest");
             warningLbl.setForeground(Color.red);
             return false;
         }
@@ -418,14 +440,19 @@ public class EditToernooi extends javax.swing.JFrame {
         }
         return true;
     }
-    
+    /*
+     * Veranderd de geselecteerde waarden uit de datum comboBoxen 
+     * in een Date formaat geschikt voor de database
+     */
     private Date getDatum () {
         int day = Integer.parseInt((String) dayBox.getSelectedItem());
         int month = monthBox.getSelectedIndex()+1;
         int year = Integer.parseInt((String) yearBox.getSelectedItem());
         return Date.valueOf(year + "-" + month + "-" + day);
     }
-    
+    /* 
+     * Checkt of er niet al een evenement is op dezelfde datum en locatie
+     */
     private boolean checkDate(int locatieID, Date datum) throws SQLException {
         String query = "SELECT * FROM Evenement WHERE locatieID = ? AND datum = ?";
         Connection conn = SimpleDataSource.getConnection();
@@ -441,7 +468,9 @@ public class EditToernooi extends javax.swing.JFrame {
             return false;
         }
     }
-    
+    /*
+     * Haalt de capiciteit van de geselecteerde locatie uit de database
+     */
     private int getCapaciteit (int locatie) {
         String query = "SELECT aantalTafels, spelersPerTafel FROM Locatie WHERE locatieID = ?;";
         try {

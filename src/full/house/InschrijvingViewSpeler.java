@@ -106,6 +106,10 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Selecteer en geselecteerde speler.
+     * @param evt 
+     */
     private void betaaldBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_betaaldBtnMouseClicked
         int[] rows = inschrijvingTable.getSelectedRows();
         for (int i = 0; i < rows.length; i++) {
@@ -115,6 +119,10 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
         getInschrijvingen();
     }//GEN-LAST:event_betaaldBtnMouseClicked
 
+    /**
+     * Verwijdert een geselecteerde inschrijving.
+     * @param evt 
+     */
     private void deleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteBtnMouseClicked
         int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U deze inschrijving(en) wilt verwijderen?", "Verwijder inschrijving(en)?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -128,6 +136,9 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
         getInschrijvingen();
     }//GEN-LAST:event_deleteBtnMouseClicked
 
+    /**
+     * Haalt inschrijvingen op uit de database.
+     */
     private void getInschrijvingen () {
         String query = "SELECT Inschrijving.evenementID, naam, isBetaald, soortToernooi, datum "
                 + "FROM Inschrijving "
@@ -149,6 +160,12 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Zet boolean isBetaald op true van geselecteerde speler.
+     * @param spelerID
+     * @param evenementID
+     * @return true wanneer boolean op true is gezet.
+     */
     private boolean setBetaald (int spelerID, int evenementID) {
         String query = "UPDATE Inschrijving "
                 + "SET isBetaald = true "
@@ -171,6 +188,11 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Verwijdert inschrijving uit database.
+     * @param speler
+     * @param toernooi 
+     */
     private void deleteInschrijving (int speler, int toernooi) {
         String query = "DELETE FROM Inschrijving WHERE spelerID = ? AND evenementID = ?;";
         try {
@@ -186,6 +208,11 @@ public class InschrijvingViewSpeler extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Vult tabel met evenementen.
+     * @param result
+     * @throws SQLException 
+     */
     private void fillTable(ResultSet result) throws SQLException {
         String[] columnNames = {"Evenement ID", "Evenement naam", "Datum", "Soort", "Betaald"};
         DefaultTableModel model = new TableModel();

@@ -15,6 +15,10 @@ import java.sql.PreparedStatement;
  */
 public class SpelerGen {
     
+    /**
+     * Genereerd random telefoonnummers.
+     * @return returns het gegenereerde telefoonnummer.
+     */
     private static String genTelefoon()
     {
         String telefoonNummer = "06";
@@ -27,7 +31,10 @@ public class SpelerGen {
         return telefoonNummer;
     }
     
-    
+    /**
+     * Genereerd spelers.
+     * @return returns null.
+     */
     private static String[] genNamen()      
     {
         String[] voorLetter = {"J.J.", "A.B.", "S.G.", "K.A.", "S.J.", "H.J.", "D.H.", "T.E.", "H.K.", "S.T."};

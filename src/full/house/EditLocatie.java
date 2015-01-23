@@ -10,13 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 /**
  *
  * @author Tim
  */
 public class EditLocatie extends javax.swing.JFrame {
-
+    //variabelen die nodig zijn binnen de class
+    //worden later gedeclareerd
+    
     LocatieView parent;
     int locatieID;
     String naam;
@@ -26,9 +27,10 @@ public class EditLocatie extends javax.swing.JFrame {
     String postcode;
     int aantalTafels;
     int spelersPerTafel;
-    
+
     /**
-     * Creates new form AddUserFrame
+     * genereert een nieuwe JFrameForm 
+     * EditLocatie met LocatieView als de parent
      */
     public EditLocatie(LocatieView parent, int locatieID) {
         initComponents();
@@ -190,24 +192,30 @@ public class EditLocatie extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * als getValues() en checkPostcode() true opleveren wordt editLocaties()
+     * uitgevoerd zo niet krijgt de gebruiker een warning te zien
+     *
+     * @param evt
+     */
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         if (getValues()) {
             if (FullHouse.checkPostcode(postcode)) {
                 editLocatie();
                 this.setVisible(false);
                 this.dispose();
-            }
-            else {
+            } else {
                 warningLbl.setText("Ongeldige postcode! formaat postcode 1234AB");
                 warningLbl.setForeground(Color.red);
             }
-        }
-        else {
+        } else {
             warningLbl.setText("Controleer invoer!");
             warningLbl.setForeground(Color.red);
         }
     }//GEN-LAST:event_saveBtnMouseClicked
-
+    /*
+     * sluit het scherm zonder iets te veranderen
+     */
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
@@ -222,10 +230,10 @@ public class EditLocatie extends javax.swing.JFrame {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
             stat.setInt(1, locatieID);
-            
+
             ResultSet result = stat.executeQuery();
             result.next();
-            
+
             idField.setText("" + locatieID);
             naamField.setText(result.getString("naam"));
             straatnaamField.setText(result.getString("straatnaam"));
@@ -234,22 +242,25 @@ public class EditLocatie extends javax.swing.JFrame {
             postcodeField.setText(result.getString("postcode"));
             aantalField.setText("" + result.getInt("aantalTafels"));
             spelersPerCB.setSelectedIndex(result.getInt("spelersPerTafel") - 4);
-            
+
             result.close();
             stat.close();
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             FullHouse.showDBError(e);
         }
     }
-    
-    private void editLocatie () {
+
+    /**
+     * update query voor de locatie en voert deze uit
+     *
+     */
+    private void editLocatie() {
         String query = "UPDATE Locatie SET naam=?, straatnaam=?, huisNr=?, woonplaats=?, postcode=?,"
                 + "aantalTafels=?, spelersPerTafel=? WHERE locatieID=?;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
-            
+
             stat.setString(1, naam);
             stat.setString(2, straatnaam);
             stat.setString(3, huisNr);
@@ -258,17 +269,20 @@ public class EditLocatie extends javax.swing.JFrame {
             stat.setInt(6, aantalTafels);
             stat.setInt(7, spelersPerTafel);
             stat.setInt(8, locatieID);
-            
+
             stat.executeUpdate();
             stat.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             FullHouse.showDBError(e);
         }
         parent.getLocaties();
     }
-    
-    private boolean getValues () {
+
+    /**
+     * controleert of alle velden goed zijn ingevuld, zo ja: returned true, zo
+     * nee: returned false
+     */
+    private boolean getValues() {
         naam = naamField.getText();
         straatnaam = straatnaamField.getText();
         huisNr = huisNrField.getText();
@@ -277,27 +291,21 @@ public class EditLocatie extends javax.swing.JFrame {
         spelersPerTafel = Integer.parseInt(spelersPerCB.getSelectedItem().toString());
         try {
             aantalTafels = Integer.parseInt(aantalField.getText());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
         if (naam.length() < 2) {
             return false;
-        }
-        else if (straatnaam.length() < 2) {
+        } else if (straatnaam.length() < 2) {
             return false;
-        }
-        else if (huisNr.length() < 1) {
+        } else if (huisNr.length() < 1) {
             return false;
-        }
-        else if (woonplaats.length() < 2) {
+        } else if (woonplaats.length() < 2) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField aantalField;
     private javax.swing.JLabel addUserLbl;

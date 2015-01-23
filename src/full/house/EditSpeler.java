@@ -16,7 +16,9 @@ import java.sql.SQLException;
  * @author Tim
  */
 public class EditSpeler extends javax.swing.JFrame {
-
+    //variabelen die nodig zijn binnen de class
+    //worden later gedeclareerd
+    
     SpelerView parent;
     int spelerID;
     String naam;
@@ -30,7 +32,8 @@ public class EditSpeler extends javax.swing.JFrame {
     double rating;
     double gewonnenGeld;
     /**
-     * Creates new form AddUserFrame
+     * genereert een nieuwe JFrameForm 
+     * EditSpeler met SpelerView als de parent
      */
     public EditSpeler(SpelerView parent, int spelerID) {
         initComponents();
@@ -231,7 +234,12 @@ public class EditSpeler extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+     /**
+     * als getValues() en checkPostcode() true opleveren wordt editSpeler()
+     * uitgevoerd zo niet krijgt de gebruiker een warning te zien
+     *
+     * @param evt
+     */
     private void saveBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveBtnMouseClicked
         if (getValues()) {
             if (FullHouse.checkPostcode(postcode)) {
@@ -246,30 +254,41 @@ public class EditSpeler extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_saveBtnMouseClicked
-
+    /*
+     * sluit het scherm zonder veranderingen door te voeren
+     */
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
-
+    /*
+     * zorgt er voor dat in het ratingField alleen getallen ingevoerd kunnen worden
+     */
     private void ratingFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ratingFieldKeyTyped
         if ((evt.getKeyChar() < '0' || evt.getKeyChar() > '9') && evt.getKeyChar() != '.') {
             evt.consume();
         }
     }//GEN-LAST:event_ratingFieldKeyTyped
-
+    /*
+     * zorgt ervoor dat in het gewonnenGeldField alleen getallen ingevoerd kunnen worden
+     */
     private void gewonnenGeldFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gewonnenGeldFieldKeyTyped
         if ((evt.getKeyChar() < '0' || evt.getKeyChar() > '9') && evt.getKeyChar() != '.') {
             evt.consume();
         }
     }//GEN-LAST:event_gewonnenGeldFieldKeyTyped
-
+    /*
+     * zorgt ervoor dat in het telefoonNrField alleen getallen ingevoerd kunnen worden
+     */
     private void telefoonNrFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_telefoonNrFieldKeyTyped
         if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
             evt.consume();
         }
     }//GEN-LAST:event_telefoonNrFieldKeyTyped
-
+    /*
+     * haalt de informatie uit de tables op en vult de velden
+     * zodat deze aangepast kunnen worden
+     */
     private void fillFields() {
         String query = "SELECT * FROM Speler WHERE spelerID = ?;";
         try {
@@ -299,7 +318,11 @@ public class EditSpeler extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
-    
+    /*
+     * query om de speler table aan te passen
+     * returned succes als er geen exception is 
+     * returned false als er wel een exception is
+     */
     private boolean editSpeler () {
         String query = "UPDATE Speler SET naam=?, voorletters=?, postcode=?, woonplaats=?, straatnaam=?, huisNr=?,"
                 + "telefoonNr=?, email=?, rating=?, gewonnenGeld=?, isDocent=? WHERE spelerID=?;";
@@ -330,7 +353,9 @@ public class EditSpeler extends javax.swing.JFrame {
         parent.getSpelers();
         return true;
     }
-    
+    /*
+     * checkt of de ingevoerde waarden correct zijn
+     */
     private boolean getValues () {
         naam = naamField.getText();
         voorletters = voorlettersField.getText();

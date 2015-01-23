@@ -151,12 +151,20 @@ public class SpelerView extends javax.swing.JPanel {
 
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Opent dialog voor toevoegen van speler.
+     * @param evt 
+     */
     private void addSpelerBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addSpelerBtnMouseClicked
         AddSpeler addSpeler = new AddSpeler(this);
         addSpeler.setLocation(300, 150);
         addSpeler.setVisible(true);
     }//GEN-LAST:event_addSpelerBtnMouseClicked
 
+    /**
+     * Opent dialog voor bewerken van geselecteerde speler.
+     * @param evt 
+     */
     private void editSpelerBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editSpelerBtnMouseClicked
         int[] row = spelerTable.getSelectedRows();
         if (row.length == 0) {
@@ -171,6 +179,10 @@ public class SpelerView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_editSpelerBtnMouseClicked
 
+    /**
+     * Verwijdert geselecteerde speler.
+     * @param evt 
+     */
     private void deleteSpelerBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteSpelerBtnMouseClicked
         int confirm = JOptionPane.showConfirmDialog(null, "Weet U zeker dat U deze speler(s) wilt verwijderen?", "Verwijder speler?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -182,6 +194,10 @@ public class SpelerView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_deleteSpelerBtnMouseClicked
 
+    /**
+     * Opent dialog voor toevoegen van inschrijving voor de geslecteerde speler(s).
+     * @param evt 
+     */
     private void addInschrijvingBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addInschrijvingBtnMouseClicked
         int[] row = spelerTable.getSelectedRows();
         if (row.length == 0) {
@@ -197,6 +213,10 @@ public class SpelerView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_addInschrijvingBtnMouseClicked
 
+    /**
+     * Opent dialog voor het bekijken van de inschrijvingen van de geselecteerde speler.
+     * @param evt 
+     */
     private void viewInschrijvingenBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewInschrijvingenBtnMouseClicked
         int[] row = spelerTable.getSelectedRows();
         if (row.length > 1) {
@@ -211,6 +231,9 @@ public class SpelerView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_viewInschrijvingenBtnMouseClicked
 
+    /**
+     * Haalt spelers op uit database.
+     */
     public final void getSpelers () {
         String query = "SELECT * FROM Speler;";
         try {
@@ -226,7 +249,11 @@ public class SpelerView extends javax.swing.JPanel {
         }
     }
     
-    
+    /**
+     * Vult de tabel met spelers.
+     * @param result
+     * @throws SQLException 
+     */
     private void fillTable(ResultSet result) throws SQLException {
         String[] columnNames = {"ID", "Naam", "Voorletters", "Straatnaam", "HuisNr", "Woonplaats", "Postcode", "Telefoon nr", "E-mail adres", "Rating", "Winsten", "Docent"};
         DefaultTableModel model = new TableModel();
@@ -253,6 +280,10 @@ public class SpelerView extends javax.swing.JPanel {
         result.close();
     }
     
+    /**
+     * Verwijdert spelers uit database.
+     * @param id 
+     */
     private void deleteSpeler (int id) {
         String query = "DELETE FROM Speler WHERE spelerID = ?;";
         try {
@@ -269,6 +300,10 @@ public class SpelerView extends javax.swing.JPanel {
         getSpelers();
     }
     
+    /**
+     * Zet de breedte van de kolommen van de tabel.
+     * @param table 
+     */
     private void setColumnWidth (JTable table) {
         TableColumnModel tcm = table.getColumnModel();
         

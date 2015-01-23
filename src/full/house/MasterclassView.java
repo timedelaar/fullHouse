@@ -132,12 +132,20 @@ public class MasterclassView extends javax.swing.JPanel {
 
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Opent dialog voor het toevoegen van nieuwe masterclass.
+     * @param evt 
+     */
     private void newClassButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newClassButtonMouseClicked
         AddMasterclass addMasterclass = new AddMasterclass(this);
         addMasterclass.setLocationRelativeTo(this);
         addMasterclass.setVisible(true);
     }//GEN-LAST:event_newClassButtonMouseClicked
 
+    /**
+     * Verwijdert geselecteerde masterclass.
+     * @param evt 
+     */
     private void deleteClassButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteClassButtonMouseClicked
         int confirm = JOptionPane.showConfirmDialog(null, "Weet u zeker dat u deze masterclass wilt verwijderen?", "Verwijder toernooi?", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
@@ -149,6 +157,10 @@ public class MasterclassView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_deleteClassButtonMouseClicked
 
+    /**
+     * Opent dialog voor het bewerken van de geselecteerde masterclass.
+     * @param evt 
+     */
     private void editClassButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editClassButtonMouseClicked
         int[] rows = masterclassTable.getSelectedRows();
         if(rows.length == 0){
@@ -169,6 +181,10 @@ public class MasterclassView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_editClassButtonMouseClicked
 
+    /**
+     * Opent dialog voor het bekijken van de inschrijving van de geselecteerde masterclass.
+     * @param evt 
+     */
     private void viewClassButtonMouseClicked (java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewClassButtonMouseClicked
         int[] rows = masterclassTable.getSelectedRows();
         if(rows.length == 0){
@@ -189,6 +205,9 @@ public class MasterclassView extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_viewClassButtonMouseClicked
     
+    /**
+     * Haalt masterclasses op uit de database.
+     */
     public final void getMasterclasses(){
         String query = "SELECT MasterClass.evenementID, MasterClass.docent, MasterClass.minimumRating, "
                 + "Evenement.naam, Evenement.datum, Evenement.prijs, Speler.naam, Speler.voorletters FROM MasterClass " 
@@ -207,6 +226,11 @@ public class MasterclassView extends javax.swing.JPanel {
         }
     }
     
+    /**
+     * Vult de tabel met de masterclasses.
+     * @param result
+     * @throws SQLException 
+     */
     private void fillTable(ResultSet result) throws SQLException{
         String[] columnNames = {"ClassID", "Class naam", "Docent", "Datum", "Minimum rating", "Prijs"};
         DefaultTableModel model = new TableModel();
@@ -226,6 +250,10 @@ public class MasterclassView extends javax.swing.JPanel {
         result.close();
     }
     
+    /**
+     * Verwijdert masterclass uit de database.
+     * @param id 
+     */
     private void deleteMasterclass(int id){
         String query = "DELETE FROM MasterClass WHERE EvenementID = ?;";
         String query2 = "DELETE FROM Evenement WHERE EvenementID = ?;";

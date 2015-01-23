@@ -30,14 +30,15 @@ public class BekijkToernooiInschrijving extends javax.swing.JFrame {
         
     }
 
-    
+    /**
+     * Haalt inschrijving op uit database.
+     */
     private void getInschrijvingen() {
         String query = "SELECT Inschrijving.evenementID, Inschrijving.spelerID, Speler.naam, Speler.voorletters "
                 + "FROM Inschrijving "
                 + "JOIN Speler "
                 + "ON Inschrijving.spelerID = Speler.spelerID "
                 + "WHERE Inschrijving.evenementID = ?;";
-                //+ "ORDER BY Inschrijving.evenementID ASC;";
         try {
             Connection conn = SimpleDataSource.getConnection();
             PreparedStatement stat = conn.prepareStatement(query);
@@ -47,11 +48,16 @@ public class BekijkToernooiInschrijving extends javax.swing.JFrame {
             result.close();
             stat.close();
         } catch (Exception e) {
-            //FullHouse.showDBError(e);
+            FullHouse.showDBError(e);
             System.out.println(e);
         }
     }
 
+    /**
+     * Vult tabel met de Inschrijvingen.
+     * @param result
+     * @throws SQLException 
+     */
     private void fillTable(ResultSet result) throws SQLException {
         String[] columnNames = {"Evenement ID", "Speler ID", "Naam", "Voorletters"};
         DefaultTableModel model = new DefaultTableModel();

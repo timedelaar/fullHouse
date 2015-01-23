@@ -10,13 +10,14 @@ package full.house;
  */
 import java.awt.Color;
 import java.sql.*;
-import java.util.Calendar;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class EditMasterclass extends javax.swing.JFrame {
-
+    //variabelen die nodig zijn binnen de class
+    //worden later gedeclareerd
+    
     MasterclassView parent;
     int classID;
     private int docent;
@@ -25,7 +26,10 @@ public class EditMasterclass extends javax.swing.JFrame {
     private String naam;
     private Date datum;
     private int locatieID;
-
+    /**
+     * genereert een nieuwe JFrameForm 
+     * EditMasterclass met MasterclassView als de parent
+     */
     public EditMasterclass(MasterclassView parent, int classID) {
         initComponents();
         this.parent = parent;
@@ -99,6 +103,8 @@ public class EditMasterclass extends javax.swing.JFrame {
 
         maandComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december" }));
 
+        jaarComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020" }));
+
         saveButton.setText("Save");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,15 +145,16 @@ public class EditMasterclass extends javax.swing.JFrame {
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel5))
                                 .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(locatieComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(naamField, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addComponent(dagComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(maandComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jaarComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jaarComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(24, 24, 24))
                                     .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(docentCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -206,12 +213,17 @@ public class EditMasterclass extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /*
+     * Sluit het scherm zonder veranderingen door te voeren
+     */
     private void cancelButtonMouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelButtonMouseClicked
-
+    /*
+     * als getValues() en editMasterclass() allebei true zijn
+     * worden veranderingen doorgevoerd en het scherm gesloten
+     */
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         if (getValues()) {
             if (editMasterclass()) {
@@ -220,19 +232,29 @@ public class EditMasterclass extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_saveButtonActionPerformed
-
+    /*
+     * zorgt er voor dat in het minRatingField alleen getallen ingevoerd kunnen worden
+     */
     private void minRatingFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_minRatingFieldKeyTyped
         if (evt.getKeyChar() < '0' || evt.getKeyChar() > '9') {
             evt.consume();
         }
     }//GEN-LAST:event_minRatingFieldKeyTyped
-
+    /*
+     * zorgt er voor dat in het prijsField alleen getallen ingevoerd kunnen worden
+     */
     private void prijsFieldKeyTyped (java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prijsFieldKeyTyped
         if ((evt.getKeyChar() < '0' || evt.getKeyChar() > '9') && evt.getKeyChar() != '.') {
             evt.consume();
         }
     }//GEN-LAST:event_prijsFieldKeyTyped
     
+    /*
+     * query om de masterclass en evenement table aan te passen
+     * als de gebruiker er zelf voor kiest een dubbel evenement te maken
+     * op dezelfde locatie/datum of als er nog geen toernooi is
+     * returned succes = true anders returned succes = false
+     */
     private boolean editMasterclass() {
         boolean succes = false;
         String query = "UPDATE MasterClass SET docent = ?, minimumRating = ? "
@@ -280,6 +302,10 @@ public class EditMasterclass extends javax.swing.JFrame {
         return succes;
     }
     
+    /*
+     * haalt de informatie uit de tables op en vult de velden
+     * zodat deze aangepast kunnen worden
+     */
     private void fillFields() {
         String query = "SELECT * FROM Evenement E "
                 + "JOIN MasterClass MC ON E.EvenementID = MC.EvenementID "
@@ -302,7 +328,6 @@ public class EditMasterclass extends javax.swing.JFrame {
             prijsField.setText("" + prijs);
             minRatingField.setText("" + minimumRating);
 
-            fillDatumCB();
             datum = result.getDate("datum");
             String dag = datum.toString().substring(8);
             int maand = Integer.parseInt(datum.toString().substring(5, 7));
@@ -321,7 +346,11 @@ public class EditMasterclass extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
-
+    /*
+     * vult de locatieComboBox met alle locaties
+     * 
+     * @param current
+     */
     private void fillLocatieCB(int current) {
         String query = "SELECT LocatieID, naam FROM Locatie";
         try {
@@ -336,7 +365,11 @@ public class EditMasterclass extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
-    
+    /*
+     * Vult de docentComboBox met alle docenten
+     * 
+     * @param current
+     */
     private void fillDocentCB(int current) {
         String query = "SELECT spelerID, naam, voorletters FROM Speler WHERE isDocent = ? ORDER BY naam;";
         try {
@@ -353,15 +386,15 @@ public class EditMasterclass extends javax.swing.JFrame {
             FullHouse.showDBError(e);
         }
     }
-    
-    private void fillDatumCB () {
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = 0; i < 10; i++) {
-            int year = currentYear + i;
-            jaarComboBox.addItem(year);
-        }
-    }
-
+    /*
+     * fillBox vult alle comboBoxen
+     * 
+     * @param box bepaalt welke comboBox
+     * @param result bepaalt uit welke resultSet de gegevens komen
+     * @param idColumn bepaalt welke id bij de geselecteerde column hoort
+     * @param desColumn bepaalt hoe groot de column moet zijn
+     * @param currentID bepaalt welk item in de comboBox het huidig geselecteerde item is.
+     */
     private void fillBox(JComboBox box, ResultSet result, int idColumn, int[] desColumn, int currentID) throws SQLException {
         DefaultComboBoxModel model = new DefaultComboBoxModel();
         ModelItem current = new ModelItem(0, "");
@@ -382,7 +415,9 @@ public class EditMasterclass extends javax.swing.JFrame {
         box.setModel(model);
         box.setSelectedItem(current);
     }
-    
+    /*
+     * checkt of de ingevoerde waarden correct zijn
+     */
     private boolean getValues () {
         naam = naamField.getText();
         ModelItem item = (ModelItem) locatieComboBox.getSelectedItem();
@@ -400,11 +435,7 @@ public class EditMasterclass extends javax.swing.JFrame {
             return false;
         }
         datum = getDatum();
-        if (datum.before(new Date(System.currentTimeMillis()))) {
-            warningLbl.setText("<html>Datum ligt in het verleden.<br>Selecteer een andere datum</html>");
-            warningLbl.setForeground(Color.red);
-            return false;
-        }
+        
         if (naam.length() < 2) {
             warningLbl.setText("Naam moet minimaal twee karakters bevatten");
             warningLbl.setForeground(Color.red);
@@ -423,7 +454,10 @@ public class EditMasterclass extends javax.swing.JFrame {
         
         return true;
     }
-    
+    /*
+     * Veranderd de geselecteerde waarden uit de datum comboBoxen 
+     * in een Date formaat geschikt voor de database
+     */
     private Date getDatum() {
         int dag = Integer.parseInt((String) dagComboBox.getSelectedItem());
         int maand = maandComboBox.getSelectedIndex() + 1;
@@ -432,7 +466,9 @@ public class EditMasterclass extends javax.swing.JFrame {
     }
     
     
-    
+    /* 
+     * Checkt of er niet al een evenement is op dezelfde datum en locatie
+     */
     private boolean checkDate(int locatieID, Date datum) throws SQLException {
         String query = "SELECT * FROM Evenement WHERE locatieID = ? AND datum = ?";
         Connection conn = SimpleDataSource.getConnection();

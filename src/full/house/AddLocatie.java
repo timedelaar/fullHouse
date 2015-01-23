@@ -175,6 +175,11 @@ public class AddLocatie extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Voegt een locatie toe.
+     * Laat een label zien als er een ongeldige postcode word ingevoerd.
+     * @param evt 
+     */
     private void addBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addBtnMouseClicked
         if (getValues()) {
             if (FullHouse.checkPostcode(postcode)) {
@@ -190,11 +195,19 @@ public class AddLocatie extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addBtnMouseClicked
 
+    /**
+     * Sluit scherm af.
+     * @param evt 
+     */
     private void cancelBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelBtnMouseClicked
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_cancelBtnMouseClicked
 
+    /**
+     * Voegt een locatie toe aan de database.
+     * @return Returns false als de locatie niet is toegevoegd.
+     */
     private boolean addLocatie () {
         String query = "INSERT INTO Locatie(naam, straatnaam, huisNr, woonplaats, postcode, aantalTafels, spelersPerTafel)"
                 + "VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -221,6 +234,11 @@ public class AddLocatie extends javax.swing.JFrame {
         return true;
     }
     
+    /**
+     * Haalt gegevens op uit de invoer velden.
+     * Controleert of de invoer correct is.
+     * @return Returns true wanneer alles goed is ingevult.
+     */
     private boolean getValues () {
         naam = naamField.getText();
         straatnaam = straatnaamField.getText();

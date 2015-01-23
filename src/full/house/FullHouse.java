@@ -33,7 +33,11 @@ public class FullHouse {
                         + "Contacteer uw beheerder als deze fout zich blijft voordoen", "Database error", JOptionPane.ERROR_MESSAGE);
         System.out.println(e);
     }
-    
+    /**
+     * Controleert of de invoer correct is.
+     * @param postcode
+     * @return returns true als de postcode correct is.
+     */
     public static boolean checkPostcode (String postcode) {
         if (postcode.length() != 6) {
             return false;
@@ -56,6 +60,12 @@ public class FullHouse {
         }
     }
     
+    /**
+     * Voegt nullen toe zodat ID's 3 cijferig zijn.
+     * @param s
+     * @param length
+     * @return nullen.
+     */
     public static String addZeroes (String s, int length) {
         while (s.length() < length) {
             s = "0" + s;
